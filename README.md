@@ -2,7 +2,7 @@
 
 Native Nextcloud-App für Placetel mit Dashboard, Agentenstatistik, Warteschleifenansicht und optionaler DispoLive-Anbindung. DispoLive kann in den Einstellungen ein- oder ausgeschaltet werden.
 
-Dieses Repository enthält den Entwicklungsstand 0.2.0 als privaten Kandidaten. Es gibt noch keine App-Store-Veröffentlichung und keine Release-Signatur.
+Dieses Repository enthält den Entwicklungsstand 0.2.0 als noch nicht veröffentlichten App-Store-Kandidaten. Die Veröffentlichung des Quellcodes ist freigegeben; Zertifikatsantrag und Store-Vorbereitung laufen. Es gibt noch keine App-Store-Veröffentlichung und keine Release-Signatur.
 
 ## Voraussetzungen und Installation
 

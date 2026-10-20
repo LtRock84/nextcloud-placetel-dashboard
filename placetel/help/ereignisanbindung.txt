@@ -1,0 +1,409 @@
+Schritt für Schritt: Nextcloud, Placetel und DispoLive-Popups einrichten
+
+Du kannst als privater Betreiber gleichzeitig Nutzer, Nextcloud-Administrator und Serveradministrator sein. Beginne mit Start und Nextcloud-Verwaltung; danach richte die gewünschten Funktionen ein. Die Kapitel sind aufklappbar. Anzeigen oder Kopieren führt keine Einrichtung und keinen Befehl aus.
+Vorlagen enthalten Beispielwerte. Den aktuellen öffentlichen HTTPS-Weg und eigene Pfade/Benutzer selbst prüfen; die App kann externe Erreichbarkeit oder Betriebssystemdienste nicht allein durch Speichern bestätigen.
+
+Beispieladresse: https://cloud.example.org/index.php/apps/placetel/notify
+Alle Beispielwerte vor Verwendung an die eigene Installation anpassen.
+
+1. Start: Was wird benötigt und wer erledigt was?
+Zuständig: Alle Nutzer
+
+1.1 Die drei Teile verstehen
+Das Dashboard läuft als native App in Nextcloud. Placetel schickt bei einem Anruf eine technische Nachricht (Webhook) an die App. Die App kann daraufhin über die DispoLive-API eine Anrufermeldung anfordern. Der Server muss eingeschaltet sein; dein Arbeitsplatz-PC und das Dashboard müssen dafür nicht geöffnet bleiben.
+
+Das Basisdashboard braucht keinen zusätzlichen Dienst. Für zeitnahe Verarbeitung wartender Meldungen bei mehreren gleichzeitigen Anrufen empfehlen wir den mitgelieferten PHP-Worker. Diesen Hintergrundprozess muss ein Serveradministrator einrichten; der App-Schalter installiert keinen Betriebssystemdienst.
+
+1.2 Zuständigkeiten klären
+Nextcloud-Administrator: App installieren, eigene API-Schlüssel, Gruppenrechte und Popup-Ziel speichern. Placetel-Administrator: Notify-Adresse und gemeinsames Geheimnis hinterlegen. DispoLive-Administrator: API-Zugang und korrektes Arbeitsplatz-Telefon bereitstellen. Serveradministrator: HTTPS/Proxy und Worker prüfen. Eine Person kann mehrere dieser Rollen haben.
+
+Ohne Serverzugriff oder bei Hosting ohne erlaubte Dauerprozesse den Hoster um die Worker-Einrichtung bitten. Die App kann solche Rechte nicht selbst vergeben. Die Placetel- und DispoLive-Berechtigungen sind zusätzliche Voraussetzungen.
+
+1.3 Vor Änderungen den Iststand sichern
+Diese Anleitung führt selbst keine Befehle aus. Codekästen sind kopierbare Vorlagen. Containername, Webnutzer, PHP-/Nextcloud-Pfad und Domain müssen vorher zum eigenen System passen. Beispiele verwenden keine echten Zugangsdaten.
+
+Änderungen an Proxy oder Systemdiensten zunächst im Staging prüfen und deren bisherige Konfiguration sichern. Bestehende Nextcloud-Dienste, HTTPS-Anmeldung und regulären Cron erhalten. Keine API-Schlüssel oder Nextcloud-Konfiguration in Supportanfragen kopieren.
+
+2. Nextcloud selbst administrieren: Installation, Rechte und Hintergrundaufgaben
+Zuständig: Auch für private Betreiber, die gleichzeitig Nutzer und Administrator sind
+
+2.1 Mit dem eigenen Administratorkonto anmelden
+Öffne deine Nextcloud im Browser und melde dich mit deinem bisherigen Administratorkonto an. Klicke rechts oben auf dein Profilbild beziehungsweise deine Initialen. Suche nach „Apps“ und „Verwaltungseinstellungen“. Die Bezeichnungen können je Sprache und Version etwas abweichen.
+
+Fehlen diese Einträge, bist du möglicherweise nur normaler Nutzer oder Gruppenadministrator. Nur ein Mitglied der Nextcloud-Gruppe admin darf diese App konfigurieren. Als privater Betreiber kannst du selbst dieser Administrator sein; ein zusätzliches Konto ist dafür nicht erforderlich. Fehlende Rechte muss der bestehende Administrator vergeben.
+
+2.2 Browser-Verwaltung und Serverzugriff auseinanderhalten
+Im Browser verwaltest du Apps, Benutzer und Einstellungen. Serverzugriff bedeutet dagegen Zugriff auf das Betriebssystem beziehungsweise den Nextcloud-Container, zum Beispiel über SSH, die Konsole deines Hosters oder die Containerverwaltung deines NAS. Ein Nextcloud-Administratorkonto verschafft dir diesen Zugriff nicht automatisch.
+
+Notiere deine Installationsart: direktes Linux, Docker/NAS oder verwaltetes Hosting. Für eine spätere Store-Installation genügen normalerweise die Browserrechte; für die jetzige manuelle Installation sowie Cron, HTTPS-Proxy und PHP-Worker brauchst du zusätzlich passende Serverrechte. Wenn du selbst hostest, erledigst du beide Rollen nacheinander.
+
+2.3 Version und Sicherung vor der Installation prüfen
+Öffne über das Profilmenü die Verwaltungseinstellungen und dort „Übersicht“. Prüfe die Nextcloud-Version und bestehende Warnungen. Dieser App-Kandidat ist für Nextcloud 35 und PHP ab 8.3 vorgesehen; eine andere Version nicht durch Erzwingen der App-Kompatibilität übergehen. Die PHP-Version findest du je Installation unter „System“ beziehungsweise beim Hoster. Der PHP-Kommandozeilenaufruf für Cron und Worker muss ebenfalls passen.
+
+Erstelle vor manueller Installation oder Update ein zusammengehöriges Backup von Datenbank, Nextcloud-Konfiguration, Apps und Daten nach dem Verfahren deiner Installation. Prüfe, wo es liegt und wie es zurückgespielt wird. Eine Kopie der App allein sichert keine Einstellungen oder Anrufhistorie. Konfiguration und Backup enthalten Geheimnisse: geschützt aufbewahren, nicht zur Fehleranalyse veröffentlichen.
+
+2.4 Den richtigen Installationsweg wählen
+Diese Version ist derzeit ein unveröffentlichter, noch nicht signierter Kandidat. Suche deshalb nicht nach einem bereits verfügbaren Store-Eintrag. Verwende für eine lokale Prüfung ausschließlich das freigegebene native App-Paket mit dem Ordner placetel; das Quellpaket und das private NAS-Übergabepaket sind keine Store-Installationsdateien.
+
+Später, nach einer tatsächlichen Veröffentlichung: Profilmenü → Apps öffnen, nach „Placetel Dashboard“ suchen, Herausgeber und unterstützte Nextcloud-Version prüfen und „Herunterladen und aktivieren“ beziehungsweise „Aktivieren“ wählen. Ein Download ist noch kein Nachweis, dass Zugang und Popup-Versand eingerichtet sind. Bei eingeschränktem Hosting vorher klären, ob eigene Apps erlaubt sind.
+
+2.5 Aktuellen Kandidaten auf dem Server bereitstellen
+Öffne die Serverkonsole deiner Installation. Ermittle mit der bestehenden Nextcloud-Konfiguration den beschreibbaren App-Pfad (apps_paths), häufig custom_apps. Bei Docker muss es das dauerhaft eingebundene App-Verzeichnis der richtigen Nextcloud-Instanz sein. Ein Upload in die Nextcloud-App „Dateien“ installiert keine Anwendung.
+
+Entpacke das native App-Archiv zunächst in einen getrennten temporären Ordner. Prüfe, dass darin placetel/appinfo/info.xml liegt. Übertrage dann den vollständigen Ordner placetel in den ermittelten App-Pfad; danach muss dort beispielsweise custom_apps/placetel/appinfo/info.xml liegen, ohne zusätzlich verschachtelten placetel-Ordner. Vorhandene Version zuerst sichern und einen Austausch nach dem Verfahren deines Hosters durchführen, keine fremden Apps oder Nextcloud-Daten löschen.
+
+Die Dateien müssen für den Nextcloud-Webnutzer lesbar sein; Eigentümer und Berechtigungen nach dem bestehenden Installationsverfahren setzen. Kein chmod 777 und kein pauschaler Besitzerwechsel der ganzen Nextcloud. Signaturwarnungen des Kandidaten als offenen Veröffentlichungsschritt dokumentieren; keine globale Signaturprüfung deaktivieren. Wenn Pfad oder Rechte unklar sind, hier anhalten und die Installationsdokumentation des eigenen Systems verwenden.
+
+2.6 App aktivieren und zum ersten Mal öffnen
+Zurück im Browser: Profilmenü → Apps → deaktivierte beziehungsweise eigene Apps öffnen. „Placetel Dashboard“ suchen und aktivieren. Wird die App nicht angeboten, zuerst Ordnerstruktur, App-Pfad, Leserechte und Versionskompatibilität prüfen; nicht mehrfach in verschiedene Verzeichnisse installieren.
+
+Alternativ kann ein Serveradministrator im richtigen Nextcloud-Verzeichnis als Webnutzer php occ app:enable placetel ausführen. Wie Benutzer, PHP-Pfad und Container ermittelt werden, erklärt das Kapitel „PHP-Worker“. Anschließend die Nextcloud-Seite neu laden und Placetel Dashboard über die App-Navigation öffnen. In dessen eigenen „Einstellungen“ werden die Telefonie-Zugänge gepflegt, nicht in deinem persönlichen Nextcloud-Passwortfeld.
+
+2.7 Benutzer und Gruppen im Browser vorbereiten
+Öffne über das Profilmenü „Konten“ beziehungsweise „Benutzer“. Prüfe zunächst, welche Personen schon eigene Nextcloud-Konten besitzen. Für weitere Personen über „Neues Konto“ die erforderlichen Felder ausfüllen und das Konto nach eurem üblichen Einladungsverfahren anlegen. Keine gemeinsam genutzten Administratorkonten für das ganze Team verwenden.
+
+Lege in der Gruppenverwaltung bei Bedarf zwei normale Gruppen an, zum Beispiel telefonie-lesen und telefonie-disposition. Wähle anschließend bei jedem vorgesehenen Benutzer die passende Gruppenzugehörigkeit und kontrolliere, dass sie übernommen wurde. Diese Beispiele sind frei gewählte Gruppennamen, keine automatisch vorhandenen App-Gruppen. Die Gruppe admin verleiht umfassende Nextcloud-Rechte und ist für reine Dashboard-Nutzung nicht nötig.
+
+2.8 Die vorbereiteten Gruppen in der App freigeben
+Öffne Placetel Dashboard → Einstellungen → Zugriffsrechte. Für einen begrenzten Personenkreis „Alle angemeldeten Nutzer dürfen lesen“ ausschalten und die tatsächlich vorhandenen Gruppen-IDs bei den Lesegruppen eintragen. Die Dispositionsgruppen erhalten zusätzlich die von der App unterstützten Änderungsrechte. Für zunächst nur eigenen Zugriff kannst du die Freigabe für alle ausschalten und beide Gruppenlisten leer lassen; Administratoren behalten Zugriff.
+
+Falls du die App zusätzlich auf der Nextcloud-Seite „Apps“ nur für bestimmte Gruppen aktivierst, müssen die vorgesehenen Nutzer auch dort freigegeben sein. Sonst fehlt ihnen die App trotz korrekter App-Rechte. Du kannst die App stattdessen allgemein aktivieren und den Datenzugriff ausschließlich mit ihren Zugriffsrechten begrenzen. Änderungen speichern und mit einem getrennten normalen Lesekonto in einem privaten Browserfenster prüfen: Daten lesbar, Administrations- und Änderungsfunktionen nicht freigegeben.
+
+2.9 Normalen Nextcloud-Cron im Browser prüfen
+Öffne Verwaltungseinstellungen → Grundeinstellungen → Hintergrundaufgaben. Sieh nach, welche Betriebsart gewählt ist und wann die letzte Ausführung stattfand. Bei AJAX werden Aufgaben von Seitenaufrufen abhängig; für einen Server, der ohne offenen Browser arbeiten soll, ist regulärer Cron vorgesehen.
+
+Wähle „Cron“ erst, wenn der passende Zeitgeber auf dem Server tatsächlich eingerichtet ist. Der Schalter allein legt keinen Betriebssystem-Job an. Läuft bereits ein funktionierender Nextcloud-Cron, diesen weiterverwenden und keinen zweiten hinzufügen. Dieser normale Cron und der zeitnahe Popup-Worker sind zwei unterschiedliche Aufgaben; der Worker ersetzt Cron nicht.
+
+2.10 Fehlenden regulären Cron passend zur Installation einrichten
+Bei direktem Linux-Betrieb zunächst echten Webnutzer, PHP- und Nextcloud-Pfad prüfen. Das folgende Beispiel passt nur zu www-data und /var/www/nextcloud. Öffne die bestehende Crontabelle mit dem ersten Befehl, erhalte alle vorhandenen Zeilen und ergänze die zweite Zeile nur, wenn kein gleichwertiger Nextcloud-Cron vorhanden ist. Die Zeile beginnt mit fünf Zeitfeldern: alle fünf Minuten. Speichere und kontrolliere anschließend mit dem dritten Befehl die Tabelle.
+
+Bei Docker/NAS nicht die Linux-Zeile ungeprüft auf dem Host verwenden: Dort läuft Nextcloud im Container. Prüfe zuerst, ob die bestehende Installation einen eigenen Cron-Container oder Aufgabenplaner verwendet, und aktiviere den dokumentierten Cron-Weg dieses Images. Bei Hosting ohne Konsole im Hoster-Menü einen Cronjob für die eigene Nextcloud einrichten lassen. Bestehende Container nicht ersetzen und keine zweite Nextcloud installieren.
+
+Gehe nach mehreren Minuten zurück zu den Hintergrundaufgaben. Der Zeitpunkt der letzten Ausführung muss regelmäßig weiterlaufen, auch wenn kein Browser offen bleibt. Fehler anhand des eigenen Cron-/Containerprotokolls beheben. Erst danach den optionalen Popup-Worker im gesonderten Kapitel einrichten.
+
+Befehl / Vorlage (wird nicht automatisch ausgeführt):
+sudo crontab -u www-data -e
+# Nur die folgende Zeile in die bestehende Crontabelle eintragen:
+*/5 * * * * /usr/bin/php -d apc.enable_cli=1 -f /var/www/nextcloud/cron.php
+# Nach Speichern und Schließen kontrollieren:
+sudo crontab -u www-data -l
+
+2.11 Zugänge speichern und den Funktionsumfang bewusst wählen
+Fahre mit dem Kapitel „Placetel und Teamzugriff“ fort: eigenen API-Schlüssel holen, in der App prüfen und verschlüsselt speichern. Prüfe anschließend Dashboard und Datenstand. Eine erfolgreiche Nextcloud-Installation liefert ohne gültigen Placetel-Zugang noch keine echten Telefoniedaten.
+
+Wenn du nur das Placetel-Dashboard brauchst, lasse DispoLive ausgeschaltet. Für DispoLive-Namensabgleich kommen dessen Zugangsdaten hinzu. Für Anrufer-Popups sind zusätzlich die Kapitel HTTPS, Placetel-Ereignisse, DispoLive-Ziel und Worker abzuarbeiten. Die Eingabe eines API-Schlüssels richtet weder eine Firewallregel noch einen Hintergrunddienst ein.
+
+2.12 Betrieb, Aktualisierung und Rückweg festhalten
+Notiere ohne Zugangsdaten: Nextcloud-/App-Version, Installationspfad, Betriebsart, zuständiges Konto, Backup-Ort und ob Cron, HTTPS-Empfang und Worker geprüft wurden. Nach Updates dieser Komponenten kontrolliere Anmeldung, Datenabruf und bei aktivierten Popups einen vereinbarten Testanruf. Die folgenden Kapitel erklären jeweils den erwarteten Erfolg und die Fehlerdiagnose.
+
+Zum vorübergehenden Stoppen von Popups zuerst deren App-Schalter ausschalten und den eigenen Worker wie beschrieben beenden. Eine App-Deaktivierung über Profilmenü → Apps ist etwas anderes als Löschen oder Deinstallieren; vor solchen Schritten Sicherung und mögliche Datenfolgen prüfen. Für aktuelle Kandidaten ist weiterhin eine kontrollierte manuelle Aktualisierung nötig. Spätere Store-Updates erst nach Kompatibilitätsprüfung und Backup einspielen.
+
+3. Placetel und Teamzugriff einrichten
+Zuständig: Nextcloud- und Placetel-Administrator
+
+3.1 App öffnen und Nextcloud-Rolle prüfen
+Als Nextcloud-Administrator anmelden, Placetel Dashboard öffnen und Einstellungen wählen. Die Schlüsselverwaltung steht nur Administratoren zur Verfügung. Die Installation verwendet ein gemeinsames Placetel-Konto für die freigegebenen Teammitglieder, kein eigenes Telefoniekonto je Nextcloud-Nutzer.
+
+3.2 Placetel-API-Schlüssel besorgen
+Im Placetel-Portal als Administrator die Web-API-Integration öffnen: https://web.placetel.de/integrations/web_api. Falls erforderlich aktivieren und einen eigenen Schlüssel für diese App erstellen. Benötigt wird Placetel PROFI mit den passenden API-/Callcenter-Rechten. Fehlt die Integration, den Placetel-Administrator beziehungsweise Support um Freischaltung bitten.
+
+Den Schlüssel im Feld „Dein Placetel-API-Schlüssel“ ohne vorangestelltes Bearer einfügen und „Konto prüfen & verschlüsselt speichern“ wählen. Kein Loginpasswort eintragen. Die App prüft das Konto, startet den lesenden Abruf und zeigt den Schlüssel danach nicht wieder an.
+
+3.3 Teamrechte festlegen
+In den Einstellungen unter Zugriffsrechte vorhandene Nextcloud-Gruppen-IDs eintragen. Diese findet ein Administrator in der Nextcloud-Benutzerverwaltung. Dispositionsgruppen dürfen unterstützte Telefonie-Einstellungen ändern; Lesegruppen dürfen Daten anzeigen. Gruppen hier nicht neu erfinden.
+
+Standardmäßig dürfen alle angemeldeten Nextcloud-Nutzer lesen. Für einen begrenzten Personenkreis diesen Schalter ausschalten und Gruppen angeben. Leere Dispositionsgruppen: nur Administratoren dürfen Änderungen vornehmen. Administratoren behalten Zugriff. Mit einem separaten Lesekonto prüfen, welche Daten sichtbar sind.
+
+4. HTTPS und den technischen Empfangspfad sicher erreichbar machen
+Zuständig: Server-/Nextcloud-Administrator; anschließend extern prüfen
+
+4.1 Was „öffentlich erreichbar“ hier bedeutet
+Placetel muss eine HTTPS-Verbindung zu genau einer Adresse deiner Nextcloud herstellen können: https://cloud.example.org/index.php/apps/placetel/notify. Der Pfad dahinter ist /index.php/apps/placetel/notify. HTTPS verschlüsselt die Übertragung und bestätigt über ein gültiges Zertifikat den Servernamen.
+
+„Geschützt“ heißt hier: Die App verarbeitet nur korrekt mit dem gemeinsamen Geheimnis signierte Nachrichten (HMAC-SHA256). Dieser einzelne Maschinen-Endpunkt verlangt keine Nextcloud-Anmeldung. Dashboard, Statistiken und Einstellungen bleiben an die Nextcloud-Sitzung gebunden. Ein alleiniger VPN-/LAN-Zugang reicht für Placetel nicht aus.
+
+4.2 Die richtige öffentliche Adresse ermitteln
+Die App über die öffentliche Nextcloud-HTTPS-Adresse öffnen und unter Ereignisanbindung die angezeigte Empfangsadresse kopieren. localhost, 127.0.0.1, private LAN-Adressen und rein interne Hostnamen sind für Placetel nicht erreichbar. Eine bestehende öffentliche Nextcloud-Domain möglichst weiterverwenden.
+
+Bei Installation in einem Unterverzeichnis gehört dieses auch in die Adresse, etwa https://cloud.example.org/nextcloud/index.php/apps/placetel/notify. Die von der App abgeleitete Adresse ist noch kein Erreichbarkeitsnachweis; DNS, Zertifikat und Weiterleitung werden damit nicht geprüft.
+
+4.3 Domain, Zertifikat und Netzwerk prüfen
+Der Domainname muss im öffentlichen DNS zum tatsächlich erreichbaren HTTPS-Zugang führen. A betrifft IPv4, AAAA IPv6; vorhandene Einträge müssen jeweils zu einem funktionierenden Weg passen. Das Zertifikat muss zur Domain passen, gültig sein und ohne Zertifikatswarnung geprüft werden können.
+
+Wenn dieselbe Nextcloud bereits von außerhalb erreichbar ist, dafür keinen zusätzlichen NAS-Port öffnen. Bei einem direkten Anschluss muss ein Administrator den bestehenden HTTPS-Zugang auf TCP443 zum richtigen HTTPS-Frontend herstellen. NAS-Verwaltung, Datenbank, Redis oder internen PHP-Port nicht veröffentlichen. Bei Provider-NAT/CGNAT oder gesperrtem Hosting muss ein geeigneter öffentlicher Zugang vom Betreiber bereitgestellt werden.
+
+4.4 Zusätzliche Anmeldeschranken erkennen
+Ein Reverse Proxy ist die vorgeschaltete Stelle, die HTTPS-Anfragen an Nextcloud weiterleitet. Neben der eigentlichen Nextcloud-Anmeldung kann dort eine weitere Schranke liegen, etwa Basic Auth, ein vorgeschaltetes SSO-Login, VPN-Zwang, IP-Freigabe oder eine Browser-/Captcha-Prüfung. Placetel kann solche interaktiven Anmeldungen nicht erledigen.
+
+Der Administrator richtet eine gezielte Ausnahme ausschließlich für POST auf /index.php/apps/placetel/notify ein. Kein globales Abschalten von Nextcloud-Login, Zwei-Faktor-Anmeldung, Firewall oder Proxy-Zugangsschutz. Hinter der Ausnahme bleibt die HMAC-Prüfung der App aktiv; an anderen Pfaden gelten die bisherigen Regeln weiter.
+
+4.5 Weiterleitung unverändert an Nextcloud durchführen
+Im für die öffentliche Nextcloud-Domain zuständigen HTTPS-Host des Proxys genau diesen Pfad an den bestehenden Nextcloud-Webserver weiterleiten. Die vorhandene Abbildung eines Unterverzeichnisses beibehalten: Manche Installationen reichen den ganzen Pfad durch, andere entfernen am Proxy ein Präfix. POST-Methode, unveränderten Formular-Body und X-Placetel-Signature weiterreichen; keine Login-Umleitung oder Zwischenspeicherung für diesen Pfad.
+
+Nicht an Datenbank oder PHP-FPM-Port weiterleiten. Unterverzeichnis und eventuelle URL-Umschreibungen mit dem Nextcloud-Administrator prüfen. Bei falscher Host-/HTTPS-Erkennung nur die tatsächlich verwendeten Proxyadressen in Nextcloud als trusted_proxies setzen; keinen pauschalen Vertrauensbereich freigeben. Konkrete Proxy- und trusted_domains-Werte hängen von der Installation ab.
+
+4.6 Optionales Beispiel für einen selbst verwalteten Nginx-HTTPS-Proxy
+Nur für Administratoren mit selbst gepflegter Nginx-Konfiguration: Der folgende Block gehört in den bereits vorhandenen HTTPS-server-Block der richtigen Nextcloud-Domain. NEXTCLOUD_UPSTREAM durch den tatsächlich erreichbaren internen Nextcloud-Webserver samt Port ersetzen. Es ist keine vollständige Server-/TLS-Konfiguration. Das Beispiel setzt voraus, dass der Backend-Webserver denselben vollständigen Pfad bedient. Entfernt euer bestehender Proxy ein äußeres Pfadpräfix, muss der Administrator die vorhandene Abbildung korrekt übernehmen; die Vorlage dann nicht unverändert verwenden.
+
+Nicht unverändert in Nginx Proxy Manager, Traefik, Apache oder eine NAS-UI einfügen. Dort dieselbe genaue Pfadregel über deren Konfiguration umsetzen lassen. Geerbte IP-/WAF-Schranken zusätzlich gezielt prüfen; die zwei auth-Zeilen ersetzen keine unbekannte produktspezifische Zugriffspolitik. Keine zweite widersprüchliche location für denselben Pfad anlegen.
+
+Befehl / Vorlage (wird nicht automatisch ausgeführt):
+location = /index.php/apps/placetel/notify {
+    auth_basic off;
+    auth_request off;
+    client_max_body_size 16k;
+    limit_except POST { deny all; }
+    proxy_pass http://NEXTCLOUD_UPSTREAM;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+}
+
+4.7 Proxy-Konfiguration prüfen, bevor sie aktiv wird
+Den zum eigenen Proxy gehörenden Konfigurationstest verwenden. Für einen systemweit installierten Nginx sind die folgenden Befehle ein Beispiel. Nur bei erfolgreichem Test neu laden; bei Fehlern die gesicherte Konfiguration wiederherstellen. Bei Proxy-Containern/Verwaltungsoberflächen deren Test-/Neuladefunktion verwenden.
+
+Befehl / Vorlage (wird nicht automatisch ausgeführt):
+sudo nginx -t
+sudo systemctl reload nginx
+
+4.8 Von außerhalb ohne Anmeldung testen
+Zuerst das gemeinsame Geheimnis wie im nächsten Kapitel in der App speichern. Dann auf einem Gerät außerhalb des eigenen LANs, etwa Laptop über Mobilfunk-Hotspot, diese absichtlich NICHT signierte POST-Anfrage senden. Öffentliche HTTPS-Adresse einsetzen. curl verwendet dabei keine Nextcloud-Anmeldung, folgt ohne -L keiner Login-Umleitung und prüft das Zertifikat. Keinen Schlüssel und keine echte Rufnummer in den Befehl aufnehmen.
+
+Erwartet: HTTP401 mit der App-Antwort „Ereignis nicht angenommen“. Dies ist bei diesem Test richtig: Die Verbindung erreicht die Signaturprüfung, die gefälschte Nachricht wird verworfen. Ein 401 allein beweist das nicht, falls stattdessen Proxy-Login/WWW-Authenticate oder eine fremde HTML-Seite antwortet. Ein Aufruf der Adresse per Browser-GET prüft den benötigten POST-Weg nicht.
+
+Befehl / Vorlage (wird nicht automatisch ausgeführt):
+curl --include --max-time 10 \
+  --request POST \
+  --header 'Content-Type: application/x-www-form-urlencoded' \
+  --data 'event=IncomingCall' \
+  'https://cloud.example.org/index.php/apps/placetel/notify'
+
+4.9 Zugriffsschutz und echtes Ereignis getrennt bestätigen
+Ohne Nextcloud-Anmeldung dürfen Dashboard und API keine Anrufdaten liefern. Dafür ein privates Browserfenster verwenden und das Dashboard öffnen: Anmeldung beziehungsweise Zugriffsverweigerung erwarten. Eine vorangestellte Proxyanmeldung bleibt für andere Pfade erhalten.
+
+Erst der kontrollierte Testanruf aus dem Testkapitel bestätigt den tatsächlichen Weg von Placetel. Ein selbst gesendeter unautorisierter POST oder ein gespeichertes Geheimnis ersetzt diese Abnahme nicht. IP-Freigaben nur zusätzlich verwenden, wenn Placetel verbindliche aktuelle Absenderbereiche bereitstellt; keine Adressen raten.
+
+5. Placetel-Anrufereignisse und gemeinsames Geheimnis einrichten
+Zuständig: Placetel-/Nextcloud-Administrator
+
+5.1 Gemeinsames Geheimnis erzeugen und an beiden Stellen eintragen
+Unter Einstellungen → Ereignisanbindung ein zufälliges Geheimnis mit mindestens24 Zeichen erzeugen, vor dem Speichern kopieren und in der App verschlüsselt speichern. Das ist ein eigenes Signaturgeheimnis, weder Placetel-API-Key noch Nextcloud-Passwort.
+
+Im Placetel-Portal Einstellungen → Externe APIs öffnen, die Empfangsadresse https://cloud.example.org/index.php/apps/placetel/notify und exakt dasselbe gemeinsame Geheimnis hinterlegen. Keine zusätzlichen Leerzeichen. Keine Geheimnisse als URL-Parameter, in Befehlen, Screenshots oder Supportnachrichten verwenden. Die gespeicherte Zeichenfolge wird in der App nicht wieder angezeigt; beim Verlust an beiden Stellen kontrolliert ersetzen.
+
+5.2 Notify für die gewünschten eigenen Rufnummern aktivieren
+In Placetel die Benachrichtigungen je gewünschter Rufnummer aktivieren, in Einstellungen → Externe APIs beziehungsweise den Notify-Optionen der Rufnummer. Eingehende, angenommene und beendete Ereignisse werden für den Ablauf benötigt. Die genauen sichtbaren Auswahlmöglichkeiten können je Portalstand variieren.
+
+Hier geht es um Notify. Das bestehende Anrufrouting nicht auf „External API“/Call Control umstellen. Der Notify-Empfang dient der Meldung und soll die Zustellung eurer Telefonate nicht verändern. Portaländerungen speichern.
+
+5.3 Ereigniseingang kontrollieren
+In der App unter Ereignisse den letzten Empfang und die Ereignisse eines kontrollierten Anrufs prüfen. Wiederholte Zustellungen derselben Anruf-ID werden zusammengeführt. Zeitpunkt in der App ist Empfangszeit, kein Beweis eines exakten Klingel-/Gesprächsbeginns.
+
+Noch keine Ereignisse: HTTPS-/Proxyweg, passende Rufnummernfreigabe und identisches Geheimnis prüfen. Nicht durch Abschalten der Signaturprüfung „lösen“. Die gewöhnlichen Callcenter-Statistiken bleiben von dieser Ereignisquelle getrennt.
+
+6. DispoLive-Zugang und Popup-Empfänger einrichten
+Zuständig: DispoLive-/Nextcloud-Administrator
+
+6.1 Eigenen DispoLive-Zugang speichern
+Im DispoLive-Abschnitt die eigene Basisadresse wie https://firma.dispolive.de ohne weiteren Pfad eintragen. Ein API-Schlüssel mit Berechtigung für contactFindByPhone wird vom zuständigen DispoLive-Administrator oder Support bereitgestellt; Menü und Freischaltung hängen von Version/Rechten ab. Kein Loginpasswort verwenden.
+
+Zugang verschlüsselt speichern und den DispoLive-Abgleich einschalten. Die normale Rufnummernsuche und die Schaltfläche „Erneut abgleichen“ senden keine Popups. Mit einer bekannten Kontaktnummer im internationalen Format kann zunächst nur der Namensabgleich geprüft werden.
+
+6.2 Arbeitsplatz-Telefon als Empfänger bestimmen
+In DispoLive Mitarbeiter → Grunddaten → Arbeitsplatz-Telefon öffnen und den Wert des gewünschten Arbeitsplatzes identisch in das Popup-Zielfeld der App übernehmen. Das ist die Zielkennung des Arbeitsplatzes, nicht die Anrufernummer und keine automatisch aus dem Nextcloud-Namen abgeleitete Zuordnung.
+
+Die empfangende Person muss in DispoLive angemeldet sein. Derselbe Arbeitsplatzwert bei mehreren Mitarbeitern kann mehrere Empfänger betreffen. Die tatsächliche Zuordnung mit DispoLive-Administrator und Testanruf bestätigen.
+
+6.3 Firmen- und Rufnummernfilter bei Bedarf setzen
+Firmenkürzel nur bei entsprechendem Leitstellenbetrieb mit dem in DispoLive hinterlegten Kürzel belegen, sonst leer lassen. Der DispoLive-Administrator kennt den richtigen Wert.
+
+Der optionale Nummernfilter meint eure angerufenen öffentlichen Placetel-Nummern, etwa +493012345678, nicht interne Warteschleifen-IDs. Nummern mit Ländervorwahl durch Komma trennen. Leer: alle für Notify freigegebenen eingehenden Nummern werden an den eingestellten Arbeitsplatz gemeldet.
+
+6.4 Popup-Versand ausdrücklich einschalten
+„Popups für neue eingehende Anrufe aktivieren“ auswählen und „Popup-Einstellungen speichern“ drücken. Erforderlich sind Echtbetrieb, aktiver DispoLive-Zugang, Signaturgeheimnis und ein Arbeitsplatz-Ziel. Das Speichern selbst löst keinen Probe-Popup aus.
+
+Bei neuen gültigen eingehenden Anrufereignissen fordert die App mit notification:true die Meldung an; DispoLive ermittelt den Namen. Unterdrückte Rufnummern werden nicht erfunden. Erst mit der kontrollierten Abnahme feststellen, was bei unbekannter Nummer oder mehreren Treffern tatsächlich angezeigt wird.
+
+7. PHP-Worker prüfen und dauerhaft betreiben
+Zuständig: Serveradministrator; nicht im Browserterminal eines beliebigen Nutzers
+
+7.1 Wann der Worker hilft
+Der Webhook versucht die erste Meldung direkt zuzustellen. Bei parallelen Anrufen oder belegter/begrenzter DispoLive-API kann eine Meldung warten. Der Worker prüft diese Warteschlange unabhängig von einem geöffneten Browser regelmäßig. Normaler Nextcloud-Cron garantiert keine zeitnahe Ausführung.
+
+Der Worker ist ein eigener beaufsichtigter PHP-Prozess derselben App auf demselben Server. Kein zusätzlicher Node-Dienst oder anderes Konto. Die App benötigt weiter ihren normalen Cron für andere Hintergrundarbeiten. Genau einen Worker-Betriebsweg auswählen; nicht zusätzlich mehrere Taskplaner oder unüberwachte &-Prozesse starten.
+
+7.2 Installationsart und richtige Befehlsumgebung feststellen
+Serverzugang öffnen. Läuft Nextcloud direkt auf Linux, den tatsächlichen Nextcloud-Ordner mit occ, denselben PHP-CLI-Build wie für Nextcloud und den Webnutzer ermitteln. Auf Debian/Ubuntu häufig www-data; andere Systeme können andere Benutzer verwenden. Keine Eigentümer oder Rechte pauschal ändern.
+
+Läuft Nextcloud in Docker/NAS-Containern, auf dem Docker-Host arbeiten und den richtigen Nextcloud-Webcontainer ermitteln; nicht den Datenbank-, Redis- oder Office-Container. docker ps --format zeigt Namen ohne vertrauliche Environmentdaten. Kein vollständiges docker inspect/config.php an Support schicken.
+
+Befehl / Vorlage (wird nicht automatisch ausgeführt):
+docker ps --format '{{.Names}}  {{.Image}}'
+command -v docker
+command -v php
+ps -p 1 -o comm=
+
+7.3 Variante A: Linux-Installation ohne Docker einmalig prüfen
+Diese Vorlage setzt Webnutzer www-data und /var/www/nextcloud voraus. Vorher durch eure tatsächlichen Werte ersetzen. Sie prüft zunächst, ob Nextcloud korrekt lädt und der Befehl verfügbar ist. apc.enable_cli=1 hilft bei einer Nextcloud mit APCu; passende PHP-Erweiterungen bleiben erforderlich.
+
+Ein Durchlauf bearbeitet nur bereits berechtigte wartende Popups; er erzeugt keinen fiktiven Testanruf. Ausgabe „Popup-Warteschlange geprüft.“ und Exitcode0 erwarten. Keine API-Schlüssel über Argumente oder Umgebungsvariablen hinzufügen.
+
+Befehl / Vorlage (wird nicht automatisch ausgeführt):
+sudo -u www-data /usr/bin/php -d apc.enable_cli=1 /var/www/nextcloud/occ help placetel:notifications:work
+sudo -u www-data /usr/bin/php -d apc.enable_cli=1 /var/www/nextcloud/occ placetel:notifications:work
+sudo -u www-data /usr/bin/php -d apc.enable_cli=1 /var/www/nextcloud/occ placetel:notifications:work --seconds=10
+
+7.4 Variante B: bestehender Nextcloud-Dockercontainer einmalig prüfen
+NEXTCLOUD_CONTAINER durch den tatsächlichen Webcontainer ersetzen. /var/www/html/occ, www-data und /usr/local/bin/php sind Beispiele für das offizielle Image; bei anderem Image zuerst prüfen. Der Befehl läuft als Webnutzer im vorhandenen Container, nicht als PHP-Prozess auf dem Host.
+
+Der Host braucht berechtigten Dockerzugriff. Dockerzugriff ist administrativ und wird nicht jedem Nextcloud-Nutzer gegeben. Keine zusätzlichen privilegierten Container oder Docker-Socket-Mounts für diese App einrichten.
+
+Befehl / Vorlage (wird nicht automatisch ausgeführt):
+docker exec --user www-data NEXTCLOUD_CONTAINER /usr/local/bin/php -d apc.enable_cli=1 /var/www/html/occ help placetel:notifications:work
+docker exec --user www-data NEXTCLOUD_CONTAINER /usr/local/bin/php -d apc.enable_cli=1 /var/www/html/occ placetel:notifications:work --seconds=10
+
+7.5 Dauerbetrieb A: systemd für direkte Linux-Installation
+Nur auf einem systemd-Host als Serveradministrator: mit sudoedit /etc/systemd/system/placetel-notifications.service eine neue Dienstdatei anlegen. Die folgende Vorlage verwenden und Webnutzer/Gruppe, PHP- und Nextcloud-Pfad anpassen. Existiert bereits ein gleichnamiger Dienst, zunächst dessen Betreiber/Konfiguration prüfen, nicht überschreiben.
+
+Die Vorlage startet PHP direkt als Webnutzer und überwacht den Prozess mit Wiederanlauf. Für andere Dienstmanager deren gleichwertige Start-/Restart-/Stop-Konfiguration verwenden; diese Datei gehört nicht in den App-Ordner.
+
+Befehl / Vorlage (wird nicht automatisch ausgeführt):
+[Unit]
+Description=Placetel DispoLive popup worker
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/nextcloud
+ExecStart=/usr/bin/php -d apc.enable_cli=1 /var/www/nextcloud/occ placetel:notifications:work --seconds=0
+Restart=always
+RestartSec=5
+TimeoutStopSec=15
+
+[Install]
+WantedBy=multi-user.target
+
+7.6 Dauerbetrieb B: systemd auf dem Docker-Host
+Nur alternativ zu A: auf dem Docker-Host ebenfalls /etc/systemd/system/placetel-notifications.service anlegen. NEXTCLOUD_CONTAINER und Docker-/PHP-/occ-Pfad anpassen. Der Hostdienst braucht Dockerberechtigung; PHP läuft durch --user weiterhin als Webnutzer im Container.
+
+Ein docker-exec-Prozess wird nach Containerneustart nicht automatisch neu gestartet. Deshalb überwacht systemd den Aufruf. Hier bewusst 60s-Läufe mit erneutem Start verwenden: Das Beenden des Docker-Clients beendet einen Prozess im Container nicht zuverlässig. Nach einem Dienststopp kann der laufende Durchgang deshalb noch bis zu seinem regulären Ende weiterarbeiten. Sofort keine weiteren Meldungen zulassen: Popup-Schalter in der App ausschalten; eine bereits laufende API-Anfrage lässt sich nicht zurückholen.
+
+Befehl / Vorlage (wird nicht automatisch ausgeführt):
+[Unit]
+Description=Placetel DispoLive popup worker in existing Nextcloud container
+Wants=docker.service network-online.target
+After=docker.service network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/docker exec --user www-data NEXTCLOUD_CONTAINER /usr/local/bin/php -d apc.enable_cli=1 /var/www/html/occ placetel:notifications:work --seconds=60
+Restart=always
+RestartSec=2
+TimeoutStopSec=15
+
+[Install]
+WantedBy=multi-user.target
+
+7.7 systemd-Dienstdatei kontrollieren und aktivieren
+Auf dem Host mit den zur Variante passenden, fertig angepassten Werten prüfen. Nur nach erfolgreicher Prüfung aktivieren. enable sorgt für den Start bei Systemstart, --now startet sofort. Bei status/log auf laufenden Prozess beziehungsweise planmäßige Neustarts der Docker-60s-Variante achten.
+
+Fehler zuerst anhand Pfad, Benutzer, PHP-Modulen, Containerstatus und Command-Verfügbarkeit beheben. Keine geheimen Konfigurationsdateien oder vollständigen Logs veröffentlichen. Die folgenden Befehle ändern den Hostdienst nur, wenn ein Administrator sie selbst ausführt.
+
+Befehl / Vorlage (wird nicht automatisch ausgeführt):
+sudo systemd-analyze verify /etc/systemd/system/placetel-notifications.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now placetel-notifications.service
+sudo systemctl status placetel-notifications.service --no-pager
+sudo journalctl -u placetel-notifications.service -n 30 --no-pager
+
+7.8 NAS ohne nutzbares systemd oder fremdverwaltetes Hosting
+Wenn systemd auf eurem NAS nicht verfügbar/unterstützt ist, dessen dokumentierte Dienst-/Aufgabenverwaltung oder den Hoster verwenden. Es gibt keinen universellen Menüpfad für alle NAS-Modelle. Systemdateien nicht entgegen Herstellervorgaben verändern.
+
+Dem Administrator folgende Vorgaben geben: denselben geprüften OCC-Befehl im bestehenden Nextcloud-Container ausführen, einen beaufsichtigten Start nach Host-/Containerstart und Wiederanlauf nach Fehler einrichten, genau einen Betriebsweg wählen, keine parallelen Taskläufe zulassen und Neustarts prüfen. Bei einem periodischen Task können begrenzte Läufe z. B. --seconds=50 verwendet werden; die unvermeidlichen Pausen bestimmen die mögliche Verzögerung. Ein bloßer einmaliger Starttask, docker exec -d oder & ersetzt keine Überwachung.
+
+Kann das Hosting keine dauerhafte beziehungsweise ausreichend häufige Verarbeitung anbieten, bleiben direkter Erstversuch und normaler Cron. Dann ist zeitnahe Queuebearbeitung nicht zugesichert; dies nicht als vollständig eingerichteten Worker markieren.
+
+7.9 Funktion ohne offenen Browser und nach Neustart bestätigen
+In der App unter DispoLive-Popups auf „Letzter optionaler Worker-Durchlauf“ achten. Den Zeitstempel später erneut prüfen; ein alter einzelner Zeitstempel beweist keinen Dauerbetrieb. Während der Server läuft den Browser schließen und einen kontrollierten Testanruf durchführen. Danach Zustellstatus und echte DispoLive-Anzeige kontrollieren.
+
+Mit dem Betreiber einen Host-/Container- oder Dienstneustart planen und danach erneut Dienststatus und fortschreitenden Worker-Zeitstempel prüfen. Die Worker-Zeit zeigt einen Durchlauf, keinen Beweis für erfolgreiches Popup. Bei Docker auch mindestens einen vollständigen 60s-Lauf und den nächsten Start beobachten.
+
+7.10 Anhalten, deaktivieren und Änderungen übernehmen
+Zum Verhindern neuer Sendungen zuerst Popups in den App-Einstellungen ausschalten und speichern. Anschließend den eigenen Supervisor-Dienst stoppen/deaktivieren. Bei Docker kann ein bereits gestarteter begrenzter Durchlauf noch laufen; nach dessen Ende muss der Worker-Zeitstempel stehen bleiben. Keine fremden Container stoppen oder pauschal PHP-Prozesse beenden.
+
+Nach Änderung einer eigenen systemd-Datei daemon-reload und restart ausführen. Bereits gesendete Benachrichtigungen lassen sich nicht zurückrufen. Nextcloud-Cron nicht deaktivieren.
+
+Befehl / Vorlage (wird nicht automatisch ausgeführt):
+sudo systemctl disable --now placetel-notifications.service
+# Nach einer beabsichtigten Konfigurationsänderung stattdessen:
+sudo systemctl daemon-reload
+sudo systemctl restart placetel-notifications.service
+
+8. Abnahme: Woran erkenne ich, dass alles wirklich funktioniert?
+Zuständig: Betreiber mit Nextcloud-/DispoLive-Zugang; Serveradministrator bei Fehlern
+
+8.1 Kontrollierten Test vorbereiten
+Einen Testzeitpunkt und eine bekannte eigene Kontaktnummer vereinbaren, keine unbeteiligten Kunden für Tests anrufen. DispoLive am vorgesehenen Arbeitsplatz anmelden. In der App Echtbetrieb, DispoLive-Abgleich und Popups prüfen; im Placetel-Portal die richtige eigene Zielnummer für Notify freigeben.
+
+Zuerst normalen Namensabgleich ohne Popup prüfen, danach einen echten kontrollierten eingehenden Testanruf auf die freigegebene Nummer durchführen. Eigene Nummer darf sichtbar sein; bei unterdrückter Nummer wird kein Popup angefordert.
+
+8.2 Drei Stationen einzeln kontrollieren
+1. App → Ereignisse: neues IncomingCall mit neuem Empfang sichtbar. 2. Einstellungen → DispoLive → Popups: zugehörige Zustellanfrage „Von API bestätigt“ oder erklärter anderer Zustand. 3. Im angemeldeten DispoLive-Browser: Meldung beim richtigen Arbeitsplatz mit passendem gefundenem Kontakt tatsächlich sichtbar.
+
+Nur wenn alle drei Stationen stimmen, ist die Ende-zu-Ende-Anzeige abgenommen. Eine HTTP200-Antwort von DispoLive allein bestätigt die Anfrage, nicht die sichtbare Browserdarstellung, richtigen Empfänger oder einen eindeutigen Kontakttreffer.
+
+8.3 Wiederholungen und mehrere Anrufe prüfen
+Mit kontrollierten Anrufen prüfen: neue echte Anrufe derselben Nummer sollen neue Meldungen erhalten. Wiederholte Placetel-Ereignisse derselben Call-ID dürfen keine Dubletten erzeugen. Für gleichzeitige Testanrufe bei Bedarf den Worker und die Warteschlange beobachten.
+
+Pending-Anfragen verfallen nach90s ab Empfang und werden bei bekanntem Annahme-/Endereignis, Deaktivierung oder Ziel-/Zugangsänderung verworfen. Bereits unterwegs befindliche Anfragen können noch abgeschlossen werden. API-Limits und Netzwerklaufzeit verhindern eine feste Sekunden-/Exactly-once-Garantie.
+
+8.4 Ergebnis datensparsam dokumentieren
+Datum, App-/Nextcloud-Version, geprüfte Stationen, Zeitpunkt/Status und verbleibende Probleme notieren. Ob das Popup am richtigen Arbeitsplatz sichtbar war ausdrücklich festhalten. Keine API-Schlüssel, Signaturgeheimnisse, Patienten-/Anrufrohdaten oder vollständigen Konfigurationsdateien aufnehmen.
+
+Wenn alle Prüfungen passen, das Testfenster abschließen. Bei Fehlern die passende Diagnose unten verwenden, keine Sicherheitsprüfung global ausschalten und keine unbekannten Zustellergebnisse blind erneut senden.
+
+9. Fehlerhilfe: Was bedeutet die Anzeige und was prüfe ich als Nächstes?
+Zuständig: Nutzer und zuständiger Administrator
+
+9.1 Verbindungstest: TLS/DNS/Timeout oder HTTP301/302
+TLS-/Zertifikatsfehler: Domain, Zertifikatskette, Gültigkeit und Uhrzeit prüfen; curl nicht mit -k unsicher machen. DNS-/Verbindungsfehler: öffentliche A/AAAA-Einträge, Anschluss/CGNAT und HTTPS-Frontend prüfen. Timeout: Firewall, Weiterleitung und Serverzustand prüfen.
+
+301/302 oder Login-/Captcha-HTML bei direktem HTTPS-POST: falsche Basisadresse oder zusätzliche Proxy-/SSO-Schranke. Nur die genaue Notify-POST-Regel korrigieren; eine pauschale Loginfreigabe ist keine Lösung.
+
+9.2 Verbindungstest: HTTP-Fehlerantworten richtig einordnen
+401 mit „Ereignis nicht angenommen“ ist bei absichtlich unsigniertem Test nach gespeicherter Signatur richtig. Bei echten Placetel-Ereignissen dagegen gemeinsames Geheimnis/Weitergabe des unveränderten Bodys und Signaturheaders prüfen. 401 mit fremdem Proxylogin ist nicht derselbe Nachweis.
+
+403 kann eine Proxy-/IP-/WAF-Regel sein. 404: App aktiv, exakter Pfad, Unterverzeichnis und Proxy-Upstream prüfen. GET kann wegen ausschließlich erlaubtem POST abgelehnt werden (403/404/405); das ist kein POST-Funktionstest. 413: Größenlimit. 415: falscher Content-Type. 503 kann noch fehlendes Signaturgeheimnis, belegte Verarbeitung oder Server-/Datenbankfehler bedeuten. App-/Proxylogs vom Administrator gezielt ohne Geheimnisse prüfen lassen. 502/504: Der Proxy erreicht den Nextcloud-Webserver nicht oder wartet zu lange; Upstream-Adresse, Port, Containerstatus und vorhandene Pfadabbildung prüfen.
+
+9.3 Popup bleibt vorgemerkt oder Worker-Zeit ist alt
+Lokale Namenssuche oder API-Limit kann den Versand kurz verzögern. Ohne beaufsichtigten Worker hängt eine wartende Meldung von weiteren Ereignissen/offener Ansicht/Cron ab. Dienststatus, Container, Fortschritt des Worker-Zeitstempels und Fehlermeldungen prüfen.
+
+Bei fortschreitender Worker-Zeit trotzdem keine API-Bestätigung: Zustellhinweis, aktiven DispoLive-Zugang, Zielnummernfilter und bereits angenommene/beendete Anrufe beachten. Alte Daten nicht durch immer kürzere unkontrollierte Cron-Läufe oder mehrere Worker zu reparieren versuchen.
+
+9.4 Popup abgelehnt, unbekannt oder API bestätigt ohne sichtbare Meldung
+Abgelehnt: gespeicherte Adresse/Schlüssel, DispoLive-Freischaltung und Arbeitsplatz-/Firmenangaben prüfen. Explizites429 wird begrenzt wiederholt; lokale API-Wartezeiten verbrauchen keinen externen Zustellversuch.
+
+„Ergebnis unbekannt“ nach Timeout/5xx/Abbruch: Die Meldung könnte bereits angekommen sein. Deshalb kein automatischer Resend. „Von API bestätigt“, aber nichts sichtbar: richtige DispoLive-Anmeldung, identisches Arbeitsplatz-Telefon, ggf. Firmenkürzel, Kontakttreffer und Empfängerberechtigung mit DispoLive-Administrator prüfen. Browser-Berechtigungen nur soweit für eure DispoLive-Version erforderlich prüfen lassen; eine API-Bestätigung nicht als Browserbeweis werten.
+
+9.5 OCC-Befehl fehlt oder Worker startet nicht
+„Command not defined“: richtige Nextcloud-Installation/Container und aktivierte aktuelle Placetel-App prüfen. Falscher PHP-/occ-Pfad oder Webnutzer: Werte im Dienst korrigieren. APCu-/Modulfehler: denselben passenden PHP-CLI-Build samt Modulen verwenden, ggf. -d apc.enable_cli=1.
+
+„Container not running“: Ursache der vorhandenen Nextcloud-Instanz beheben, nicht eine zweite Instanz mit fremden Daten starten. Fehlender Docker-/sudo-/systemd-Zugriff: zuständigen Serveradministrator/Hoster hinzuziehen. Erst den einmaligen OCC-Test bestehen lassen, dann den dauerhaften Dienst aktivieren.
+
+Offizielle Dokumentationen
+Placetel: Notify-Einrichtung und Signatur: https://github.com/Placetel/call-control-notify-api#setup
+Nextcloud: Reverse Proxy: https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/reverse_proxy_configuration.html
+Nextcloud: OCC als Webnutzer: https://docs.nextcloud.com/server/stable/admin_manual/occ_command.html
+systemd: überwachte Dienste: https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html
+Docker: Lebensdauer von docker exec: https://docs.docker.com/reference/cli/docker/container/exec/
+Nginx: Proxy-Weiterleitung: https://nginx.org/en/docs/http/ngx_http_proxy_module.html
+Nextcloud: Apps installieren und aktivieren: https://docs.nextcloud.com/server/stable/admin_manual/apps_management.html
+Nextcloud: Benutzer und Gruppen verwalten: https://docs.nextcloud.com/server/stable/admin_manual/configuration_user/user_configuration.html
+Nextcloud: reguläre Hintergrundaufgaben und Cron: https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/background_jobs_configuration.html

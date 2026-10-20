@@ -1,0 +1,9 @@
+Placetel Dashboard – Fehler melden
+
+Zunächst den Administrator dieser Nextcloud kontaktieren. Zeitpunkt, App-/Nextcloud-
+Version, betroffenen Tab, Rolle und reproduzierbare Schritte angeben. Keine API-
+Schlüssel, vollständigen Rufnummern, Patientendaten oder unbereinigten Screenshots
+weitergeben. Diagnosedaten vor Weitergabe prüfen.
+
+Ein öffentlicher Maintainer-/Supportkanal wird vor der Store-Veröffentlichung in den
+App-Metadaten angegeben. Der vorliegende Kandidat verwendet dafür einen Platzhalter.

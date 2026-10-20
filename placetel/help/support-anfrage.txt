@@ -1,0 +1,22 @@
+Betreff: Placetel Profi – offizielle API für Callcenter-Agentenzuordnung und belastbare Statistik
+
+Guten Tag,
+
+wir entwickeln für unser Placetel-Profi-Callcenter mit zunächst fünf Agenten eine lokal laufende Verwaltungsanwendung. Wir möchten ausschließlich offizielle, unterstützte Schnittstellen verwenden.
+
+Bitte bestätigen Sie folgende Punkte bzw. senden Sie die betreffende Dokumentation:
+
+1. Über welche offizielle Schnittstelle lassen sich Mitgliedschaften von Agenten in Callcenter-Warteschleifen lesen, hinzufügen und entfernen?
+2. Lassen sich Fähigkeiten bzw. Fähigkeitenstufen je Agent und Warteschleife lesen und ändern? Welche Wertebereiche und Prioritätsregeln gelten? Die allgemeine Agentenpriorität ist hierfür nicht ausreichend.
+3. Ist dafür eine gesonderte Freischaltung, Lizenz oder ein spezieller Token erforderlich? Welche Abrufgrenzen gelten?
+4. Was geschieht mit einem laufenden Gespräch bei Änderung oder Entfernung einer Zuordnung? Welche Garantien für wiederholte Schreibaufrufe bestehen?
+5. Welche Kennung in /call_center_calls bleibt über alle wiederholten Zustellversuche und Warteschleifenwechsel eines Anrufs stabil? Identifizieren id und iteration einen Vorgang oder einzelne Zustellversuche? Wie werden Weiterverbindungen zwischen Agenten dargestellt?
+6. Ist eine stabile Agenten-ID je angenommenem Gespräch verfügbar? Wie kann agent_name bei gleichen Namen und späteren Umbenennungen zuverlässig zugeordnet werden?
+7. Welche präzise Bedeutung haben started_at, left_queue_at, ended_at, call_status und answer_status? Welches Feld markiert die tatsächliche Gesprächsannahme? Wie werden abgewiesene Zustellversuche, laufende und abgeschlossene Gespräche unterschieden?
+8. Welche offizielle Quelle liefert aktuelle wartende Anrufer, aktive Gespräche, Wartezeiten und Agentenbelegung? Welche Aktualisierungsverzögerung und welche passenden Webhook-Ereignisse sind garantiert?
+9. Wie weit lässt sich die Callcenter-Historie nachladen? Können sich ältere Datensätze nachträglich ändern? Wie funktionieren Paginierung und Tagesfilter hinsichtlich Zeitzone, Nachtgesprächen und Zeitumstellung?
+10. Gibt es eine Testumgebung oder ein empfohlenes Verfahren für kontrollierte Testanrufe und Zuordnungsänderungen?
+
+Ziel ist eine deduplizierte Statistik pro Agent (angenommene Gespräche, eindeutige normalisierte Anrufernummern, tatsächliche Gesprächsdauer und Stundenbelegung) sowie eine lokale zeitgesteuerte Zuordnung von Agenten zu Warteschleifen.
+
+Vielen Dank!

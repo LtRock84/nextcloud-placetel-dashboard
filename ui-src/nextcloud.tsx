@@ -1,0 +1,11 @@
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { App } from './App';
+import styles from './styles.css?inline';
+const host=document.getElementById('placetel-root')!;
+const shadow=host.attachShadow({mode:'open'});
+const style=document.createElement('style');
+style.textContent=styles.replace(':root{',':host{')+`\n:host{display:block;height:100%;overflow:auto} .app-shell{position:relative;min-height:100%;height:100%}.sidebar{position:sticky;top:0;height:100%;min-height:650px;flex-shrink:0}.main-shell{margin-left:0!important}.workspace-main{margin-left:0!important} .main-content{margin-left:0!important} .main-area{margin-left:0!important} @media(max-width:800px){.sidebar{min-height:0}}`;
+shadow.append(style);
+const mount=document.createElement('div');mount.style.height='100%';shadow.append(mount);
+createRoot(mount).render(<React.StrictMode><App /></React.StrictMode>);

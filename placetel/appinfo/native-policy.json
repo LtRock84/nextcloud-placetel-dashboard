@@ -1,0 +1,8 @@
+[
+ {"method":"GET","pattern":"^/(bootstrap|health|statistics|coverage|operations/report)$","role":"viewer"},
+ {"method":"POST","pattern":"^/dispolive/resolve$","role":"viewer"},
+ {"method":"POST","pattern":"^/(agents|queues)/[A-Za-z0-9_-]+$","role":"operator"},
+ {"method":"POST","pattern":"^/operations/(callback|alerts|routing/(load|profile|simulate|preview|apply))$","role":"operator"},
+ {"method":"DELETE","pattern":"^/operations/routing/profile/[A-Za-z0-9_-]+$","role":"operator"},
+ {"method":"POST","pattern":"^/(connect|disconnect|mode|settings|operations/notify|dispolive/(connect|disconnect|toggle|popups))$","role":"admin"}
+]

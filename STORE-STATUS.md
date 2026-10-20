@@ -7,6 +7,7 @@ Quellrepositorys sowie den Zertifikatsantrag freigegeben.
 - App: Placetel Dashboard. Maintainer: LtRock84.
 - Support: https://github.com/LtRock84/nextcloud-placetel-dashboard/issues
 - CSR mit CN=placetel und RSA-4096 ist vorbereitet und lokal geprüft.
+- Zertifikatsantrag: https://github.com/nextcloud/app-certificate-requests/pull/1359 (eingereicht).
 - Zertifikat: noch nicht ausgestellt.
 - Store-Release: noch nicht eingereicht.
 

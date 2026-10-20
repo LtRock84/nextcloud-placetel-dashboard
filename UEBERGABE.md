@@ -29,3 +29,8 @@ Nächster Schritt: Zertifikatsantrag mit öffentlichem Quelllink bei Nextcloud
 einreichen; nach Ausstellung Zertifikat und Schlüsselzugehörigkeit prüfen.
 Vor Store-Release verbleibende Abnahmen durchführen; keine Mockprüfung als
 echte Anbieter-/Browserabnahme ausgeben. Status in STORE-STATUS.md fortführen.
+
+Repository ist jetzt öffentlich. Zertifikatsantrag am20.10.2026 eingereicht:
+https://github.com/nextcloud/app-certificate-requests/pull/1359
+Nur ein öffentlicher CSR im Antrag, keine privaten Schlüssel. Ausstellung durch
+Nextcloud steht aus; danach Signatur und Store-Einreichung fortsetzen.

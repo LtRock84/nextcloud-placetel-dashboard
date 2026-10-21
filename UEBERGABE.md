@@ -34,3 +34,18 @@ Repository ist jetzt öffentlich. Zertifikatsantrag am20.10.2026 eingereicht:
 https://github.com/nextcloud/app-certificate-requests/pull/1359
 Nur ein öffentlicher CSR im Antrag, keine privaten Schlüssel. Ausstellung durch
 Nextcloud steht aus; danach Signatur und Store-Einreichung fortsetzen.
+
+## DCO-Korrektur am 21.10.2026
+
+Der ursprüngliche CSR-Commit hatte keinen Signed-off-by-Vermerk. Der Zertifikats-
+antrag #1359 war deshalb durch DCO blockiert; die vorige Statusprüfung hatte
+Check-Runs übersehen. Commit im ausschließlich hierfür verwendeten Branch mit
+erwartetem altem Head ersetzt: 35ca305268f21627b55fa5ce56ed9544f3f16c6d.
+Baum/CSR und Basis unverändert; weiterhin genau ein Commit und eine Datei.
+DCO-Check danach abgeschlossen mit success:
+https://github.com/nextcloud/app-certificate-requests/runs/119044985450
+Antrag weiterhin offen; Zertifikat noch nicht als ausgestellt bestätigt.
+Künftige Statusprüfungen müssen Check-Runs und Workflow-Läufe berücksichtigen,
+nicht ausschließlich PR-Kommentare oder Combined Status. Lokaler ursprünglicher
+Arbeitsordner war bei dieser Prüfung nicht eingebunden; deshalb Übergabe hier
+im Repository fortgeführt. Nächster Schritt bleibt Bearbeitung durch Nextcloud.

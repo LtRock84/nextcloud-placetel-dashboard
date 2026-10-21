@@ -5,6 +5,7 @@
  <version>0.2.0</version><licence>agpl</licence><author>LtRock84</author>
  <namespace>Placetel</namespace><category>office</category>
  <bugs>https://github.com/LtRock84/nextcloud-placetel-dashboard/issues</bugs>
+ <donation type="paypal" title="Projekt unterstützen">https://www.paypal.me/Werkstattmanager</donation>
  <dependencies><php min-version="8.3"/><nextcloud min-version="35" max-version="35"/></dependencies>
  <background-jobs><job>OCA\Placetel\BackgroundJob\Synchronize</job></background-jobs>
  <commands><command>OCA\Placetel\Command\Notifications</command></commands>

@@ -32,3 +32,18 @@ Tests verwenden ausschließlich synthetische Daten: [Testanleitung](tests/native
 ## Datenschutz und Lizenz
 
 Keine betrieblichen Daten oder Zugangsdaten gehören in dieses Repository. [Datenschutz](placetel/DATENSCHUTZ.md), [AGPL-3.0-Lizenz](LICENSE), [Drittanbieter-Lizenzen](placetel/THIRDPARTY-LICENSES.txt).
+
+## Projekt unterstützen
+
+[♥ Projekt über PayPal unterstützen](https://www.paypal.me/Werkstattmanager)
+
+In der App steht unten in der Seitenleiste **Projekt unterstützen**. Vor dem Wechsel
+zu PayPal erklärt ein Hinweis die freiwillige Unterstützung: Die App bleibt kostenlos,
+keine zusätzlichen Funktionen oder individuellen Leistungen und keine Spendenbescheinigung.
+Der Betrag ist bei PayPal frei wählbar. Der Empfänger ist dasselbe öffentliche
+PayPal-Profil wie im Werkstattmanager; er kann nicht über Einstellungen oder
+Anrufdaten verändert werden. GitHubs Sponsor-Link verwendet dieselbe Adresse.
+
+Keine eingebetteten Zahlungsdienste, Skripte oder Vorabverbindungen. Erst der
+Weiterklick öffnet PayPal in einem neuen Tab ohne Referrer. Die App überträgt dabei
+keine Anruf-/Kontaktdaten und verarbeitet oder speichert keine Zahlungen.

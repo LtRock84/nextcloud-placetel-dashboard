@@ -19,3 +19,9 @@
   90s-Ablauf und keine blinden Wiederholungen nach unbekanntem Ergebnis.
 - Getrennte Empfangs-/Versandsperren, gemeinsames DispoLive-Ratenlimit;
   optionaler nativer PHP/OCC-Worker für wartende Meldungen.
+
+## Noch nicht veröffentlicht – 21.10.2026
+
+- Freiwillige Projektunterstützung in der Seitenleiste mit vorgeschaltetem Hinweis,
+  gleichem PayPal.Me-Ziel wie Werkstattmanager und ohne Zahlungsintegration.
+- Unterstützungslink in Projektbeschreibung und GitHub-Sponsor-Konfiguration.

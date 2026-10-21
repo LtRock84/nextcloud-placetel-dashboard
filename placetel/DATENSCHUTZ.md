@@ -24,3 +24,12 @@ Eine Call-ID-Zustellliste speichert Zustellstatus, Zeiten und Versuche maximal30
 Konfiguration enthält Arbeitsplatz und ausgewählte eigene Zielrufnummern. In der UI
 werden aktuelle Zustellzustände angezeigt. Bereits gesendete Browsermeldungen kann
 ein späteres Ausschalten nicht zurückrufen. Keine Patientendaten/Rohantworten in Logs.
+
+## Freiwillige Projektunterstützung
+
+Der Unterstützungsbutton öffnet zunächst nur einen lokalen Hinweis. Erst ein
+weiterer Klick öffnet das feste öffentliche PayPal.Me-Profil Werkstattmanager in
+einem neuen Tab ohne Referrer. Es gibt keine eingebetteten PayPal-Skripte oder
+Vorabverbindungen und keine Übergabe von Anruf-, Kontakt- oder Zugangsdaten.
+Die App speichert keine Zahlungen. Für die bewusst geöffnete PayPal-Seite gelten
+die dortigen Datenschutzbedingungen. Unterstützung verändert keine App-Rechte.

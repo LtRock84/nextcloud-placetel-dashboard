@@ -49,3 +49,26 @@ Künftige Statusprüfungen müssen Check-Runs und Workflow-Läufe berücksichtig
 nicht ausschließlich PR-Kommentare oder Combined Status. Lokaler ursprünglicher
 Arbeitsordner war bei dieser Prüfung nicht eingebunden; deshalb Übergabe hier
 im Repository fortgeführt. Nächster Schritt bleibt Bearbeitung durch Nextcloud.
+
+## Laufend: freiwillige Projektunterstützung (21.10.2026)
+
+Werkstattmanager-Quellstand als Referenz gelesen: ProjectSupport.vue und
+project-support.ts. Derselbe feste öffentliche PayPal.Me-Empfänger übernommen.
+Neue React-Komponente mit Hinweisdialog, bewusster Weiterleitung in neuem Tab,
+noopener/noreferrer und no-referrer, keine externen Skripte/Requests vor Weiterklick.
+Seitenleiste, README, FUNDING.yml, Datenschutz, Changelog und App-Store-Metadaten
+ergänzt. Kein zahlungsabhängiger Funktionsumfang. Build bestanden; Dialogprüfung
+bestanden (DOM-Simulation, kein echter Browser-/Layouttest). Ursprünglicher Arbeitsordner auf externem Volume nicht eingebunden;
+aktueller GitHub-Stand in temporärem Checkout /private/tmp/placetel-donation-work
+bearbeitet. Lokaler Desktopdienst kann dadurch noch nicht aktualisiert werden.
+
+Prüfung: sauberer npm-ci-Aufbau, Produktionsbuild, info.xml gegen das vorhandene
+offizielle Schema gültig. Isolierte React-/DOM-Prüfung bestätigt Hinweis, festes
+Zahlungsziel, neues Tab, noopener/noreferrer und no-referrer, Schließen/Abbrechen
+und null Netzwerkanfragen. Native Dialogfunktionen im DOM simuliert; reale
+Tastatur-/Fokus-/Mobilansicht im Browser noch prüfen.20 Backend-Dateien unverändert.
+Kein Zahlungsversuch, keine Produktionsdaten oder Zertifikatsdateien verändert.
+Neue Komponente ui-src/ProjectSupport.tsx; Empfänger derselbe wie Werkstattmanager.
+Bei Wiederanbindung des ursprünglichen Volumes Änderungen gezielt in Desktop-
+Quellen übernehmen und neu bauen; nicht dessen Daten/Schlüssel ersetzen.
+Noch kein App-Store-Release oder NAS-Update.

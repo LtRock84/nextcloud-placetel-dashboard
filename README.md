@@ -47,3 +47,15 @@ Anrufdaten verändert werden. GitHubs Sponsor-Link verwendet dieselbe Adresse.
 Keine eingebetteten Zahlungsdienste, Skripte oder Vorabverbindungen. Erst der
 Weiterklick öffnet PayPal in einem neuen Tab ohne Referrer. Die App überträgt dabei
 keine Anruf-/Kontaktdaten und verarbeitet oder speichert keine Zahlungen.
+
+## Neue Funktionen im Entwicklungsstand
+
+- Gesamttelefonzeit pro Agent mit getrennter eingehender und ausgehender Zeit.
+  Live-Dauern werden wegen fehlender bestätigter Annahmezeitpunkte als Näherungen
+  ausgewiesen; laufende und unbekannte Dauern bleiben separat.
+- Optionale DispoLive-Popups lassen sich je angerufener Rufnummer an mehrere
+  Arbeitsplätze verteilen. Die Regeln werden vom Administrator eingerichtet.
+
+Der Quellstand kann vor Ausstellung des App-Zertifikats aktualisiert werden.
+Diese Änderungen sind noch kein signiertes Release und kein App-Store-Angebot.
+Die neue native Nextcloud-Laufzeitabnahme steht noch aus.

@@ -51,6 +51,14 @@ try {
  clearPopupRows();$a=$call('expired');$popups->enqueue($a,'IncomingCall');$row=$get($a);$row['receivedAt']=gmdate('c',time()-100);$store->put($a['id'],$row,'dispolive-popups',gmdate('Y-m-d'));$before=count($requests);$popups->tick();checkPopup($get($a)['state']==='expired'&&count($requests)===$before,'old queued calls not replayed');
  clearPopupRows();$a=$call('crash');$popups->enqueue($a,'IncomingCall');$row=$get($a);$row['state']='sending';$row['updatedAt']=gmdate('c',time()-35);$store->put($a['id'],$row,'dispolive-popups',gmdate('Y-m-d'));$before=count($requests);$popups->tick();checkPopup($get($a)['state']==='uncertain'&&count($requests)===$before,'interrupted send after restart marked uncertain');
  clearPopupRows();$a=$call('late-event',['firstReceivedAt'=>gmdate('c',time()-100)]);$popups->enqueue($a,'IncomingCall');checkPopup($get($a)['state']==='skipped','old received event cannot backfill popup');
+ clearPopupRows();$response=200;$before=count($requests);
+ $popups->configure(array_replace($config,['calledNumbers'=>[],'routes'=>[['calledNumber'=>'+493011111111','desktopPhones'=>['1','3','3']],['calledNumber'=>'+493022222222','desktopPhones'=>['2','3']]]]));
+ $a=$call('route-one',['to'=>'+493011111111']);$popups->enqueue($a,'IncomingCall');$store->remove('dispolive:next');$popups->tick();$store->remove('dispolive:next');$popups->tick();
+ $destinations=array_column(array_column(array_slice($requests,$before),'body'),'desktopPhone');sort($destinations);checkPopup($destinations===['1','3'],'number one fans out to workplace one and three once');
+ $popups->enqueue($a,'IncomingCall');$popups->tick();checkPopup(count($requests)===$before+2,'routing retries do not duplicate delivered workplace popups');
+ $before=count($requests);$b=$call('route-two',['to'=>'+493022222222']);$popups->enqueue($b,'IncomingCall');$store->remove('dispolive:next');$popups->tick();$store->remove('dispolive:next');$popups->tick();
+ $destinations=array_column(array_column(array_slice($requests,$before),'body'),'desktopPhone');sort($destinations);checkPopup($destinations===['2','3'],'number two fans out to workplace two and three');
+ $before=count($requests);$other=$call('route-unmatched',['to'=>'+493033333333']);$popups->enqueue($other,'IncomingCall');$popups->tick();checkPopup(count($requests)===$before,'unmatched number never falls back to default workplace');
  checkPopup(!str_contains(json_encode($popups->state()),'DO_NOT_EXPOSE_SYNTHETIC_RESPONSE')&&!str_contains(json_encode($popups->state()),'synthetic-popup-fixture-key'),'status never leaks remote body or API key');
  checkPopup($container->get(\OCA\Placetel\Command\Notifications::class)->getName()==='placetel:notifications:work','public Nextcloud command registers worker');
 }finally{

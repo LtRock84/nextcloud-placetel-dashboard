@@ -38,6 +38,20 @@ final class Analysis {
  public function statistics(array $records,array $coverage,array $options): array {
   ['from'=>$from,'to'=>$to,'asOf'=>$asOf]=$options;[$start,$end,$dates]=self::range($from,$to,$asOf);$now=self::stamp($asOf);$live=($options['source']??null)==='placetel'||count(array_filter($records,static fn($c)=>($c['source']??null)==='placetel'))>0;
   $at=static fn($c)=>$c['acceptedAt']??$c['referenceAt']??$c['offeredAt'];$unique=[];foreach($records as $c)$unique[$c['id']]=$c;
+  // Agent total intentionally spans all queues, including unqueued outbound calls.
+  $telephoneTime=['incomingSeconds'=>0,'outgoingSeconds'=>0,'totalSeconds'=>0,'incomingKnown'=>0,'outgoingKnown'=>0,'completed'=>0,'unknown'=>0,'ongoing'=>0,'approximate'=>false];
+  foreach($unique as $c){
+   if(($options['agentId']??'')&&$c['agentId']!==$options['agentId'])continue;
+   if(isset($c['source'])&&!in_array($c['callType']??'',['dail_in','dail_out'],true))continue;
+   $t=self::stamp($at($c));if($c['outcome']!=='accepted'||!is_finite($t)||$t<$start||$t>=$end)continue;
+   $outgoing=($c['callType']??'')==='dail_out';$b=self::stamp($c['endedAt']);
+   if(!$c['endedAt']||$b>$now){$telephoneTime['ongoing']++;continue;}$telephoneTime['completed']++;
+   $begin=$c['durationVerified']?$c['acceptedAt']:(($c['source']??'')==='placetel'?($outgoing?($c['referenceAt']??$c['offeredAt']):($c['durationStart']??null)):null);$a=self::stamp($begin);
+   if(!is_finite($a)||!is_finite($b)||$b<$a){$telephoneTime['unknown']++;continue;}
+   $telephoneTime[$outgoing?'outgoingSeconds':'incomingSeconds']+=$b-$a;$telephoneTime[$outgoing?'outgoingKnown':'incomingKnown']++;
+   if(!$c['durationVerified'])$telephoneTime['approximate']=true;
+  }
+  $telephoneTime['totalSeconds']=$telephoneTime['incomingSeconds']+$telephoneTime['outgoingSeconds'];
   $records=array_values(array_filter($unique,static fn($c)=>(!isset($c['source'])||($c['callType']??'')==='dail_in')&&(!($options['agentId']??'')||$c['agentId']===$options['agentId'])&&(!($options['queueId']??'')||$c['queueId']===$options['queueId'])));
   $calls=[];$distinct=[];$known=[];$estimates=[];$anonymous=0;$completed=0;
   foreach($records as $c){$t=self::stamp($at($c));if($c['outcome']!=='accepted'||$t<$start||$t>=$end)continue;$a=self::stamp($c['acceptedAt']);$b=self::stamp($c['endedAt']);$d=self::stamp($c['durationStart']??null);
@@ -55,6 +69,6 @@ final class Analysis {
   $failed=$ongoing=$waiting=$unmappedAgents=$unmappedQueues=0;
   foreach($records as $c){$t=self::stamp($at($c));if($c['outcome']==='missed'&&self::stamp($c['offeredAt'])>=$start&&self::stamp($c['offeredAt'])<$end)$failed++;if($end===$now&&$c['outcome']==='accepted'&&$t<$end&&$t>$end-86400&&(!$c['endedAt']||self::stamp($c['endedAt'])>$now))$ongoing++;if($c['outcome']==='waiting'&&self::stamp($c['offeredAt'])<$end&&!$c['endedAt'])$waiting++;}
   foreach($calls as $c){if(!$c['agentId'])$unmappedAgents++;if(!$c['queueId'])$unmappedQueues++;}
-  return ['from'=>$from,'to'=>$to,'asOf'=>$asOf,'accepted'=>count($calls),'uniqueCallers'=>count($distinct),'anonymousCalls'=>$anonymous,'durationSeconds'=>array_sum($known),'averageSeconds'=>$known?array_sum($known)/count($known):null,'durationKnown'=>count($known),'completed'=>$completed,'ongoing'=>$ongoing,'waiting'=>$waiting,'estimatedDurationSeconds'=>array_sum($estimates),'estimatedAverageSeconds'=>$estimates?array_sum($estimates)/count($estimates):null,'estimateKnown'=>count($estimates),'timeBasis'=>$live?'started':'accepted','durationBasis'=>$live?'queue-exit-estimate':'verified','failedAttempts'=>$failed,'unmappedAgents'=>$unmappedAgents,'unmappedQueues'=>$unmappedQueues,'coverage'=>self::coverage($coverage,$dates),'hourly'=>array_values($hours),'timeOfDay'=>$tod,'calls'=>$calls];
+  return ['telephoneTime'=>$telephoneTime,'from'=>$from,'to'=>$to,'asOf'=>$asOf,'accepted'=>count($calls),'uniqueCallers'=>count($distinct),'anonymousCalls'=>$anonymous,'durationSeconds'=>array_sum($known),'averageSeconds'=>$known?array_sum($known)/count($known):null,'durationKnown'=>count($known),'completed'=>$completed,'ongoing'=>$ongoing,'waiting'=>$waiting,'estimatedDurationSeconds'=>array_sum($estimates),'estimatedAverageSeconds'=>$estimates?array_sum($estimates)/count($estimates):null,'estimateKnown'=>count($estimates),'timeBasis'=>$live?'started':'accepted','durationBasis'=>$live?'queue-exit-estimate':'verified','failedAttempts'=>$failed,'unmappedAgents'=>$unmappedAgents,'unmappedQueues'=>$unmappedQueues,'coverage'=>self::coverage($coverage,$dates),'hourly'=>array_values($hours),'timeOfDay'=>$tod,'calls'=>$calls];
  }
 }

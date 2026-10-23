@@ -112,3 +112,12 @@ mit zwölf einfachen Schritten: Administratorkonto/Serverzugriff, Versions- und
 Backupprüfung, aktuelle Kandidateninstallation gegenüber späterem Storeweg,
 Aktivierung, Benutzer/Gruppen/App-Rechte sowie regulärer Cron und Betrieb.
 Regulärer Nextcloud-Cron und zeitnaher Popup-Worker bleiben getrennt erklärt.
+
+## Projekt unterstützen
+
+Unten in der Seitenleiste öffnet **Projekt unterstützen** zunächst einen Hinweis.
+Erst ein weiterer Klick öffnet https://www.paypal.me/Werkstattmanager im neuen Tab
+(gleicher Empfänger wie Werkstattmanager, ohne Referrer oder Anrufdaten).
+Freiwillige Unterstützung der Projektkosten und Weiterentwicklung, keine bezahlten
+Zusatzfunktionen oder individuellen Leistungen und keine Spendenbescheinigung.
+Die App bleibt kostenlos. Keine eingebettete Zahlungsintegration.

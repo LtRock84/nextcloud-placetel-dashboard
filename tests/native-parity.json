@@ -59,6 +59,17 @@
         "asOf": "2026-10-20T22:00:00Z"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 900,
+          "outgoingSeconds": 0,
+          "totalSeconds": 900,
+          "incomingKnown": 1,
+          "outgoingKnown": 0,
+          "completed": 1,
+          "unknown": 0,
+          "ongoing": 0,
+          "approximate": false
+        },
         "from": "2026-10-20",
         "to": "2026-10-20",
         "asOf": "2026-10-20T22:00:00Z",
@@ -438,6 +449,17 @@
         "asOf": "2026-10-20T22:00:00Z"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 960,
+          "outgoingSeconds": 0,
+          "totalSeconds": 960,
+          "incomingKnown": 2,
+          "outgoingKnown": 0,
+          "completed": 2,
+          "unknown": 0,
+          "ongoing": 0,
+          "approximate": false
+        },
         "from": "2026-10-20",
         "to": "2026-10-20",
         "asOf": "2026-10-20T22:00:00Z",
@@ -832,6 +854,17 @@
         "asOf": "2026-10-20T22:00:00Z"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 900,
+          "outgoingSeconds": 0,
+          "totalSeconds": 900,
+          "incomingKnown": 1,
+          "outgoingKnown": 0,
+          "completed": 1,
+          "unknown": 0,
+          "ongoing": 0,
+          "approximate": false
+        },
         "from": "2026-10-20",
         "to": "2026-10-20",
         "asOf": "2026-10-20T22:00:00Z",
@@ -1211,6 +1244,17 @@
         "asOf": "2026-10-20T22:00:00Z"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 1500,
+          "outgoingSeconds": 0,
+          "totalSeconds": 1500,
+          "incomingKnown": 2,
+          "outgoingKnown": 0,
+          "completed": 2,
+          "unknown": 0,
+          "ongoing": 0,
+          "approximate": false
+        },
         "from": "2026-10-19",
         "to": "2026-10-25",
         "asOf": "2026-10-20T22:00:00Z",
@@ -1739,6 +1783,17 @@
         "asOf": "2026-10-20T22:00:00Z"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 900,
+          "outgoingSeconds": 0,
+          "totalSeconds": 900,
+          "incomingKnown": 1,
+          "outgoingKnown": 0,
+          "completed": 1,
+          "unknown": 0,
+          "ongoing": 0,
+          "approximate": false
+        },
         "from": "2026-10-20",
         "to": "2026-10-20",
         "asOf": "2026-10-20T22:00:00Z",
@@ -2106,6 +2161,17 @@
         "asOf": "2026-10-20T22:00:00Z"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 0,
+          "outgoingSeconds": 0,
+          "totalSeconds": 0,
+          "incomingKnown": 0,
+          "outgoingKnown": 0,
+          "completed": 1,
+          "unknown": 1,
+          "ongoing": 0,
+          "approximate": false
+        },
         "from": "2026-10-20",
         "to": "2026-10-20",
         "asOf": "2026-10-20T22:00:00Z",
@@ -2473,6 +2539,17 @@
         "asOf": "2026-10-20T22:00:00Z"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 0,
+          "outgoingSeconds": 0,
+          "totalSeconds": 0,
+          "incomingKnown": 0,
+          "outgoingKnown": 0,
+          "completed": 0,
+          "unknown": 0,
+          "ongoing": 1,
+          "approximate": false
+        },
         "from": "2026-10-20",
         "to": "2026-10-20",
         "asOf": "2026-10-20T22:00:00Z",
@@ -2840,6 +2917,17 @@
         "asOf": "2026-10-20T22:00:00Z"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 0,
+          "outgoingSeconds": 0,
+          "totalSeconds": 0,
+          "incomingKnown": 1,
+          "outgoingKnown": 0,
+          "completed": 1,
+          "unknown": 0,
+          "ongoing": 0,
+          "approximate": false
+        },
         "from": "2026-10-20",
         "to": "2026-10-20",
         "asOf": "2026-10-20T22:00:00Z",
@@ -3210,6 +3298,17 @@
         "asOf": "2026-10-20T22:00:00Z"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 0,
+          "outgoingSeconds": 900,
+          "totalSeconds": 900,
+          "incomingKnown": 0,
+          "outgoingKnown": 1,
+          "completed": 1,
+          "unknown": 0,
+          "ongoing": 0,
+          "approximate": false
+        },
         "from": "2026-10-20",
         "to": "2026-10-20",
         "asOf": "2026-10-20T22:00:00Z",
@@ -3561,6 +3660,17 @@
         "asOf": "2026-10-02T00:00:00Z"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 0,
+          "outgoingSeconds": 0,
+          "totalSeconds": 0,
+          "incomingKnown": 0,
+          "outgoingKnown": 0,
+          "completed": 0,
+          "unknown": 0,
+          "ongoing": 0,
+          "approximate": false
+        },
         "from": "2026-10-01",
         "to": "2026-10-01",
         "asOf": "2026-10-02T00:00:00Z",
@@ -3901,6 +4011,17 @@
         "asOf": "2026-03-30T00:00:00Z"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 0,
+          "outgoingSeconds": 0,
+          "totalSeconds": 0,
+          "incomingKnown": 0,
+          "outgoingKnown": 0,
+          "completed": 0,
+          "unknown": 0,
+          "ongoing": 0,
+          "approximate": false
+        },
         "from": "2026-03-29",
         "to": "2026-03-29",
         "asOf": "2026-03-30T00:00:00Z",
@@ -4248,6 +4369,17 @@
         "asOf": "2026-10-26T00:00:00Z"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 4200,
+          "outgoingSeconds": 0,
+          "totalSeconds": 4200,
+          "incomingKnown": 1,
+          "outgoingKnown": 0,
+          "completed": 1,
+          "unknown": 0,
+          "ongoing": 0,
+          "approximate": false
+        },
         "from": "2026-10-25",
         "to": "2026-10-25",
         "asOf": "2026-10-26T00:00:00Z",
@@ -4610,6 +4742,17 @@
         "asOf": "2026-10-20T22:00:00Z"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 0,
+          "outgoingSeconds": 0,
+          "totalSeconds": 0,
+          "incomingKnown": 0,
+          "outgoingKnown": 0,
+          "completed": 0,
+          "unknown": 0,
+          "ongoing": 0,
+          "approximate": false
+        },
         "from": "2026-11-01",
         "to": "2026-11-02",
         "asOf": "2026-10-20T22:00:00Z",
@@ -4849,6 +4992,512 @@
         "source": "placetel"
       },
       "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 540,
+          "outgoingSeconds": 0,
+          "totalSeconds": 540,
+          "incomingKnown": 1,
+          "outgoingKnown": 0,
+          "completed": 1,
+          "unknown": 0,
+          "ongoing": 0,
+          "approximate": true
+        },
+        "from": "2026-10-20",
+        "to": "2026-10-20",
+        "asOf": "2026-10-20T22:00:00Z",
+        "accepted": 1,
+        "uniqueCallers": 1,
+        "anonymousCalls": 0,
+        "durationSeconds": 0,
+        "averageSeconds": null,
+        "durationKnown": 0,
+        "completed": 1,
+        "estimatedDurationSeconds": 540,
+        "estimatedAverageSeconds": 540,
+        "estimateKnown": 1,
+        "timeBasis": "started",
+        "durationBasis": "queue-exit-estimate",
+        "failedAttempts": 1,
+        "unmappedAgents": 0,
+        "unmappedQueues": 0,
+        "ongoing": 0,
+        "waiting": 0,
+        "coverage": {
+          "complete": 1,
+          "imported": 1,
+          "expected": 1,
+          "missing": [],
+          "unverified": []
+        },
+        "hourly": [
+          {
+            "key": "2026-10-20T00:00:00.000+02:00",
+            "label": "20.10. 00:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T01:00:00.000+02:00",
+            "label": "20.10. 01:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T02:00:00.000+02:00",
+            "label": "20.10. 02:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T03:00:00.000+02:00",
+            "label": "20.10. 03:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T04:00:00.000+02:00",
+            "label": "20.10. 04:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T05:00:00.000+02:00",
+            "label": "20.10. 05:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T06:00:00.000+02:00",
+            "label": "20.10. 06:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T07:00:00.000+02:00",
+            "label": "20.10. 07:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T08:00:00.000+02:00",
+            "label": "20.10. 08:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T09:00:00.000+02:00",
+            "label": "20.10. 09:00 +02:00",
+            "accepted": 1,
+            "minutes": 9
+          },
+          {
+            "key": "2026-10-20T10:00:00.000+02:00",
+            "label": "20.10. 10:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T11:00:00.000+02:00",
+            "label": "20.10. 11:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T12:00:00.000+02:00",
+            "label": "20.10. 12:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T13:00:00.000+02:00",
+            "label": "20.10. 13:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T14:00:00.000+02:00",
+            "label": "20.10. 14:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T15:00:00.000+02:00",
+            "label": "20.10. 15:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T16:00:00.000+02:00",
+            "label": "20.10. 16:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T17:00:00.000+02:00",
+            "label": "20.10. 17:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T18:00:00.000+02:00",
+            "label": "20.10. 18:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T19:00:00.000+02:00",
+            "label": "20.10. 19:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T20:00:00.000+02:00",
+            "label": "20.10. 20:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T21:00:00.000+02:00",
+            "label": "20.10. 21:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T22:00:00.000+02:00",
+            "label": "20.10. 22:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2026-10-20T23:00:00.000+02:00",
+            "label": "20.10. 23:00 +02:00",
+            "accepted": 0,
+            "minutes": 0
+          }
+        ],
+        "timeOfDay": [
+          {
+            "key": "0",
+            "label": "00:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "1",
+            "label": "01:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "2",
+            "label": "02:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "3",
+            "label": "03:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "4",
+            "label": "04:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "5",
+            "label": "05:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "6",
+            "label": "06:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "7",
+            "label": "07:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "8",
+            "label": "08:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "9",
+            "label": "09:00",
+            "accepted": 1,
+            "minutes": 9
+          },
+          {
+            "key": "10",
+            "label": "10:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "11",
+            "label": "11:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "12",
+            "label": "12:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "13",
+            "label": "13:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "14",
+            "label": "14:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "15",
+            "label": "15:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "16",
+            "label": "16:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "17",
+            "label": "17:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "18",
+            "label": "18:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "19",
+            "label": "19:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "20",
+            "label": "20:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "21",
+            "label": "21:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "22",
+            "label": "22:00",
+            "accepted": 0,
+            "minutes": 0
+          },
+          {
+            "key": "23",
+            "label": "23:00",
+            "accepted": 0,
+            "minutes": 0
+          }
+        ],
+        "calls": [
+          {
+            "id": "placetel:2",
+            "rootId": "placetel:2",
+            "source": "placetel",
+            "agentId": "a1",
+            "queueId": "q1",
+            "agentName": "Alter Name",
+            "queueName": "Demo Queue",
+            "caller": "+493012345678",
+            "offeredAt": "2026-10-20T07:00:00.000Z",
+            "referenceAt": "2026-10-20T07:00:00.000Z",
+            "acceptedAt": null,
+            "endedAt": "2026-10-20T07:10:00.000Z",
+            "durationStart": "2026-10-20T07:01:00.000Z",
+            "durationVerified": false,
+            "outcome": "accepted",
+            "callType": "dail_in",
+            "callStatus": "ended",
+            "answerStatus": "answer",
+            "iteration": "2",
+            "updatedAt": "2026-10-20T07:00:00.000Z",
+            "normalizedCaller": "+493012345678",
+            "seconds": null,
+            "estimatedSeconds": 540
+          }
+        ]
+      }
+    },
+    {
+      "name": "telephone-total-mixed",
+      "calls": [
+        {
+          "id": "placetel:1",
+          "rootId": "placetel:1",
+          "source": "placetel",
+          "agentId": "a1",
+          "queueId": "q1",
+          "agentName": "Demo Agent",
+          "queueName": "Demo Queue",
+          "caller": "03012345678",
+          "offeredAt": "2026-10-20T07:00:00.000Z",
+          "referenceAt": "2026-10-20T07:00:00.000Z",
+          "acceptedAt": null,
+          "endedAt": "2026-10-20T07:00:20.000Z",
+          "durationStart": null,
+          "durationVerified": false,
+          "outcome": "missed",
+          "callType": "dail_in",
+          "callStatus": "not_answered",
+          "answerStatus": "noanswer",
+          "iteration": "1",
+          "updatedAt": "2026-10-20T07:00:00.000Z"
+        },
+        {
+          "id": "placetel:2",
+          "rootId": "placetel:2",
+          "source": "placetel",
+          "agentId": "a1",
+          "queueId": "q1",
+          "agentName": "Alter Name",
+          "queueName": "Demo Queue",
+          "caller": "+493012345678",
+          "offeredAt": "2026-10-20T07:00:00.000Z",
+          "referenceAt": "2026-10-20T07:00:00.000Z",
+          "acceptedAt": null,
+          "endedAt": "2026-10-20T07:10:00.000Z",
+          "durationStart": "2026-10-20T07:01:00.000Z",
+          "durationVerified": false,
+          "outcome": "accepted",
+          "callType": "dail_in",
+          "callStatus": "ended",
+          "answerStatus": "answer",
+          "iteration": "2",
+          "updatedAt": "2026-10-20T07:00:00.000Z"
+        },
+        {
+          "id": "out",
+          "rootId": "c1",
+          "agentId": "a1",
+          "queueId": "",
+          "caller": "03012345678",
+          "offeredAt": "2026-10-20T09:54:00+02:00",
+          "acceptedAt": null,
+          "endedAt": "2026-10-20T10:10:00+02:00",
+          "outcome": "accepted",
+          "durationVerified": false,
+          "source": "placetel",
+          "callType": "dail_out",
+          "referenceAt": "2026-10-20T09:54:00+02:00"
+        },
+        {
+          "id": "out",
+          "rootId": "c1",
+          "agentId": "a1",
+          "queueId": "",
+          "caller": "03012345678",
+          "offeredAt": "2026-10-20T09:54:00+02:00",
+          "acceptedAt": null,
+          "endedAt": "2026-10-20T10:10:00+02:00",
+          "outcome": "accepted",
+          "durationVerified": false,
+          "source": "placetel",
+          "callType": "dail_out",
+          "referenceAt": "2026-10-20T09:54:00+02:00"
+        },
+        {
+          "id": "active-out",
+          "rootId": "c1",
+          "agentId": "a1",
+          "queueId": "",
+          "caller": "03012345678",
+          "offeredAt": "2026-10-20T09:54:00+02:00",
+          "acceptedAt": null,
+          "endedAt": null,
+          "outcome": "accepted",
+          "durationVerified": false,
+          "source": "placetel",
+          "callType": "dail_out",
+          "referenceAt": "2026-10-20T09:54:00+02:00"
+        },
+        {
+          "id": "bad-out",
+          "rootId": "c1",
+          "agentId": "a1",
+          "queueId": "",
+          "caller": "03012345678",
+          "offeredAt": "2026-10-20T09:54:00+02:00",
+          "acceptedAt": null,
+          "endedAt": "2026-10-20T08:00:00+02:00",
+          "outcome": "accepted",
+          "durationVerified": false,
+          "source": "placetel",
+          "callType": "dail_out",
+          "referenceAt": "2026-10-20T09:54:00+02:00"
+        },
+        {
+          "id": "other-agent",
+          "rootId": "c1",
+          "agentId": "a2",
+          "queueId": "q1",
+          "caller": "03012345678",
+          "offeredAt": "2026-10-20T09:54:00+02:00",
+          "acceptedAt": "2026-10-20T09:55:00+02:00",
+          "endedAt": "2026-10-20T10:10:00+02:00",
+          "outcome": "accepted",
+          "durationVerified": true
+        }
+      ],
+      "coverage": [
+        {
+          "date": "2026-10-20",
+          "status": "complete",
+          "updatedAt": "2026-10-20T22:00:00Z"
+        }
+      ],
+      "options": {
+        "from": "2026-10-20",
+        "to": "2026-10-20",
+        "asOf": "2026-10-20T22:00:00Z",
+        "agentId": "a1",
+        "queueId": "q1",
+        "source": "placetel"
+      },
+      "expected": {
+        "telephoneTime": {
+          "incomingSeconds": 540,
+          "outgoingSeconds": 960,
+          "totalSeconds": 1500,
+          "incomingKnown": 1,
+          "outgoingKnown": 1,
+          "completed": 3,
+          "unknown": 1,
+          "ongoing": 1,
+          "approximate": true
+        },
         "from": "2026-10-20",
         "to": "2026-10-20",
         "asOf": "2026-10-20T22:00:00Z",

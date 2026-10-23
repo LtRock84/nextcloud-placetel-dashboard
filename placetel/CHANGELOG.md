@@ -25,3 +25,13 @@
 - Freiwillige Projektunterstützung in der Seitenleiste mit vorgeschaltetem Hinweis,
   gleichem PayPal.Me-Ziel wie Werkstattmanager und ohne Zahlungsintegration.
 - Unterstützungslink in Projektbeschreibung und GitHub-Sponsor-Konfiguration.
+
+## In Entwicklung – 23.10.2026
+
+- Gesamttelefonzeit je Agent für eingehende und ausgehende beantwortete Anrufe,
+  mit getrennten Summen und transparenter Kennzeichnung der Dauer-Näherungen.
+- DispoLive-Popups je angerufener Rufnummer an mehrere konfigurierbare Arbeitsplätze.
+- Getrennte Zustellzustände je Anruf und Arbeitsplatz, ohne doppelte Meldungen.
+- Rufnummernregeln und Arbeitsplatz-Zustellstatus in den Einstellungen.
+- Überarbeitete Notify-Einrichtung und Kopierhinweis für das Signaturgeheimnis.
+- Native Abnahme dieser Erweiterungen und signiertes Store-Release noch offen.

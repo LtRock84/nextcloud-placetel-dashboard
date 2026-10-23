@@ -236,13 +236,13 @@
           "title": "Gemeinsames Geheimnis erzeugen und an beiden Stellen eintragen",
           "text": [
             "Unter Einstellungen → Ereignisanbindung ein zufälliges Geheimnis mit mindestens24 Zeichen erzeugen, vor dem Speichern kopieren und in der App verschlüsselt speichern. Das ist ein eigenes Signaturgeheimnis, weder Placetel-API-Key noch Nextcloud-Passwort.",
-            "Im Placetel-Portal Einstellungen → Externe APIs öffnen, die Empfangsadresse {{NOTIFY_URL}} und exakt dasselbe gemeinsame Geheimnis hinterlegen. Keine zusätzlichen Leerzeichen. Keine Geheimnisse als URL-Parameter, in Befehlen, Screenshots oder Supportnachrichten verwenden. Die gespeicherte Zeichenfolge wird in der App nicht wieder angezeigt; beim Verlust an beiden Stellen kontrolliert ersetzen."
+            "Im Placetel-Portal AppStore → Notify API öffnen, die Empfangsadresse {{NOTIFY_URL}} und exakt dasselbe gemeinsame Geheimnis hinterlegen. Keine zusätzlichen Leerzeichen. Keine Geheimnisse als URL-Parameter, in Befehlen, Screenshots oder Supportnachrichten verwenden. Die gespeicherte Zeichenfolge wird in der App nicht wieder angezeigt; beim Verlust an beiden Stellen kontrolliert ersetzen."
           ]
         },
         {
           "title": "Notify für die gewünschten eigenen Rufnummern aktivieren",
           "text": [
-            "In Placetel die Benachrichtigungen je gewünschter Rufnummer aktivieren, in Einstellungen → Externe APIs beziehungsweise den Notify-Optionen der Rufnummer. Eingehende, angenommene und beendete Ereignisse werden für den Ablauf benötigt. Die genauen sichtbaren Auswahlmöglichkeiten können je Portalstand variieren.",
+            "In Placetel die Benachrichtigungen je gewünschter Rufnummer aktivieren, in AppStore → Notify API beziehungsweise den Notify-Optionen der Rufnummer. Eingehende, angenommene und beendete Ereignisse werden für den Ablauf benötigt. Die genauen sichtbaren Auswahlmöglichkeiten können je Portalstand variieren.",
             "Hier geht es um Notify. Das bestehende Anrufrouting nicht auf „External API“/Call Control umstellen. Der Notify-Empfang dient der Meldung und soll die Zustellung eurer Telefonate nicht verändern. Portaländerungen speichern."
           ]
         },

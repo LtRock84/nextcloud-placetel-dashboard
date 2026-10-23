@@ -72,3 +72,31 @@ Neue Komponente ui-src/ProjectSupport.tsx; Empfänger derselbe wie Werkstattmana
 Bei Wiederanbindung des ursprünglichen Volumes Änderungen gezielt in Desktop-
 Quellen übernehmen und neu bauen; nicht dessen Daten/Schlüssel ersetzen.
 Noch kein App-Store-Release oder NAS-Update.
+
+## Quellstand 23.10.2026: Telefonzeiten und Popup-Verteilung
+
+Neue Statistik zeigt je Agent die Summe eingehender und ausgehender Zeiten mit
+Aufteilung. Livewerte sind ausdrücklich Näherungen: eingehend ab Verlassen der
+Warteschleife, ausgehend ab Anrufbeginn, jeweils bis Ende. Fehlende/laufende
+Dauern nicht als bestätigte Zeit behandeln. Agentengesamtzeit umfasst alle Queues
+unabhängig vom Queuefilter; übrige eingehende Kennzahlen bleiben unverändert.
+
+Optionale DispoLive-Popups unterstützen konfigurierbare Zielrufnummernregeln
+mit mehreren Arbeitsplätzen. Persistente Zustellzustände je Call-ID/Arbeitsplatz,
+Deduplizierung über überlappende Regeln, kein Fallback bei nicht passender Nummer.
+Standardziel bleibt für Installationen ohne Regeln erhalten. Gemeinsames API-
+Ratenlimit, Ablauf und Abbruch bei Annahme/Ende bleiben aktiv. Keine Betriebs-
+konfiguration, Zugangsdaten oder echten Rufnummern in diesem Repository.
+
+Prüfungen: 102 isolierte Tests im ursprünglichen Entwicklungsprojekt bestanden;
+nicht alle Desktoptests gehören zu diesem nativen Repository. Publicscan und
+Produktionsbuild erfolgreich, PHP-Syntax der geänderten Fachdateien geprüft.
+Neue native Paritäts-/Popup-Fixtures vorbereitet (40 Fachchecks/40 Popupchecks);
+NC-Laufzeittest der neuen Erweiterungen steht noch aus. Frühere NC35-Tests
+belegen ausschließlich den damaligen Stand. Vor Store-Release neue NC-/Browser-
+und Anbieterabnahme durchführen. Zertifikat/Signatur weiterhin nicht bestätigt.
+Nur Quellaktualisierung beauftragt, kein Release/Tag/App-Store-Upload.
+
+GitHub-Aktualisierung: sauberer npm-ci-Lockfile-Build am23.10.2026 bestanden.
+Öffentlichen Quellstand mit Datenschutz-/Pfadprüfung vor Upload kontrollieren;
+kein Release/Tag erzeugen. Zertifikatsantrag ist von Quellaktualisierung getrennt.

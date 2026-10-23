@@ -25,4 +25,4 @@ Transport; webhook-contract.php startet kurzzeitig webhook-router.php ausschlie�
 auf Container-Loopback. Er benutzt den echten Request/Controller und einen Mock-
 DispoLive-Client. Niemals den Router in custom_apps oder im öffentlichen Webroot
 installieren. verify.py führt die vollständige Kette aus und verlangt Marker sowie
-39+70+36+7 erfolgreiche Checks; anschließend OCC-Worker/Job und Paketdateien prüfen.
+40+70+40+7 erfolgreiche Checks (aktualisierte Suite; neue Abnahme offen); anschließend OCC-Worker/Job und Paketdateien prüfen.

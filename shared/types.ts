@@ -48,6 +48,7 @@ export type Statistics = {
   durationKnown: number; completed: number; ongoing: number; waiting: number;
   estimatedDurationSeconds?: number; estimatedAverageSeconds?: number | null; estimateKnown?: number;
   timeBasis?: 'accepted' | 'started'; durationBasis?: 'verified' | 'queue-exit-estimate';
+  telephoneTime?: { incomingSeconds: number; outgoingSeconds: number; totalSeconds: number; incomingKnown: number; outgoingKnown: number; completed: number; unknown: number; ongoing: number; approximate: boolean };
   failedAttempts?: number; unmappedAgents?: number; unmappedQueues?: number;
   coverage: { complete: number; imported?: number; expected: number; missing: string[]; unverified: string[] };
   hourly: Bucket[]; timeOfDay: Bucket[];
@@ -71,4 +72,4 @@ export type DispoliveContact = { id: string | null; name: string; type: string }
 export type DispoliveMatch = { number: string; contacts: DispoliveContact[]; status: 'matched' | 'none' | 'error'; checkedAt: string; expiresAt: string; message?: string };
 export type DispoliveState = { popups?:DispolivePopupState; origin: string; version: string; configured: boolean; enabled: boolean; connected: boolean; error: string | null; lastSuccess: string | null; pending: number; matches: Record<string, DispoliveMatch> };
 
-export type DispolivePopupState = {enabled:boolean;desktopPhone:string;firmenKrz:string;calledNumbers:string[];pending:number;workerLastSeen:string|null;recent:{id:string;state:string;receivedAt:string;updatedAt:string;attempts:number;message:string}[]};
+export type DispolivePopupState = {enabled:boolean;desktopPhone:string;firmenKrz:string;calledNumbers:string[];routes?:{calledNumber:string;desktopPhones:string[]}[];pending:number;workerLastSeen:string|null;recent:{id:string;state:string;receivedAt:string;updatedAt:string;attempts:number;message:string;desktopPhone?:string}[]};

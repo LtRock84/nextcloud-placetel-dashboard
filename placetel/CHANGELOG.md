@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.2.3
+
+- Rückrufliste: Alle aktuell gefilterten offenen Einträge können gemeinsam als erledigt markiert werden; vorhandene Notizen bleiben erhalten.
+- Eine nachweislich spätere Annahme schließt den zugehörigen Rückruf automatisch ab und zeigt den Annahmezeitpunkt grün an.
+- Rückrufe ohne nachweisbare spätere Annahme bleiben offen und werden mit einem roten Hinweis klar erkennbar. Gleichzeitige Zeitstempel zählen nicht mehr fälschlich als spätere Annahme.
+
 ## 0.2.2
 
 - Nextcloud 34 zusätzlich freigegeben; grundlegende Funktionen auf 34.0.5 mit Beispieldaten geprüft.

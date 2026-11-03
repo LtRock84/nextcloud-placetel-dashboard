@@ -85,6 +85,9 @@ try:
  report=json.loads(operator.api('operations/report?from=2026-10-19&to=2026-10-20')[2]);candidate=report['callbacks'][0]
  check('callback note saved in native database',operator.api('operations/callback',{'key':candidate['key'],'latestId':candidate['latestId'],'state':'done','note':'Synthetic follow-up'})[0]==200)
  report=json.loads(operator.api('operations/report?from=2026-10-19&to=2026-10-20')[2]);check('callback note visible across users',next(c for c in report['callbacks'] if c['key']==candidate['key'])['note']=='Synthetic follow-up')
+ bulk=next(c for c in report['callbacks'] if c['state']=='open')
+ check('native bulk completion marks selected open callback done',operator.api('operations/callbacks/complete',{'callbacks':[{'key':bulk['key'],'latestId':bulk['latestId']}]} )[0]==200)
+ report=json.loads(operator.api('operations/report?from=2026-10-19&to=2026-10-20')[2]);check('native bulk completion stored',next(c for c in report['callbacks'] if c['key']==bulk['key'])['state']=='done')
  occ('app:disable','placetel');occ('app:enable','placetel');check('stored callback survives disable and enable',next(c for c in json.loads(operator.api('operations/report?from=2026-10-19&to=2026-10-20')[2])['callbacks'] if c['key']==candidate['key'])['state']=='done')
  check('unknown group rejected',admin.api('settings',{'operator_groups':['missing-synthetic-group'],'viewer_groups':None})[0]==400)
  c,h,b=viewer.call('/custom_apps/placetel/js/main.js');check('compiled native UI served',c==200 and len(b)>100000)

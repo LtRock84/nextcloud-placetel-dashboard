@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.2.4
+
+- Anrufdetails nach eingehenden, ausgehenden und nicht angenommenen Callcenter-Datensätzen filtern; Gegenstelle, Ergebnis, Agent, Warteschleife und stündliche Verteilung anzeigen.
+- Erfolglose Zustellversuche werden nicht als vollständig verpasste Anrufe ausgegeben. Als verpasst gemeldete eingehende Notify-Ereignisse erscheinen getrennt mit Hinweis auf begrenzte Abdeckung.
+- Ausgehende Zielnummern werden bei neuen Nextcloud-Datenabrufen gespeichert; bei älteren Importen können sie fehlen. Nicht bestätigte Gesprächszeiten bleiben als Näherung gekennzeichnet.
+
 ## 0.2.3
 
 - Rückrufliste: Alle aktuell gefilterten offenen Einträge können gemeinsam als erledigt markiert werden; vorhandene Notizen bleiben erhalten.

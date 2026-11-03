@@ -13,7 +13,7 @@ export type CallSegment = {
   offeredAt: string; acceptedAt: string | null; endedAt: string | null;
   outcome: 'accepted' | 'missed' | 'waiting' | 'unknown'; durationVerified: boolean;
   referenceAt?: string; durationStart?: string | null; source?: 'placetel'; agentName?: string; queueName?: string;
-  callType?: string; callStatus?: string; answerStatus?: string; iteration?: string; updatedAt?: string;
+  callType?: string; callStatus?: string; answerStatus?: string; iteration?: string; updatedAt?: string; destination?: string | null;
 };
 export type Coverage = { date: string; status: 'complete' | 'imported' | 'unverified' | 'error'; updatedAt: string; message?: string };
 export type Audit = { id: number; at: string; action: string; agentId?: string; before?: string; after?: string; status: 'ok' | 'error' | 'info'; message: string };
@@ -53,6 +53,7 @@ export type Statistics = {
   coverage: { complete: number; imported?: number; expected: number; missing: string[]; unverified: string[] };
   hourly: Bucket[]; timeOfDay: Bucket[];
   calls: (CallSegment & { normalizedCaller: string | null; seconds: number | null; estimatedSeconds?: number | null })[];
+  detailCalls?: (CallSegment & { normalizedCaller: string | null; seconds: number | null; estimatedSeconds: number | null })[];
 };
 
 export type AlertSettings = { warningSeconds: number; criticalSeconds: number; sound: boolean };

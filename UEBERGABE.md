@@ -5,8 +5,10 @@
 Zertifikat für `placetel` ausgestellt und Schlüsselzugehörigkeit geprüft. Die
 aktuelle App bestand 40 Fach-, 70 HTTP-, 40 Popup- und 7 Webhook-Prüfungen in
 einer isolierten Nextcloud 35.0.2 mit synthetischen Daten. Anleitungen und
-Changelog für das Release aktualisiert. Signiertes Paket und Store-Einreichung
-werden vorbereitet; ältere Statusnotizen unten beschreiben historische Stände.
+Changelog für das Release aktualisiert. Signiertes Paket als GitHub-Release
+v0.2.0 veröffentlicht; App im Nextcloud App Store registriert und Version 0.2.0
+im stabilen Kanal für Nextcloud 35 sichtbar. Ältere Statusnotizen beschreiben
+historische Stände.
 Keine echten Zugangsdaten oder Betriebsdaten für die Tests verwendet. Offene
 Aufgabe bleibt die individuelle Anbieter- und Zielsystemabnahme.
 

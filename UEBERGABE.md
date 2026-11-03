@@ -1,5 +1,15 @@
 # Übernahme des App-Repositorys
 
+## Releasevorbereitung 03.11.2026
+
+Zertifikat für `placetel` ausgestellt und Schlüsselzugehörigkeit geprüft. Die
+aktuelle App bestand 40 Fach-, 70 HTTP-, 40 Popup- und 7 Webhook-Prüfungen in
+einer isolierten Nextcloud 35.0.2 mit synthetischen Daten. Anleitungen und
+Changelog für das Release aktualisiert. Signiertes Paket und Store-Einreichung
+werden vorbereitet; ältere Statusnotizen unten beschreiben historische Stände.
+Keine echten Zugangsdaten oder Betriebsdaten für die Tests verwendet. Offene
+Aufgabe bleibt die individuelle Anbieter- und Zielsystemabnahme.
+
 Stand: 20.10.2026. Ziel ist ein später allgemein nutzbares Placetel Dashboard für Nextcloud; DispoLive bleibt eine optionale Zusatzfunktion. Keine Veröffentlichung ohne ausdrücklichen Auftrag.
 
 ## Aktueller Stand

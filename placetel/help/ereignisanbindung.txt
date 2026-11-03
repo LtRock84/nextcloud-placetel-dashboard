@@ -35,24 +35,24 @@ Fehlen diese Einträge, bist du möglicherweise nur normaler Nutzer oder Gruppen
 2.2 Browser-Verwaltung und Serverzugriff auseinanderhalten
 Im Browser verwaltest du Apps, Benutzer und Einstellungen. Serverzugriff bedeutet dagegen Zugriff auf das Betriebssystem beziehungsweise den Nextcloud-Container, zum Beispiel über SSH, die Konsole deines Hosters oder die Containerverwaltung deines NAS. Ein Nextcloud-Administratorkonto verschafft dir diesen Zugriff nicht automatisch.
 
-Notiere deine Installationsart: direktes Linux, Docker/NAS oder verwaltetes Hosting. Für eine spätere Store-Installation genügen normalerweise die Browserrechte; für die jetzige manuelle Installation sowie Cron, HTTPS-Proxy und PHP-Worker brauchst du zusätzlich passende Serverrechte. Wenn du selbst hostest, erledigst du beide Rollen nacheinander.
+Notiere deine Installationsart: direktes Linux, Docker/NAS oder verwaltetes Hosting. Für die Installation über den App Store genügen normalerweise die Browserrechte; für eine manuelle Installation sowie Cron, HTTPS-Proxy und PHP-Worker brauchst du zusätzlich passende Serverrechte. Wenn du selbst hostest, erledigst du beide Rollen nacheinander.
 
 2.3 Version und Sicherung vor der Installation prüfen
-Öffne über das Profilmenü die Verwaltungseinstellungen und dort „Übersicht“. Prüfe die Nextcloud-Version und bestehende Warnungen. Dieser App-Kandidat ist für Nextcloud 35 und PHP ab 8.3 vorgesehen; eine andere Version nicht durch Erzwingen der App-Kompatibilität übergehen. Die PHP-Version findest du je Installation unter „System“ beziehungsweise beim Hoster. Der PHP-Kommandozeilenaufruf für Cron und Worker muss ebenfalls passen.
+Öffne über das Profilmenü die Verwaltungseinstellungen und dort „Übersicht“. Prüfe die Nextcloud-Version und bestehende Warnungen. Diese App-Version ist für Nextcloud 35 und PHP ab 8.3 vorgesehen; eine andere Version nicht durch Erzwingen der App-Kompatibilität übergehen. Die PHP-Version findest du je Installation unter „System“ beziehungsweise beim Hoster. Der PHP-Kommandozeilenaufruf für Cron und Worker muss ebenfalls passen.
 
 Erstelle vor manueller Installation oder Update ein zusammengehöriges Backup von Datenbank, Nextcloud-Konfiguration, Apps und Daten nach dem Verfahren deiner Installation. Prüfe, wo es liegt und wie es zurückgespielt wird. Eine Kopie der App allein sichert keine Einstellungen oder Anrufhistorie. Konfiguration und Backup enthalten Geheimnisse: geschützt aufbewahren, nicht zur Fehleranalyse veröffentlichen.
 
 2.4 Den richtigen Installationsweg wählen
-Diese Version ist derzeit ein unveröffentlichter, noch nicht signierter Kandidat. Suche deshalb nicht nach einem bereits verfügbaren Store-Eintrag. Verwende für eine lokale Prüfung ausschließlich das freigegebene native App-Paket mit dem Ordner placetel; das Quellpaket und das private NAS-Übergabepaket sind keine Store-Installationsdateien.
+Profilmenü → Apps öffnen, nach „Placetel Dashboard“ suchen, Herausgeber und unterstützte Nextcloud-Version prüfen und „Herunterladen und aktivieren“ beziehungsweise „Aktivieren“ wählen. Ein Download ist noch kein Nachweis, dass Zugang und Popup-Versand eingerichtet sind. Bei eingeschränktem Hosting vorher klären, ob eigene Apps erlaubt sind.
 
-Später, nach einer tatsächlichen Veröffentlichung: Profilmenü → Apps öffnen, nach „Placetel Dashboard“ suchen, Herausgeber und unterstützte Nextcloud-Version prüfen und „Herunterladen und aktivieren“ beziehungsweise „Aktivieren“ wählen. Ein Download ist noch kein Nachweis, dass Zugang und Popup-Versand eingerichtet sind. Bei eingeschränktem Hosting vorher klären, ob eigene Apps erlaubt sind.
+Alternativ kann ein Administrator das signierte native App-Paket mit dem Ordner placetel manuell installieren. Das Quellpaket ist keine fertige Installationsdatei. Die folgenden Schritte 2.5 und 2.6 beschreiben diese Alternative.
 
-2.5 Aktuellen Kandidaten auf dem Server bereitstellen
+2.5 App bei manueller Installation auf dem Server bereitstellen
 Öffne die Serverkonsole deiner Installation. Ermittle mit der bestehenden Nextcloud-Konfiguration den beschreibbaren App-Pfad (apps_paths), häufig custom_apps. Bei Docker muss es das dauerhaft eingebundene App-Verzeichnis der richtigen Nextcloud-Instanz sein. Ein Upload in die Nextcloud-App „Dateien“ installiert keine Anwendung.
 
 Entpacke das native App-Archiv zunächst in einen getrennten temporären Ordner. Prüfe, dass darin placetel/appinfo/info.xml liegt. Übertrage dann den vollständigen Ordner placetel in den ermittelten App-Pfad; danach muss dort beispielsweise custom_apps/placetel/appinfo/info.xml liegen, ohne zusätzlich verschachtelten placetel-Ordner. Vorhandene Version zuerst sichern und einen Austausch nach dem Verfahren deines Hosters durchführen, keine fremden Apps oder Nextcloud-Daten löschen.
 
-Die Dateien müssen für den Nextcloud-Webnutzer lesbar sein; Eigentümer und Berechtigungen nach dem bestehenden Installationsverfahren setzen. Kein chmod 777 und kein pauschaler Besitzerwechsel der ganzen Nextcloud. Signaturwarnungen des Kandidaten als offenen Veröffentlichungsschritt dokumentieren; keine globale Signaturprüfung deaktivieren. Wenn Pfad oder Rechte unklar sind, hier anhalten und die Installationsdokumentation des eigenen Systems verwenden.
+Die Dateien müssen für den Nextcloud-Webnutzer lesbar sein; Eigentümer und Berechtigungen nach dem bestehenden Installationsverfahren setzen. Kein chmod 777 und kein pauschaler Besitzerwechsel der ganzen Nextcloud. Bei Signaturwarnungen die Paketquelle und Integrität prüfen; keine globale Signaturprüfung deaktivieren. Wenn Pfad oder Rechte unklar sind, hier anhalten und die Installationsdokumentation des eigenen Systems verwenden.
 
 2.6 App aktivieren und zum ersten Mal öffnen
 Zurück im Browser: Profilmenü → Apps → deaktivierte beziehungsweise eigene Apps öffnen. „Placetel Dashboard“ suchen und aktivieren. Wird die App nicht angeboten, zuerst Ordnerstruktur, App-Pfad, Leserechte und Versionskompatibilität prüfen; nicht mehrfach in verschiedene Verzeichnisse installieren.
@@ -96,7 +96,7 @@ Wenn du nur das Placetel-Dashboard brauchst, lasse DispoLive ausgeschaltet. Für
 2.12 Betrieb, Aktualisierung und Rückweg festhalten
 Notiere ohne Zugangsdaten: Nextcloud-/App-Version, Installationspfad, Betriebsart, zuständiges Konto, Backup-Ort und ob Cron, HTTPS-Empfang und Worker geprüft wurden. Nach Updates dieser Komponenten kontrolliere Anmeldung, Datenabruf und bei aktivierten Popups einen vereinbarten Testanruf. Die folgenden Kapitel erklären jeweils den erwarteten Erfolg und die Fehlerdiagnose.
 
-Zum vorübergehenden Stoppen von Popups zuerst deren App-Schalter ausschalten und den eigenen Worker wie beschrieben beenden. Eine App-Deaktivierung über Profilmenü → Apps ist etwas anderes als Löschen oder Deinstallieren; vor solchen Schritten Sicherung und mögliche Datenfolgen prüfen. Für aktuelle Kandidaten ist weiterhin eine kontrollierte manuelle Aktualisierung nötig. Spätere Store-Updates erst nach Kompatibilitätsprüfung und Backup einspielen.
+Zum vorübergehenden Stoppen von Popups zuerst deren App-Schalter ausschalten und den eigenen Worker wie beschrieben beenden. Eine App-Deaktivierung über Profilmenü → Apps ist etwas anderes als Löschen oder Deinstallieren; vor solchen Schritten Sicherung und mögliche Datenfolgen prüfen. Updates erst nach Kompatibilitätsprüfung und Backup einspielen.
 
 3. Placetel und Teamzugriff einrichten
 Zuständig: Nextcloud- und Placetel-Administrator

@@ -15,7 +15,7 @@ Native Nextcloud-App für Placetel-PROFI-Callcenter. Installation, eigenen API-S
 
 Nextcloud35, PHP≥8.3 und eine korrekt betriebene Nextcloud mit funktionierenden Hintergrundjobs. Unterstützt werden Placetel-PROFI-Konten mit den jeweiligen API-/Callcenter-Berechtigungen. Pro Installation wird ein gemeinsames Placetel-Konto eingerichtet, keine getrennten Konten pro Nextcloud-Nutzer. Die Oberfläche ist deutsch; Statistikzeitzone Europe/Berlin, nationale Rufnummern werden mit Standardregion DE normalisiert.
 
-Nach einer späteren Store-Veröffentlichung kann die App über die normale Nextcloud-App-Verwaltung installiert werden. Der vorliegende **unsignierte Kandidat** lässt sich vorab als Ordner `placetel` in `custom_apps` installieren und mit `occ app:enable placetel` aktivieren. Noch keine allgemeine Store-Freigabe behauptet.
+Die App kann über die Nextcloud-App-Verwaltung installiert und aktiviert werden. Alternativ lässt sich das signierte App-Paket als Ordner `placetel` in `custom_apps` installieren und mit `occ app:enable placetel` aktivieren.
 
 1. In Nextcloud „Placetel Dashboard → Einstellungen“ als Administrator öffnen.
 2. Eigenen Placetel-Web-API-Schlüssel eintragen. Das Konto wird über `/me` geprüft; der Schlüssel wird verschlüsselt in der Nextcloud-Datenbank gespeichert und nicht wieder angezeigt.
@@ -109,7 +109,7 @@ Eine bereits laufende Anfrage kann noch abgeschlossen werden.
 
 Die Anleitung enthält nun ein eigenes Kapitel „Nextcloud selbst administrieren“
 mit zwölf einfachen Schritten: Administratorkonto/Serverzugriff, Versions- und
-Backupprüfung, aktuelle Kandidateninstallation gegenüber späterem Storeweg,
+Backupprüfung, Installation über den App Store oder manuell,
 Aktivierung, Benutzer/Gruppen/App-Rechte sowie regulärer Cron und Betrieb.
 Regulärer Nextcloud-Cron und zeitnaher Popup-Worker bleiben getrennt erklärt.
 

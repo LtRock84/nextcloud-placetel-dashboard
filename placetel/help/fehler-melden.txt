@@ -5,5 +5,5 @@ Version, betroffenen Tab, Rolle und reproduzierbare Schritte angeben. Keine API-
 Schlüssel, vollständigen Rufnummern, Patientendaten oder unbereinigten Screenshots
 weitergeben. Diagnosedaten vor Weitergabe prüfen.
 
-Ein öffentlicher Maintainer-/Supportkanal wird vor der Store-Veröffentlichung in den
-App-Metadaten angegeben. Der vorliegende Kandidat verwendet dafür einen Platzhalter.
+Fehler können unter https://github.com/LtRock84/nextcloud-placetel-dashboard/issues
+gemeldet werden. Bitte keine Zugangsdaten oder unbereinigten Anrufdaten veröffentlichen.

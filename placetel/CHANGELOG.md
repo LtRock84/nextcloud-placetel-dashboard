@@ -1,6 +1,6 @@
 # Änderungen
 
-## 0.2.0 – nativer Veröffentlichungskandidat
+## 0.2.0
 
 - Native Nextcloud-PHP-App ohne separaten Node-/Gateway-Dienst.
 - Eigenes Placetel-Konto in den App-Einstellungen einrichten; verschlüsselte Schlüsselspeicherung und Schutz vor Vermischung mit anderem Konto.
@@ -9,7 +9,8 @@
 - Bestehendes Dashboard, Statistiksemantik, Rückrufnotizen, Routingvorschau und signierte Notify-Ereignisse übernommen.
 - Unsupported Skills-/Zuordnungsplanung bleibt gesperrt. Routingzeiten folgen dem Cron-Takt.
 - Öffentliche Pakete verwenden eine gesonderte Dateiauswahl und enthalten keine Betriebs-/Kundendaten oder privaten NAS-Unterlagen.
-- Noch kein Store-Upload oder signiertes öffentliches Release.
+- Gesamttelefonzeit je Agent mit getrennten eingehenden und ausgehenden Näherungswerten.
+- Optionale DispoLive-Popups je angerufener Nummer an mehrere Arbeitsplätze.
 
 ### Ergänzung: optionaler DispoLive-Popup-Versand
 
@@ -20,18 +21,8 @@
 - Getrennte Empfangs-/Versandsperren, gemeinsames DispoLive-Ratenlimit;
   optionaler nativer PHP/OCC-Worker für wartende Meldungen.
 
-## Noch nicht veröffentlicht – 21.10.2026
+### Projekt unterstützen
 
 - Freiwillige Projektunterstützung in der Seitenleiste mit vorgeschaltetem Hinweis,
   gleichem PayPal.Me-Ziel wie Werkstattmanager und ohne Zahlungsintegration.
 - Unterstützungslink in Projektbeschreibung und GitHub-Sponsor-Konfiguration.
-
-## In Entwicklung – 23.10.2026
-
-- Gesamttelefonzeit je Agent für eingehende und ausgehende beantwortete Anrufe,
-  mit getrennten Summen und transparenter Kennzeichnung der Dauer-Näherungen.
-- DispoLive-Popups je angerufener Rufnummer an mehrere konfigurierbare Arbeitsplätze.
-- Getrennte Zustellzustände je Anruf und Arbeitsplatz, ohne doppelte Meldungen.
-- Rufnummernregeln und Arbeitsplatz-Zustellstatus in den Einstellungen.
-- Überarbeitete Notify-Einrichtung und Kopierhinweis für das Signaturgeheimnis.
-- Native Abnahme dieser Erweiterungen und signiertes Store-Release noch offen.

@@ -5,8 +5,13 @@
 Version 0.2.1 ergänzt zwei Store-Screenshots von Dashboard und Agentenstatistik.
 Sie wurden in einer isolierten Nextcloud-Demo mit fiktiven Daten aufgenommen und
 liegen unter `docs/screenshots/0.2.1/`. App-Metadaten verlinken die Dateien auf
-den unveränderlichen Releasetag; Store-Bildproxy und Anzeige nach Upload prüfen.
-App-Funktionalität blieb unverändert. Ältere Einträge sind historische Stände.
+den unveränderlichen Releasetag. GitHub- und Store-Release wurden veröffentlicht;
+der Store-Bildproxy liefert bei der ersten Prüfung noch `File not found`, obwohl
+die Originaldateien öffentlich abrufbar sind. Nextcloud 35 ist in der Plattform-
+API derzeit nicht als unterstützt markiert; der öffentliche Sync-Code filtert
+nicht unterstützte Plattformen, was den Fehler plausibel erklärt. Deployment
+und Sync-Zeitpunkt sind nicht bestätigt. App-Funktionalität blieb unverändert.
+Ältere Einträge sind historische Stände.
 
 ## Releasevorbereitung 03.11.2026
 

@@ -1,5 +1,13 @@
 # Übernahme des App-Repositorys
 
+## Store-Aufnahmen 03.11.2026
+
+Version 0.2.1 ergänzt zwei Store-Screenshots von Dashboard und Agentenstatistik.
+Sie wurden in einer isolierten Nextcloud-Demo mit fiktiven Daten aufgenommen und
+liegen unter `docs/screenshots/0.2.1/`. App-Metadaten verlinken die Dateien auf
+den unveränderlichen Releasetag; Store-Bildproxy und Anzeige nach Upload prüfen.
+App-Funktionalität blieb unverändert. Ältere Einträge sind historische Stände.
+
 ## Releasevorbereitung 03.11.2026
 
 Zertifikat für `placetel` ausgestellt und Schlüsselzugehörigkeit geprüft. Die

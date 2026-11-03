@@ -1,5 +1,9 @@
 # Änderungen
 
+## 0.2.1
+
+- Vorschauaufnahmen des Dashboards und der Agentenstatistik im Nextcloud App Store ergänzt. Die Aufnahmen zeigen ausschließlich fiktive Demodaten.
+
 ## 0.2.0
 
 - Native Nextcloud-PHP-App ohne separaten Node-/Gateway-Dienst.

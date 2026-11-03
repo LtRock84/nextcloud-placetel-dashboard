@@ -1,0 +1,18 @@
+[
+  {
+    "version": "0.2.5",
+    "items": [
+      {"title": "Neuigkeiten nach Updates", "description": "Beim ersten Öffnen nach einem Update siehst du die Änderungen. Deine Bestätigung gilt nur für dein Nextcloud-Konto."},
+      {"title": "Erweiterte Anrufstatistik", "description": "Filtere Anrufdatensätze nach eingehend, ausgehend und nicht angenommen. Eine Stundenverteilung zeigt das Aufkommen."},
+      {"title": "Verpasste Anrufe", "description": "Als verpasst gemeldete Notify-Ereignisse erscheinen separat. Hinweise kennzeichnen eine möglicherweise unvollständige Erfassung."},
+      {"title": "Rückrufliste", "description": "Gefilterte offene Rückrufe lassen sich gemeinsam erledigen. Eine nachweislich spätere Annahme wird als erledigt gekennzeichnet."}
+    ]
+  },
+  {
+    "version": "0.2.4",
+    "items": [
+      {"title": "Anrufe im Detail", "description": "Eingehende und ausgehende Anrufdatensätze sowie nicht angenommene Zustellversuche filtern und nach Stunden auswerten."},
+      {"title": "Verpasste Notify-Anrufe", "description": "Von Placetel als verpasst gemeldete Anrufe stehen getrennt von einzelnen Zustellversuchen."}
+    ]
+  }
+]

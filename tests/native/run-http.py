@@ -46,6 +46,13 @@ try:
   check(user+' unsupported assignment planning disabled',data['status']['capabilities']['assignments'] is False)
   check(user+' no API key required for isolated demo',data['status']['mode']=='demo' and data['hosting']['configured'] is False)
  viewer=clients['viewer'];operator=clients['operator']
+ for who in ['viewer','operator','admin']:
+  client=clients[who];c,h,b=client.api('updates');update=json.loads(b);check(who+' receives update notes',c==200 and update['pending'] and bool(update['releases']))
+  if who=='viewer':
+   check('viewer cannot acknowledge a different version',client.api('updates/seen',{'version':'0.0.0'})[0]==400)
+   check('viewer acknowledges update',client.api('updates/seen',{'version':update['version']})[0]==200)
+   check('viewer update remains acknowledged',not json.loads(client.api('updates')[2])['pending'])
+ check('acknowledgement is per-user',json.loads(operator.api('updates')[2])['pending'])
  check('statistics and hourly history',viewer.api('statistics?from=2026-10-19&to=2026-10-20')[0]==200)
  check('coverage records',viewer.api('coverage')[0]==200)
  check('callbacks and reachability report',viewer.api('operations/report?from=2026-10-19&to=2026-10-20')[0]==200)

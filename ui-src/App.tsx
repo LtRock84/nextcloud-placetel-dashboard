@@ -1,3 +1,4 @@
+import {UpdateNotice} from './UpdateNotice';
 import {CallDetails} from './CallDetails';
 import {ProjectSupport} from './ProjectSupport';
 import {SetupGuide} from './SetupGuide';
@@ -144,7 +145,7 @@ export function App() {
   const toggleQueue = (id: string, q: string) => {
     const list = current[id] ?? []; setDraft({ ...current, [id]: list.some(a => a.queueId === q) ? list.filter(a => a.queueId !== q) : [...list, { queueId: q, skill: 1 }] });
   };
-  return <DispoliveContext.Provider value={demo ? undefined : data.dispolive}><div className="app-shell">
+  return <DispoliveContext.Provider value={demo ? undefined : data.dispolive}><div className="app-shell">{cloudConfig()?.native && <UpdateNotice request={api} />}
     <aside className="sidebar"><a className="brand" href="#" onClick={e => { e.preventDefault(); setPage('overview'); }}><span className="brand-mark"><Headphones size={23} /></span><span>placetel<span className="brand-sub">{cloudConfig()?.native?'DASHBOARD':'LEITSTAND'}</span></span></a>
       <div className="workspace"><span className="workspace-icon">N</span><div><strong>{demo ? 'Nordlicht' : 'Dein Callcenter'}</strong><small>{demo ? 'Demoumgebung' : data.status.account || 'Placetel Profi'}</small></div><span className="workspace-dot" /></div>
       <div className="nav-label">ARBEITSPLATZ</div><nav>{nav.map(({ id, label, icon: Icon }) => <button key={id} className={page === id ? 'active' : ''} onClick={() => { setPage(id); setSearch(''); }}><Icon size={19} />{label}{id === 'agents' && <small>{data.agents.length}</small>}</button>)}</nav>

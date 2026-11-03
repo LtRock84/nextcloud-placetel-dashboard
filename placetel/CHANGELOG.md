@@ -1,5 +1,10 @@
 # Änderungen
 
+## 0.2.5
+
+- Nach einem Update sehen Nextcloud-Nutzer die Neuerungen beim ersten Öffnen der App; die Bestätigung wird je Benutzerkonto gespeichert.
+- Bei übersprungenen Updates werden die verfügbaren Hinweise seit der letzten Bestätigung zusammen angezeigt.
+
 ## 0.2.4
 
 - Anrufdetails nach eingehenden, ausgehenden und nicht angenommenen Callcenter-Datensätzen filtern; Gegenstelle, Ergebnis, Agent, Warteschleife und stündliche Verteilung anzeigen.

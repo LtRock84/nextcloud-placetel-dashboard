@@ -56,7 +56,7 @@
         {
           "title": "Version und Sicherung vor der Installation prüfen",
           "text": [
-            "Öffne über das Profilmenü die Verwaltungseinstellungen und dort „Übersicht“. Prüfe die Nextcloud-Version und bestehende Warnungen. Diese App-Version ist für Nextcloud 35 und PHP ab 8.3 vorgesehen; eine andere Version nicht durch Erzwingen der App-Kompatibilität übergehen. Die PHP-Version findest du je Installation unter „System“ beziehungsweise beim Hoster. Der PHP-Kommandozeilenaufruf für Cron und Worker muss ebenfalls passen.",
+            "Öffne über das Profilmenü die Verwaltungseinstellungen und dort „Übersicht“. Prüfe die Nextcloud-Version und bestehende Warnungen. Diese App-Version ist für Nextcloud 34 und 35 und PHP ab 8.3 vorgesehen; eine andere Version nicht durch Erzwingen der App-Kompatibilität übergehen. Die PHP-Version findest du je Installation unter „System“ beziehungsweise beim Hoster. Der PHP-Kommandozeilenaufruf für Cron und Worker muss ebenfalls passen.",
             "Erstelle vor manueller Installation oder Update ein zusammengehöriges Backup von Datenbank, Nextcloud-Konfiguration, Apps und Daten nach dem Verfahren deiner Installation. Prüfe, wo es liegt und wie es zurückgespielt wird. Eine Kopie der App allein sichert keine Einstellungen oder Anrufhistorie. Konfiguration und Backup enthalten Geheimnisse: geschützt aufbewahren, nicht zur Fehleranalyse veröffentlichen."
           ]
         },

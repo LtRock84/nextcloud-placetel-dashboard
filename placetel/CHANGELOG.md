@@ -1,5 +1,10 @@
 # Änderungen
 
+## 0.2.2
+
+- Nextcloud 34 zusätzlich freigegeben; grundlegende Funktionen auf 34.0.5 mit Beispieldaten geprüft.
+- App-Store-Kategorie zu Einbindung geändert.
+
 ## 0.2.1
 
 - Vorschauaufnahmen des Dashboards und der Agentenstatistik im Nextcloud App Store ergänzt. Die Aufnahmen zeigen ausschließlich fiktive Demodaten.

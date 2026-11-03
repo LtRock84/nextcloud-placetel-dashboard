@@ -6,7 +6,7 @@ Dieses Repository enthält die native App und den Quellcode für Placetel Dashbo
 
 ## Voraussetzungen und Installation
 
-Nextcloud 35, PHP ab 8.3 und ein eigener Placetel-API-Zugang. Die App läuft nativ mit PHP; ein separater Node-Server ist nicht erforderlich. Installation und Einrichtung: [App-Anleitung](placetel/README.md). Die vollständige Schritt-für-Schritt-Anleitung ist zusätzlich in der App aufklappbar und als [Textfassung](placetel/help/ereignisanbindung.txt) enthalten.
+Nextcloud 34 oder 35, PHP ab 8.3 und ein eigener Placetel-API-Zugang. Die App läuft nativ mit PHP; ein separater Node-Server ist nicht erforderlich. Installation und Einrichtung: [App-Anleitung](placetel/README.md). Die vollständige Schritt-für-Schritt-Anleitung ist zusätzlich in der App aufklappbar und als [Textfassung](placetel/help/ereignisanbindung.txt) enthalten.
 
 Die Installation verwendet ein gemeinsames Placetel-Konto für die freigegebenen Nextcloud-Benutzer. Zugriffsgruppen in den App-Einstellungen festlegen. Persönliche Schlüssel werden erst in der installierten App eingegeben und verschlüsselt gespeichert.
 

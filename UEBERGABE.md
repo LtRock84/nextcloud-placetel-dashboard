@@ -1,5 +1,12 @@
 # Übernahme des App-Repositorys
 
+## Kompatibilitätsupdate 0.2.2
+
+Nextcloud 34 und 35 in den Metadaten vorgesehen; Kategorie Einbindung und neue
+gegliederte Beschreibung. Grundfunktionen auf NC34.0.5 mit Beispieldaten geprüft,
+vollständige Anbieter-/Rollen-/Upgradeprüfung auf NC34 steht weiterhin aus.
+Signierte Pakete und Veröffentlichung vornehmen; ältere Einträge sind historisch.
+
 ## Store-Aufnahmen 03.11.2026
 
 Version 0.2.1 ergänzt zwei Store-Screenshots von Dashboard und Agentenstatistik.

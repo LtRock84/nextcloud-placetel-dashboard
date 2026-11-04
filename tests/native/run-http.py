@@ -93,6 +93,7 @@ try:
  check('callback note saved in native database',operator.api('operations/callback',{'key':candidate['key'],'latestId':candidate['latestId'],'state':'done','note':'Synthetic follow-up'})[0]==200)
  report=json.loads(operator.api('operations/report?from=2026-10-19&to=2026-10-20')[2]);check('callback note visible across users',next(c for c in report['callbacks'] if c['key']==candidate['key'])['note']=='Synthetic follow-up')
  bulk=next(c for c in report['callbacks'] if c['state']=='open')
+ check('viewer cannot bulk complete callbacks',viewer.api('operations/callbacks/complete',{'callbacks':[{'key':bulk['key'],'latestId':bulk['latestId']}]})[0]==403)
  check('native bulk completion marks selected open callback done',operator.api('operations/callbacks/complete',{'callbacks':[{'key':bulk['key'],'latestId':bulk['latestId']}]} )[0]==200)
  report=json.loads(operator.api('operations/report?from=2026-10-19&to=2026-10-20')[2]);check('native bulk completion stored',next(c for c in report['callbacks'] if c['key']==bulk['key'])['state']=='done')
  occ('app:disable','placetel');occ('app:enable','placetel');check('stored callback survives disable and enable',next(c for c in json.loads(operator.api('operations/report?from=2026-10-19&to=2026-10-20')[2])['callbacks'] if c['key']==candidate['key'])['state']=='done')
@@ -122,6 +123,18 @@ try:
  check('reader loses access after group restriction',viewer.api('bootstrap')[0]==403)
  check('admin retains access',admin.api('bootstrap')[0]==200)
  admin.api('settings',{'operator_groups':[],'viewer_groups':None})
+ # The following access changes are made only in this disposable fixture.
+ occ('group:adduser','telefonie-disposition','operator')
+ areas=['overview','agents','callbacks','routing','events','queues','schedule','statistics','settings']
+ none={area:'none' for area in areas};viewer_rights={**none,'statistics':'read'}
+ matrix={'management_groups':['telefonie-disposition'],'matrix':{'default':none,'groups':{},'users':{'viewer':viewer_rights}}}
+ check('admin can select management group and individual rights',admin.api('settings',matrix)[0]==200)
+ data=json.loads(viewer.api('bootstrap')[2]);check('denied navigation areas excluded from snapshot',data['hosting']['permissions']['callbacks']=='none' and 'queueSnapshot' not in data and data['operations']['notify']['calls']==[])
+ check('individual statistics permission works',viewer.api('statistics?from=2026-10-19&to=2026-10-20')[0]==200)
+ check('denied callback report is blocked at API',viewer.api('operations/report?from=2026-10-19&to=2026-10-20')[0]==403)
+ check('denied overview cannot access overview statistics',viewer.api('statistics?scope=overview')[0]==403)
+ check('management group keeps full access',json.loads(operator.api('bootstrap')[2])['hosting']['role']=='admin')
+ check('management cannot remove its own group',operator.api('settings',{**matrix,'management_groups':[]})[0]==400)
  viewer.call('/logout?'+urllib.parse.urlencode({'requesttoken':viewer.token}));check('logged-out client cannot read',viewer.api('bootstrap')[0] in [302,303,401,403])
  print('NATIVE_HTTP_COMPLETE',flush=True)
 finally:

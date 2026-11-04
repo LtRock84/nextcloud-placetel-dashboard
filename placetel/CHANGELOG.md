@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.2.6
+
+- Berechtigung für den Sammelabschluss offener Rückrufe in Nextcloud korrigiert. Disposition und Administratoren dürfen die Aktion ausführen; für reine Lesekonten bleibt sie gesperrt.
+- Einstellungen in Themenreiter aufgeteilt; Benutzer- und Gruppenrechte je App-Bereich mit eigener Geschäftsführungsgruppe ergänzt.
+- Wartende Anrufer auf der Übersicht optisch von bereits angenommenen Anrufen getrennt.
+
 ## 0.2.5
 
 - Nach einem Update sehen Nextcloud-Nutzer die Neuerungen beim ersten Öffnen der App; die Bestätigung wird je Benutzerkonto gespeichert.

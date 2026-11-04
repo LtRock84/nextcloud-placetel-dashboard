@@ -1,0 +1,36 @@
+import { useEffect, useState } from 'react';
+import { ShieldCheck, Trash2 } from 'lucide-react';
+
+type Level='none'|'read'|'write';
+type Area='overview'|'agents'|'callbacks'|'routing'|'events'|'queues'|'schedule'|'statistics'|'settings';
+type Rights=Record<Area,Level>;
+type RuleMap=Record<string,Rights>;
+type Configuration={management_groups:string[];matrix:{default:Rights;groups:RuleMap;users:RuleMap}};
+type Choice={id:string;name:string};
+type Options={groups:Choice[];users:Choice[];limit:number};
+type Request=<T>(path:string,data?:unknown)=>Promise<T>;
+const areas:[Area,string][]=[['overview','Übersicht'],['agents','Agenten'],['callbacks','Rückrufliste'],['routing','Feiertag & Notfall'],['events','Ereignisse'],['queues','Warteschleifen'],['schedule','Einsatzplanung'],['statistics','Statistik'],['settings','Einstellungen']];
+export function RightsSettings({request,refresh,isAdmin}:{request:Request;refresh:()=>Promise<unknown>;isAdmin:boolean}){
+ const [config,setConfig]=useState<Configuration|null>(null),[options,setOptions]=useState<Options|null>(null),[kind,setKind]=useState<'groups'|'users'>('groups'),[selected,setSelected]=useState(''),[error,setError]=useState(''),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false);
+ const [search,setSearch]=useState('');
+ useEffect(()=>{if(!isAdmin)return;let active=true;void Promise.all([request<Configuration>('permissions'),request<Options>('permissions/options')]).then(([c,o])=>{if(active){setConfig(c);setOptions(o);}}).catch(()=>{if(active)setError('Rechte und Nextcloud-Benutzer konnten nicht geladen werden.');});return()=>{active=false;};},[request,isAdmin]);
+ useEffect(()=>{if(!isAdmin)return;let active=true;const timer=setTimeout(()=>{void request<Options>(`permissions/options?${new URLSearchParams({search})}`).then(o=>{if(active)setOptions(o);}).catch(()=>{if(active)setError('Die Suche nach Nextcloud-Benutzern und Gruppen ist fehlgeschlagen.');});},300);return()=>{active=false;clearTimeout(timer);};},[request,isAdmin,search]);
+ if(!isAdmin)return <section className="panel"><div className="settings-body"><h2>Rechteverwaltung</h2><p>Nur Administratoren und die Geschäftsführung können Zugriffsrechte verwalten.</p></div></section>;
+ if(!config||!options)return <section className="panel"><div className="settings-body"><h2>Rechteverwaltung</h2><p role="status">{error||'Benutzer und Gruppen werden geladen …'}</p></div></section>;
+ const rules=(config.matrix[kind]??{}) as RuleMap;
+ const labels=(items:Choice[],id:string)=>items.find(x=>x.id===id)?.name||id;
+ const updateRule=(key:'default'|string,area:Area,value:Level,group?:'groups'|'users')=>setConfig(c=>{if(!c)return c;if(!group)return {...c,matrix:{...c.matrix,default:{...c.matrix.default,[area]:value}}};return {...c,matrix:{...c.matrix,[group]:{...c.matrix[group],[key]:{...c.matrix[group][key],[area]:value}}}};});
+ const add=()=>{if(!selected||rules[selected])return;setConfig(c=>c&&({...c,matrix:{...c.matrix,[kind]:{...c.matrix[kind],[selected]:{...c.matrix.default}}}}));setSelected('');};
+ const remove=(group:'groups'|'users',id:string)=>setConfig(c=>{if(!c)return c;const next={...c.matrix[group]};delete next[id];return {...c,matrix:{...c.matrix,[group]:next}};});
+ const table=(rights:Rights,onChange:(area:Area,value:Level)=>void)=><div className="rights-table">{areas.map(([area,label])=><label key={area}><span>{label}</span><select value={rights[area]} onChange={e=>onChange(area,e.target.value as Level)} aria-label={`${label} Berechtigung`}><option value="none">Kein Zugriff</option><option value="read">Lesen</option>{(['agents','callbacks','routing','queues','settings'].includes(area)||rights[area]==='write')&&<option value="write">Bearbeiten</option>}</select></label>)}</div>;
+ const save=async()=>{setBusy(true);setError('');setNotice('');try{await request('settings',config);await refresh();setNotice('Die Zugriffsrechte wurden gespeichert.');}catch(e){setError(e instanceof Error?e.message:'Die Rechte konnten nicht gespeichert werden.');}finally{setBusy(false);}};
+ return <section className="panel"><div className="panel-heading"><div><h2>Benutzer & Rechte</h2><p>Zugriff auf die Bereiche des Placetel Dashboards festlegen</p></div><ShieldCheck size={20}/></div><div className="settings-body rights-settings">
+ <p>Nextcloud-Administratoren und Mitglieder der ausgewählten Geschäftsführungsgruppen behalten immer alle Rechte. Ein Bereich ohne Zugriff verschwindet aus der Navigation.</p>
+ <label className="field">Benutzer oder Gruppe suchen<input type="search" value={search} maxLength={128} placeholder="Name oder Kennung" onChange={e=>setSearch(e.target.value)}/><small className="field-help">Die Suche filtert die auswählbaren Nextcloud-Gruppen und Benutzer; bestehende Regeln bleiben erhalten.</small></label>
+ <fieldset><legend>Geschäftsführung</legend><p>Wähle eine oder mehrere bestehende Nextcloud-Gruppen mit vollständigem Zugriff.</p><div className="rights-choices">{options.groups.map(g=><label key={g.id}><input type="checkbox" checked={config.management_groups.includes(g.id)} onChange={e=>setConfig(c=>c&&({...c,management_groups:e.target.checked?[...c.management_groups,g.id]:c.management_groups.filter(id=>id!==g.id)}))}/>{g.name} <small>({g.id})</small></label>)}</div></fieldset>
+ <h3>Standard für alle anderen Nutzer</h3><p>Diese Rechte gelten, solange keine Gruppen- oder Benutzerregel etwas anderes vorgibt.</p>{table(config.matrix.default,(area,value)=>updateRule('default',area,value))}
+ <h3>Gruppen und einzelne Nutzer</h3><p>Eine Gruppenregel ersetzt den Standard. Bei mehreren passenden Gruppen gilt je Bereich das höchste Recht. Eine persönliche Regel ersetzt für diesen Nutzer alle Gruppenrechte.</p><div className="inline-actions"><select aria-label="Art der Zuordnung" value={kind} onChange={e=>{setKind(e.target.value as 'groups'|'users');setSelected('');}}><option value="groups">Nextcloud-Gruppe</option><option value="users">Nextcloud-Benutzer</option></select><select aria-label="Gruppe oder Benutzer auswählen" value={selected} onChange={e=>setSelected(e.target.value)}><option value="">Bitte auswählen</option>{options[kind].filter(x=>!rules[x.id]).map(x=><option key={x.id} value={x.id}>{x.name} ({x.id})</option>)}</select><button className="button" onClick={add} disabled={!selected}>Hinzufügen</button></div>
+ {(['groups','users'] as const).flatMap(k=>Object.entries(config.matrix[k]??{}).map(([id,r])=><details key={k+id} className="rights-rule"><summary>{k==='groups'?'Gruppe':'Benutzer'}: {labels(options[k],id)} <small>({id})</small></summary><button className="text-button danger" onClick={()=>remove(k,id)}><Trash2 size={14}/>Regel entfernen</button>{table(r,(area,value)=>updateRule(id,area,value,k))}</details>))}
+ {error&&<p className="message error" role="alert">{error}</p>}{notice&&<p role="status">{notice}</p>}<p className="field-help">Die Auswahl zeigt jeweils bis zu {options.limit} Gruppen und Benutzer. Verbindungen und Schlüssel können nur von Administratoren oder der Geschäftsführung geändert werden. Einsatzplanung und Agentenzuordnung bleiben im Echtbetrieb durch die Placetel-Schnittstelle eingeschränkt.</p><button className="button primary" disabled={busy} onClick={()=>void save()}>{busy?'Wird gespeichert …':'Rechte speichern'}</button>
+ </div></section>;
+}

@@ -1,0 +1,28 @@
+name: Isolated Nextcloud permission tests
+on:
+  push:
+    branches: [rechte-integrationstest]
+  workflow_dispatch:
+jobs:
+  integration:
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ['nextcloud:34.0.5-apache', 'nextcloud:35.0.2-apache']
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      PLACETEL_DISPOSABLE_TEST: '1'
+      PLACETEL_NATIVE_IMAGE: ${{ matrix.image }}
+      PLACETEL_NATIVE_FIXTURE_DIR: /tmp/placetel-native-fixture
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare synthetic fixtures
+        run: |
+          tar -czf /tmp/placetel-native-app-test.tar.gz placetel
+          cp tests/native-parity.json /tmp/native-parity.json
+          cp tests/native/contract.php tests/native/run-http.py tests/native/popups.php tests/native/webhook-contract.php tests/native/webhook-router.php /tmp/
+      - name: Start isolated Nextcloud
+        run: python3 tests/native/setup.py
+      - name: Test permissions and application
+        run: python3 tests/native/verify.py

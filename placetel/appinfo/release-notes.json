@@ -1,5 +1,14 @@
 [
   {
+    "version": "0.2.6",
+    "items": [
+      {"title": "Rückrufliste korrigiert", "description": "Disposition und Administratoren können die angezeigten offenen Rückrufe wieder gemeinsam als erledigt markieren."},
+      {"title": "Übersichtliche Einstellungen", "description": "Die Einstellungen sind nach Themen in Reiter aufgeteilt."},
+      {"title": "Rechte für Gruppen und Benutzer", "description": "Administratoren und die Geschäftsführung können den Zugriff auf einzelne App-Bereiche festlegen."},
+      {"title": "Wartende Anrufer im Blick", "description": "Aktuell wartende Anrufer sind in der Übersicht deutlicher von angenommenen Anrufen getrennt."}
+    ]
+  },
+  {
     "version": "0.2.5",
     "items": [
       {"title": "Neuigkeiten nach Updates", "description": "Beim ersten Öffnen nach einem Update siehst du die Änderungen. Deine Bestätigung gilt nur für dein Nextcloud-Konto."},

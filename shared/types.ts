@@ -25,7 +25,7 @@ export type Status = {
   capabilities: { assignments: boolean; verifiedStatistics: boolean; liveCalls: boolean; callStatistics?: boolean; agentManagement?: boolean; queueManagement?: boolean };
 };
 export type Bootstrap = {
-  hosting?: {native?:boolean;managedSecrets:boolean;configured?:boolean;role:string;user:string};
+  hosting?: {native?:boolean;managedSecrets:boolean;configured?:boolean;role:string;user:string;permissions?:Record<string,'none'|'read'|'write'>};
   access?: {operator_groups?:string[];viewer_groups?:string[]}|null;
   operations?: OperationsState;
   dispolive?: DispoliveState;

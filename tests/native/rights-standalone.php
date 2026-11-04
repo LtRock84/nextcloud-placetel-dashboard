@@ -16,9 +16,11 @@ namespace {
  $s->id='boss';verify($access->identity()['role']==='admin','management group has full access');
  $s->id='alice';$a=$access->identity();verify($a['permissions']['callbacks']==='write'&&$a['permissions']['statistics']==='read','highest group rights combined');
  verify($access->permitsArea($a,'POST','/operations/callbacks/complete')&&!$access->permitsArea($a,'GET','/statistics','overview')&&$access->permitsArea($a,'GET','/statistics'),'server enforces section permissions');
+ verify($access->permitsArea($a,'GET','/operations/incoming')&&$access->permitsArea($a,'POST','/operations/incoming/sync')&&$access->permitsArea($a,'POST','/operations/incoming/state'),'callback editor can access call-level sources');
  $c->settings['matrix']['default']=array_fill_keys(\OCA\Placetel\Service\Access::AREAS,'read');verify($access->identity()['permissions']['overview']==='none','matching group can hide an area from a permissive default');$c->settings['matrix']['default']=$none;
  $s->id='bob';$b=$access->identity();verify($b['permissions']['statistics']==='none'&&$b['permissions']['events']==='read','user rule overrides group');
  verify(!$access->permitsArea($b,'POST','/operations/callbacks/complete')&&!$access->permitsArea($b,'GET','/permissions/options'),'read-only user cannot write or enumerate users');
+ verify(!$access->permitsArea($b,'GET','/operations/incoming')&&!$access->permitsArea($b,'POST','/operations/incoming/state'),'other areas cannot access call-level sources');
  $s->id='charlie';verify($access->identity()===null,'unassigned user denied app');
  $c->settings=['operator_groups'=>['team']];$s->id='alice';verify($access->identity()['role']==='operator','legacy operator remains valid');$s->id='charlie';verify($access->identity()['role']==='viewer','legacy default read preserved');
  $s->id='admin';$store=new \OCA\Placetel\Native\Store();$managed=new \OCA\Placetel\Service\Access($c,$g,$s,$store,new Users());

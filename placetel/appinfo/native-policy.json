@@ -1,5 +1,7 @@
 [
  {"method":"GET","pattern":"^/(bootstrap|health|statistics|coverage|operations/report|updates)$","role":"viewer"},
+ {"method":"GET","pattern":"^/operations/incoming$","role":"viewer"},
+ {"method":"POST","pattern":"^/operations/incoming/(sync|state)$","role":"operator"},
  {"method":"GET","pattern":"^/permissions(/options)?$","role":"admin"},
  {"method":"POST","pattern":"^/updates/seen$","role":"viewer"},
  {"method":"POST","pattern":"^/dispolive/resolve$","role":"viewer"},

@@ -15,7 +15,7 @@ docker('exec',container,'chown','-R','www-data:www-data','/var/www/html/custom_a
 for name,target in [('contract.php','native-contract.php'),('native-parity.json','native-parity.json')]:docker('cp','/tmp/'+name,container+':/tmp/'+target);docker('exec',container,'chown','www-data:www-data','/tmp/'+target)
 out=docker('exec','-u','www-data','-e','PLACETEL_DISPOSABLE_TEST=1',container,'php','/tmp/native-contract.php');print(out,flush=True)
 if 'NATIVE_CONTRACT_COMPLETE' not in out:
- code='$f=\"/var/www/html/data/nextcloud.log\";if(is_file($f)){foreach(array_slice(file($f),-8) as $line){$j=json_decode($line,true);$e=$j[\"Exception\"]??[];echo \"Class: \".($e[\"Exception\"]??\"unknown\").\" | File: \".($e[\"File\"]??\"unknown\").\" | Line: \".($e[\"Line\"]??\"unknown\").PHP_EOL;}}'
+ code='$f="/var/www/html/data/nextcloud.log";if(is_file($f)){foreach(array_slice(file($f),-8) as $line){$j=json_decode($line,true);$e=$j["Exception"]??[];echo "Keys: ".implode(",",array_keys($j??[]))." | Exception keys: ".implode(",",array_keys(is_array($e)?$e:[]))." | Message: ".substr(preg_replace("/fixture[-A-Za-z0-9]+/", "[redacted]", (string)($j["message"]??"")),0,350).PHP_EOL;}}'
  print(docker('exec',container,'php','-r',code),flush=True)
  raise RuntimeError('Native contract did not complete; exception metadata shown above')
 result=json.loads(docker('exec',container,'cat','/tmp/native-contract-results.json'));assert result['count']==result['passed'] and result['count']>=40;(root/'native-contract-results.json').write_text(json.dumps(result,indent=2))

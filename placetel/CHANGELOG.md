@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.2.7
+
+- Eingehende Anrufe aus der Placetel-Anrufliste tageweise abrufen; Notify-Ereignisse getrennt anzeigen. Die Quellen werden nicht automatisch zusammengeführt.
+- Verpasste Anrufe je Quelle mit eigenem Status und Notiz bearbeiten. Nicht abgerufene Tage und mögliche Erfassungslücken bleiben erkennbar.
+- Erfolglose Agentenversuche werden nicht mehr allein anhand ähnlicher Rufnummern und Zeiten automatisch erledigt; ein möglicher Zusammenhang wird als Hinweis angezeigt.
+
 ## 0.2.6
 
 - Berechtigung für den Sammelabschluss offener Rückrufe in Nextcloud korrigiert. Disposition und Administratoren dürfen die Aktion ausführen; für reine Lesekonten bleibt sie gesperrt.

@@ -1,5 +1,13 @@
 [
   {
+    "version": "0.2.7",
+    "items": [
+      {"title": "Eingehende Anrufe getrennt auswerten", "description": "Die Anrufliste eines ausgewählten Tages kann abgerufen werden; Notify-Ereignisse werden als eigene Quelle angezeigt."},
+      {"title": "Rückrufe sicherer bearbeiten", "description": "Verpasste Anrufe erhalten eigene Bearbeitungsstände. Mögliche Übereinstimmungen werden nicht allein wegen einer Rufnummer automatisch erledigt."},
+      {"title": "Datenstand erkennen", "description": "Die Ansicht weist auf nicht abgerufene Tage, mögliche Lücken und fehlende Warteschleifenzuordnung hin."}
+    ]
+  },
+  {
     "version": "0.2.6",
     "items": [
       {"title": "Rückrufliste korrigiert", "description": "Disposition und Administratoren können die angezeigten offenen Rückrufe wieder gemeinsam als erledigt markieren."},

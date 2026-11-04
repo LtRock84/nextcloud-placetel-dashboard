@@ -8,6 +8,7 @@ Native Nextcloud-App für Placetel-PROFI-Callcenter. Installation, eigenen API-S
 - Agentenstatus, Prioritäten und dokumentierte Warteschleifeneinstellungen mit Änderungsvorschau.
 - Statistik nach Agent, Warteschleife, Tag, Woche, Monat und Datumsbereich: angenommene Gespräche, eindeutige normalisierte Rufnummern, Dauerabdeckung und Stundenverteilung. Wiederholte Klingelversuche zählen nicht als Annahmen; anonyme Anrufer separat.
 - Rückrufkandidaten mit lokalen Notizen, Wartezeitwarnungen, Telefonbuch und Routingvorlagen mit Vorschau.
+- In der Rückrufliste lassen sich eingehende Anrufe für einen ausgewählten Tag über „Diesen Tag abrufen“ lesen. Verpasste Anrufe können je Quelle mit Status und Notiz versehen werden. Notify wird getrennt angezeigt; dort hängt die Abdeckung vom Ereignisempfang ab.
 - Optionaler signierter Placetel-Notify-Empfang.
 - Optionaler DispoLive-Rufnummernabgleich mit eigenem Mandanten und API-Schlüssel, an-/abschaltbar. Optionaler Popup-Versand für neue signierte Anrufereignisse an ein explizit eingestelltes Arbeitsplatz-Telefon.
 
@@ -50,6 +51,15 @@ Bei geöffneter Ansicht werden Abrufe zentral pro Installation koordiniert; weit
 Agenten-Warteschleifenzuordnung und Skills samt entsprechender Einsatzplanung bleiben gesperrt, weil keine bestätigte offizielle Schnittstelle vorliegt. Dokumentierte Routingwechsel sind davon getrennt: manuell mit Vorschau oder geplant im Nextcloud-Cron-Takt; keine minutengenaue Ausführungsgarantie. Unbestätigte Schreiboperationen werden nicht automatisch wiederholt.
 
 Callcenter-Gesprächsdauern sind derzeit ausdrücklich Näherungen ab Warteschleifenaustritt, keine bestätigten reinen Sprechzeiten. Fehlende Historie wird als Datenlücke gekennzeichnet. Der erste Import kann länger dauern. Diese Version ist auf kleine Teams ausgelegt; ein einzelner paginierter Import ist auf10000 Datensätze begrenzt und bricht darüber ohne Veröffentlichung einer unvollständigen Tagesliste ab. Lastabnahme für große Callcenter steht aus.
+
+Die Anrufliste und Notify haben keine dokumentierte gemeinsame Kennung mit den
+Callcenter-Zustellversuchen. Sie werden daher getrennt geführt; derselbe Anruf
+kann in mehreren Ansichten erscheinen. Eine Warteschleife lässt sich dort nicht
+zuverlässig zuordnen. Der Tagesabruf ist manuell und zeigt den Abrufstand;
+Vollständigkeit und Aktualität der Providerdaten sind nicht garantiert. Die
+Notify-Zeit ist eine Empfangszeit. Bestehende automatische Abschlüsse allein auf
+Basis gleicher Nummer und Zeit werden nicht mehr vorgenommen; bisher ausschließlich
+automatisch erledigte Rückrufkandidaten können wieder offen erscheinen.
 
 ## Datenschutz und Betrieb
 

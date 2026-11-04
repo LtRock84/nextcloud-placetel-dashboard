@@ -38,6 +38,7 @@ class Client:
  def api(self,path,data=None,headers=None,method=None):return self.call('/index.php/apps/placetel/api/'+path,data,{'requesttoken':self.token,**(headers or {})},method)
 try:
  admin=Client();admin.login('admin');viewer=Client();viewer.login('viewer');operator=Client();operator.login('operator')
+ check('demo bootstrap seeds synthetic data',admin.api('bootstrap')[0]==200)
  check('admin configures legacy operator group',admin.api('settings',{'operator_groups':['telefonie-disposition'],'viewer_groups':None})[0]==200)
  from datetime import datetime, timedelta
  from zoneinfo import ZoneInfo

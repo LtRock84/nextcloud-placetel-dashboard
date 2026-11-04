@@ -39,9 +39,9 @@ class Client:
 try:
  admin=Client();admin.login('admin');viewer=Client();viewer.login('viewer');operator=Client();operator.login('operator')
  check('admin configures legacy operator group',admin.api('settings',{'operator_groups':['telefonie-disposition'],'viewer_groups':None})[0]==200)
- from datetime import datetime
+ from datetime import datetime, timedelta
  from zoneinfo import ZoneInfo
- day=datetime.now(ZoneInfo('Europe/Berlin')).strftime('%Y-%m-%d')
+ day=(datetime.now(ZoneInfo('Europe/Berlin'))-timedelta(days=1)).strftime('%Y-%m-%d')
  c,h,b=operator.api('operations/report?from='+day+'&to='+day);check('operator can read demo callback report',c==200);report=json.loads(b)
  candidate=next(c for c in report['callbacks'] if c['state']=='open');payload={'callbacks':[{'key':candidate['key'],'latestId':candidate['latestId']}]}
  check('viewer cannot bulk complete callbacks',viewer.api('operations/callbacks/complete',payload)[0]==403)

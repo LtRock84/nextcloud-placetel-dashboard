@@ -7,7 +7,7 @@ use OCP\Lock\{ILockingProvider,LockedException};
 final class Api {
  public function __construct(private IClientService $http,private Store $store,private Secrets $secrets,private ILockingProvider $locks) {}
  public function placetel(string $path,string $method='GET',?array $body=null,?string $token=null): mixed {
-  if(!preg_match('~^/(me|call_center_agents(?:/\d+)?|call_center_queues(?:/\d+)?|call_center_calls|contacts|routings(?:/[A-Za-z0-9%+_.-]+)?|routing_plans(?:/\d+/simulate)?)(?:\?[A-Za-z0-9%&=+_.:-]+)?$~D',$path))throw new \InvalidArgumentException('Nicht freigegebener API-Endpunkt.');
+  if(!preg_match('~^/(me|calls|call_center_agents(?:/\d+)?|call_center_queues(?:/\d+)?|call_center_calls|contacts|routings(?:/[A-Za-z0-9%+_.-]+)?|routing_plans(?:/\d+/simulate)?)(?:\?[A-Za-z0-9%&=+_.:-]+)?$~D',$path))throw new \InvalidArgumentException('Nicht freigegebener API-Endpunkt.');
   if(!in_array($method,['GET','PUT'],true)||$method==='PUT'&&!preg_match('~^/(call_center_(agents|queues)/\d+|routings/[A-Za-z0-9%+_.-]+)$~D',$path))throw new \InvalidArgumentException('Nicht freigegebene Schreibfunktion.');
   $next=$this->store->get('api:next',0);if(microtime(true)<$next)throw new RemoteException('API wartet auf das nächste Zeitfenster.',429,max(1,(int)ceil($next-microtime(true))));
   $token??=$this->secrets->get('placetel');if(!$token)throw new RemoteException('Bitte zuerst einen Placetel-API-Schlüssel einrichten.',401);

@@ -32,7 +32,7 @@ Der optionale DispoLive-Abgleich kann Anrufernummern bekannten Kontakten zuordne
 ## Voraussetzungen und Datenschutz
 
 Nextcloud 34 oder 35, PHP ab 8.3 und ein eigener Placetel-PROFI-API-Schlüssel. Der Schlüssel wird serverseitig verschlüsselt gespeichert. DispoLive ist standardmäßig ausgeschaltet und benötigt einen eigenen Zugang.]]></description>
- <version>0.2.6</version><licence>agpl</licence><author>LtRock84</author>
+ <version>0.2.7</version><licence>agpl</licence><author>LtRock84</author>
  <namespace>Placetel</namespace><category>integration</category>
  <bugs>https://github.com/LtRock84/nextcloud-placetel-dashboard/issues</bugs>
  <screenshot>https://raw.githubusercontent.com/LtRock84/nextcloud-placetel-dashboard/v0.2.1/docs/screenshots/0.2.1/dashboard.jpg</screenshot>

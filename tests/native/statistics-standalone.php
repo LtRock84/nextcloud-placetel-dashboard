@@ -23,5 +23,8 @@ namespace {
  $a=new \OCA\Placetel\Native\Analysis(new SyntheticPhones());$n=0;
  foreach($fixture['stats'] as $f){if(!equivalent($a->statistics($f['calls'],$f['coverage'],$f['options']),$f['expected']))throw new \RuntimeException('statistics parity: '.$f['name']);$n++;}
  $f=$fixture['adapter'];if(!equivalent($a->adapt($f['rows'],$f['agents'],$f['queues'],$f['aliases']),$f['expected']))throw new \RuntimeException('adapter parity');
- echo 'PASS '.($n+1)." native statistics/adapter parity cases\n";
+ $viewsPath=dirname($analysisPath).'/Views.php';require $viewsPath;
+ $v=new \OCA\Placetel\Native\Views($a);$f=$fixture['report'];
+ if(!equivalent($v->report($f['calls'],$f['queues'],$f['coverage'],$f['states'],$f['from'],$f['to'],$f['asOf']),$f['expected']))throw new \RuntimeException('callback report parity');
+ echo 'PASS '.($n+2)." native statistics/adapter/report parity cases\n";
 }

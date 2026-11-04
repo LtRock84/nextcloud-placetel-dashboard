@@ -25,6 +25,7 @@ export type Status = {
   capabilities: { assignments: boolean; verifiedStatistics: boolean; liveCalls: boolean; callStatistics?: boolean; agentManagement?: boolean; queueManagement?: boolean };
 };
 export type Bootstrap = {
+  testModel?: boolean;
   hosting?: {native?:boolean;managedSecrets:boolean;configured?:boolean;role:string;user:string;permissions?:Record<string,'none'|'read'|'write'>};
   access?: {operator_groups?:string[];viewer_groups?:string[]}|null;
   operations?: OperationsState;
@@ -58,7 +59,7 @@ export type Statistics = {
 
 export type AlertSettings = { warningSeconds: number; criticalSeconds: number; sound: boolean };
 export type CallbackState = 'open' | 'done' | 'later';
-export type CallbackTask = { key: string; caller: string | null; queueId: string; lastAt: string; attempts: number; latestId: string; state: CallbackState; note: string; laterAcceptedAt: string | null };
+export type CallbackTask = { key: string; caller: string | null; queueId: string; lastAt: string; attempts: number; latestId: string; state: CallbackState; note: string; laterAcceptedAt: string | null; possibleAcceptedAt?: string | null };
 export type Reachability = { queueId: string; accepted: number; failedAttempts: number; cancelledAttempts: number; uniqueFailed: number; unknownCallerAttempts: number };
 export type OperationsReport = { from: string; to: string; asOf: string; callbacks: CallbackTask[]; reachability: Reachability[]; coverage: Statistics['coverage'] };
 export type RoutingProfile = { id: string; label: string; routingId: string; planId: string; activateAt: string | null; state: 'ready' | 'pending' | 'executing' | 'done' | 'error' | 'skipped'; message?: string };

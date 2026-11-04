@@ -13,7 +13,11 @@ docker('exec',container,'rm','-rf','/var/www/html/custom_apps/placetel')
 docker('cp',str(stage/'placetel'),container+':/var/www/html/custom_apps/')
 docker('exec',container,'chown','-R','www-data:www-data','/var/www/html/custom_apps/placetel')
 for name,target in [('contract.php','native-contract.php'),('native-parity.json','native-parity.json')]:docker('cp','/tmp/'+name,container+':/tmp/'+target);docker('exec',container,'chown','www-data:www-data','/tmp/'+target)
-out=docker('exec','-u','www-data','-e','PLACETEL_DISPOSABLE_TEST=1',container,'php','/tmp/native-contract.php');print(out,flush=True);assert 'NATIVE_CONTRACT_COMPLETE' in out
+out=docker('exec','-u','www-data','-e','PLACETEL_DISPOSABLE_TEST=1',container,'php','/tmp/native-contract.php');print(out,flush=True)
+if 'NATIVE_CONTRACT_COMPLETE' not in out:
+ code='$f=\"/var/www/html/data/nextcloud.log\";if(is_file($f)){foreach(array_slice(file($f),-8) as $line){$j=json_decode($line,true);$e=$j[\"Exception\"]??[];echo \"Class: \".($e[\"Exception\"]??\"unknown\").\" | File: \".($e[\"File\"]??\"unknown\").\" | Line: \".($e[\"Line\"]??\"unknown\").PHP_EOL;}}'
+ print(docker('exec',container,'php','-r',code),flush=True)
+ raise RuntimeError('Native contract did not complete; exception metadata shown above')
 result=json.loads(docker('exec',container,'cat','/tmp/native-contract-results.json'));assert result['count']==result['passed'] and result['count']>=40;(root/'native-contract-results.json').write_text(json.dumps(result,indent=2))
 docker('exec','-u','www-data',container,'php','occ','group:adduser','telefonie-disposition','operator')
 env={**os.environ,'PLACETEL_DISPOSABLE_TEST':'1'};p=subprocess.run(['python3','/tmp/run-http.py'],env=env);assert p.returncode==0

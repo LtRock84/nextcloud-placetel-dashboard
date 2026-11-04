@@ -24,5 +24,9 @@ jobs:
           cp tests/native/contract.php tests/native/run-http.py tests/native/popups.php tests/native/webhook-contract.php tests/native/webhook-router.php /tmp/
       - name: Start isolated Nextcloud
         run: python3 tests/native/setup.py
-      - name: Test permissions and application
+      - name: Test permissions and application on Nextcloud 35
+        if: matrix.image == 'nextcloud:35.0.2-apache'
         run: python3 tests/native/verify.py
+      - name: Test permissions on Nextcloud 34
+        if: matrix.image == 'nextcloud:34.0.5-apache'
+        run: python3 tests/native/rights-http.py

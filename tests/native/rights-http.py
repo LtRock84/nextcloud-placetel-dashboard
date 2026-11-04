@@ -27,7 +27,12 @@ class Client:
   try:r=self.http.open(req)
   except urllib.error.HTTPError as e:r=e
   check(user+' login',r.code in [302,303] and not r.headers.get('Location','').startswith('/login'));r.read()
-  c,h,s=self.call('/index.php/apps/placetel/');check(user+' app page',c==200 and 'placetel-root' in s)
+  c,h,s=self.call('/index.php/apps/placetel/')
+  if c!=200 or 'placetel-root' not in s:
+   print('APP_PAGE_STATUS',c,'LOCATION',h.get('Location',''),flush=True)
+   code='$f="/var/www/html/data/nextcloud.log";if(is_file($f)){foreach(array_slice(file($f),-8) as $line){$j=json_decode($line,true);echo substr(preg_replace("/fixture[-A-Za-z0-9]+/", "[redacted]", (string)($j["message"]??"")),0,350).PHP_EOL;}}'
+   p=subprocess.run(['sudo','-n','docker','exec',container,'php','-r',code],capture_output=True,text=True);print(p.stdout,flush=True)
+  check(user+' app page',c==200 and 'placetel-root' in s)
   self.token=html.unescape(re.search('data-requesttoken="([^"]+)"',s)[1]);self.page=s
   return s
  def api(self,path,data=None,headers=None,method=None):return self.call('/index.php/apps/placetel/api/'+path,data,{'requesttoken':self.token,**(headers or {})},method)

@@ -128,6 +128,8 @@ try:
  areas=['overview','agents','callbacks','routing','events','queues','schedule','statistics','settings']
  none={area:'none' for area in areas};viewer_rights={**none,'statistics':'read'}
  matrix={'management_groups':['telefonie-disposition'],'matrix':{'default':none,'groups':{},'users':{'viewer':viewer_rights}}}
+ c,h,b=admin.api('permissions/options?search=viewer');choices=json.loads(b);check('admin can search Nextcloud users',c==200 and any(x['id']=='viewer' for x in choices['users']))
+ check('viewer cannot list Nextcloud users or groups',viewer.api('permissions/options')[0]==403)
  check('admin can select management group and individual rights',admin.api('settings',matrix)[0]==200)
  data=json.loads(viewer.api('bootstrap')[2]);check('denied navigation areas excluded from snapshot',data['hosting']['permissions']['callbacks']=='none' and 'queueSnapshot' not in data and data['operations']['notify']['calls']==[])
  check('individual statistics permission works',viewer.api('statistics?from=2026-10-19&to=2026-10-20')[0]==200)

@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.2.9
+
+- Zeitblöcke können die vorherige Skill-Zuordnung am Ende wiederherstellen; erkannte manuelle Änderungen bleiben erhalten. Der Nextcloud-Hintergrundjob kann den Wechsel verzögern.
+- Wochenkalender mit Agentenfarben sowie aktuelle Skills und Warteschleifen in Teamübersicht und Agentenliste.
+- Bei vorübergehender Abrufsperre warten ausgelöste Änderungen im geöffneten Browser und zeigen ihren Status an.
+
 ## 0.2.8
 
 - Agenten-Skills und betroffene Warteschleifen aus der Placetel-API lesen; Zuordnungen und Stufen einzeln oder gesammelt nach Vorschau ändern.

@@ -67,8 +67,8 @@ final class Access {
   if(in_array($path,['/bootstrap','/health','/updates','/updates/seen'],true))return true;
   if($path==='/dispolive/resolve')return count(array_filter(['overview','callbacks','events','statistics'],static fn($x)=>($permissions[$x]??'none')!=='none'))>0;
   if($path==='/coverage')return ($permissions['statistics']??'none')!=='none'||($permissions['settings']??'none')!=='none';
-  if($path==='/skills'&&$method==='GET')return ($permissions['agents']??'none')!=='none'||($permissions['schedule']??'none')!=='none';
-  $area=match(true){$path==='/statistics'=>$scope==='overview'?'overview':'statistics',$path==='/operations/report'=>$scope==='statistics'?'statistics':'callbacks',str_starts_with($path,'/operations/callback')||str_starts_with($path,'/operations/incoming')=>'callbacks',str_starts_with($path,'/operations/routing')=>'routing',str_starts_with($path,'/skill-plans')=>'schedule',str_starts_with($path,'/skills')||str_starts_with($path,'/agents/')=>'agents',str_starts_with($path,'/queues/')=>'queues',default=>'settings'};
+  if($path==='/skills'&&$method==='GET')return ($permissions['overview']??'none')!=='none'||($permissions['agents']??'none')!=='none'||($permissions['schedule']??'none')!=='none';
+  $area=match(true){$path==='/statistics'=>$scope==='overview'?'overview':'statistics',$path==='/operations/report'=>$scope==='statistics'?'statistics':'callbacks',str_starts_with($path,'/operations/callback')||str_starts_with($path,'/operations/incoming')=>'callbacks',str_starts_with($path,'/operations/routing')=>'routing',str_starts_with($path,'/skill-plans')||$path==='/agent-colors'=>'schedule',str_starts_with($path,'/skills')||str_starts_with($path,'/agents/')=>'agents',str_starts_with($path,'/queues/')=>'queues',default=>'settings'};
   return ($permissions[$area]??'none')=== 'write'||($method==='GET'&&($permissions[$area]??'none')==='read');
  }
  public function filterBootstrap(array $identity,array $value): array {

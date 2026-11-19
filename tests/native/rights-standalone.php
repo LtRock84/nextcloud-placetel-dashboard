@@ -26,6 +26,9 @@ namespace {
  verify(!$access->permitsArea($schedule,'POST','/skills/preview')&&!$access->permitsArea($schedule,'POST','/skills/apply')&&!$access->permitsArea($schedule,'GET','/operations/subscriptions'),'schedule rights cannot manually change skills or inspect subscriptions');
  $agentOnly=['role'=>'operator','permissions'=>array_replace($none,['agents'=>'write'])];
  verify($access->permitsArea($agentOnly,'POST','/skills/apply')&&!$access->permitsArea($agentOnly,'POST','/skill-plans'),'agent and schedule permissions stay separate');
+ $overview=['role'=>'viewer','permissions'=>array_replace($none,['overview'=>'read'])];
+ verify($access->permitsArea($overview,'GET','/skills')&&!$access->permitsArea($overview,'POST','/skills/apply')&&!$access->permitsArea($overview,'GET','/agent-colors'),'overview can display skills without changing skills or schedule colors');
+ verify($access->permitsArea($schedule,'GET','/agent-colors')&&$access->permitsArea($schedule,'POST','/agent-colors')&&!$access->permitsArea($agentOnly,'POST','/agent-colors'),'agent colors respect schedule rights');
  $s->id='charlie';verify($access->identity()===null,'unassigned user denied app');
  $c->settings=['operator_groups'=>['team']];$s->id='alice';verify($access->identity()['role']==='operator','legacy operator remains valid');$s->id='charlie';verify($access->identity()['role']==='viewer','legacy default read preserved');
  $s->id='admin';$store=new \OCA\Placetel\Native\Store();$managed=new \OCA\Placetel\Service\Access($c,$g,$s,$store,new Users());

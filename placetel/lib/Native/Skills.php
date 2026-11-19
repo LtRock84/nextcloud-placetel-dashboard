@@ -66,9 +66,19 @@ final class Skills {
  /** Check plan skill IDs and retain all affected queues for approval display. */
  public function validatePlan(mixed $agent,mixed $desired): array {$id=$this->agent($agent);$snapshot=$this->snapshot($id);$this->changes($snapshot,$desired);return $snapshot;}
  /** Cursor is persisted before writes; uncertain results are never replayed automatically. */
- public function scheduled(string $agent,array $desired,string $occurrence,string $catalogueHash): void {
+ public function scheduled(string $agent,array $desired,string $occurrence,string $catalogueHash,?array $restore=null): void {
   $agent=$this->agent($agent);$snapshot=$this->snapshot($agent);if(!hash_equals($catalogueHash,Routing::digest($snapshot['skills'])))throw new \InvalidArgumentException('Die Skill-Warteschlangen-Zuordnung hat sich seit der Planung geändert.');$changes=$this->changes($snapshot,$desired);
-  $this->store->put('skills:cursor:'.$agent,$occurrence);$this->store->put('skills:running:'.$agent,['kind'=>'schedule','at'=>gmdate('c')]);try{$this->writeChanges($agent,$changes);}finally{$this->store->remove('skills:running:'.$agent);}
+  if($restore!==null){$before=[];foreach((array)$snapshot['current'] as $id=>$level)$before[]=['skillId'=>(string)$id,'level'=>$level];$expected=[];foreach($desired as $entry)$expected[(string)$entry['skillId']]=$entry['level'];ksort($expected,SORT_NUMERIC);$restore+=['before'=>$before,'expected'=>Routing::digest($expected),'catalogueHash'=>$catalogueHash,'startedAt'=>$occurrence];$restore['status']='preparing';$this->store->put('skills:restore:'.$agent,$restore);}
+  $this->store->put('skills:cursor:'.$agent,$occurrence);$this->store->put('skills:running:'.$agent,['kind'=>'schedule','at'=>gmdate('c')]);try{$this->writeChanges($agent,$changes);if($restore!==null){$restore['status']='active';$this->store->put('skills:restore:'.$agent,$restore);}}finally{$this->store->remove('skills:running:'.$agent);}
   $this->store->log('live','skill-schedule','Geplante Skill-Zuordnung für Agent '.$agent.' angewendet.','ok');
+ }
+ /** Restore only if the provider still has precisely the state set at start. */
+ public function restore(string $agent,array $saved): void {
+  $agent=$this->agent($agent);if(($saved['status']??null)!=='active')throw new \InvalidArgumentException('Vorheriger Zustand ist nicht sicher wiederherstellbar.');
+  $snapshot=$this->snapshot($agent);if(!hash_equals((string)$saved['catalogueHash'],Routing::digest($snapshot['skills'])))throw new \InvalidArgumentException('Skill-Katalog wurde geändert.');
+  $current=(array)$snapshot['current'];ksort($current,SORT_NUMERIC);if(!hash_equals((string)$saved['expected'],Routing::digest($current)))throw new \InvalidArgumentException('Skills wurden zwischenzeitlich verändert.');
+  $changes=$this->changes($snapshot,$saved['before']);$saved['status']='executing';$this->store->put('skills:restore:'.$agent,$saved);
+  $this->store->put('skills:running:'.$agent,['kind'=>'restore','at'=>gmdate('c')]);try{$this->writeChanges($agent,$changes);}finally{$this->store->remove('skills:running:'.$agent);}
+  $this->store->remove('skills:restore:'.$agent);$this->store->log('live','skill-schedule','Vorherige Skill-Zuordnung für Agent '.$agent.' wiederhergestellt.','ok');
  }
 }

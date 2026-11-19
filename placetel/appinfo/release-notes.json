@@ -1,43 +1,112 @@
 [
   {
+    "version": "0.2.9",
+    "items": [
+      {
+        "title": "Zeitblöcke mit Rückkehr",
+        "description": "Für jeden Zeitblock auswählen, ob Skills bestehen bleiben oder der vorherige Zustand nach dem Ende wiederhergestellt wird."
+      },
+      {
+        "title": "Dienstplan und Agentenfarben",
+        "description": "Einmalige und wiederkehrende Zeitblöcke in der Wochenansicht sehen und Agenten eigene Farben zuweisen."
+      },
+      {
+        "title": "Skills im Überblick",
+        "description": "Die Teamübersicht und Agentenliste zeigen aktuelle Skills, Stufen und betroffene Warteschleifen."
+      },
+      {
+        "title": "Änderungen während eines Abrufs",
+        "description": "Bei einer vorübergehenden Abrufsperre wartet die App und bestätigt die erfolgreiche Änderung."
+      }
+    ]
+  },
+  {
     "version": "0.2.8",
     "items": [
-      {"title": "Agenten und Warteschleifen zuordnen", "description": "Skills und Stufen einzeln oder für mehrere Agenten ändern; betroffene Warteschleifen vorab prüfen."},
-      {"title": "Einsatzplanung", "description": "Einmalige und wöchentliche Skill-Wechsel planen; Nextcloud-Hintergrundjobs führen sie mit möglicher Verzögerung aus."},
-      {"title": "Ereignisabonnements prüfen", "description": "Administratoren können vorhandene Placetel-Webhooks datensparsam und ohne Änderungen anzeigen."}
+      {
+        "title": "Agenten und Warteschleifen zuordnen",
+        "description": "Skills und Stufen einzeln oder für mehrere Agenten ändern; betroffene Warteschleifen vorab prüfen."
+      },
+      {
+        "title": "Einsatzplanung",
+        "description": "Einmalige und wöchentliche Skill-Wechsel planen; Nextcloud-Hintergrundjobs führen sie mit möglicher Verzögerung aus."
+      },
+      {
+        "title": "Ereignisabonnements prüfen",
+        "description": "Administratoren können vorhandene Placetel-Webhooks datensparsam und ohne Änderungen anzeigen."
+      }
     ]
   },
   {
     "version": "0.2.7",
     "items": [
-      {"title": "Eingehende Anrufe getrennt auswerten", "description": "Die Anrufliste eines ausgewählten Tages kann abgerufen werden; Notify-Ereignisse werden als eigene Quelle angezeigt."},
-      {"title": "Rückrufe sicherer bearbeiten", "description": "Verpasste Anrufe erhalten eigene Bearbeitungsstände. Mögliche Übereinstimmungen werden nicht allein wegen einer Rufnummer automatisch erledigt."},
-      {"title": "Datenstand erkennen", "description": "Die Ansicht weist auf nicht abgerufene Tage, mögliche Lücken und fehlende Warteschleifenzuordnung hin."}
+      {
+        "title": "Eingehende Anrufe getrennt auswerten",
+        "description": "Die Anrufliste eines ausgewählten Tages kann abgerufen werden; Notify-Ereignisse werden als eigene Quelle angezeigt."
+      },
+      {
+        "title": "Rückrufe sicherer bearbeiten",
+        "description": "Verpasste Anrufe erhalten eigene Bearbeitungsstände. Mögliche Übereinstimmungen werden nicht allein wegen einer Rufnummer automatisch erledigt."
+      },
+      {
+        "title": "Datenstand erkennen",
+        "description": "Die Ansicht weist auf nicht abgerufene Tage, mögliche Lücken und fehlende Warteschleifenzuordnung hin."
+      }
     ]
   },
   {
     "version": "0.2.6",
     "items": [
-      {"title": "Rückrufliste korrigiert", "description": "Disposition und Administratoren können die angezeigten offenen Rückrufe wieder gemeinsam als erledigt markieren."},
-      {"title": "Übersichtliche Einstellungen", "description": "Die Einstellungen sind nach Themen in Reiter aufgeteilt."},
-      {"title": "Rechte für Gruppen und Benutzer", "description": "Administratoren und die Geschäftsführung können den Zugriff auf einzelne App-Bereiche festlegen."},
-      {"title": "Wartende Anrufer im Blick", "description": "Aktuell wartende Anrufer sind in der Übersicht deutlicher von angenommenen Anrufen getrennt."}
+      {
+        "title": "Rückrufliste korrigiert",
+        "description": "Disposition und Administratoren können die angezeigten offenen Rückrufe wieder gemeinsam als erledigt markieren."
+      },
+      {
+        "title": "Übersichtliche Einstellungen",
+        "description": "Die Einstellungen sind nach Themen in Reiter aufgeteilt."
+      },
+      {
+        "title": "Rechte für Gruppen und Benutzer",
+        "description": "Administratoren und die Geschäftsführung können den Zugriff auf einzelne App-Bereiche festlegen."
+      },
+      {
+        "title": "Wartende Anrufer im Blick",
+        "description": "Aktuell wartende Anrufer sind in der Übersicht deutlicher von angenommenen Anrufen getrennt."
+      }
     ]
   },
   {
     "version": "0.2.5",
     "items": [
-      {"title": "Neuigkeiten nach Updates", "description": "Beim ersten Öffnen nach einem Update siehst du die Änderungen. Deine Bestätigung gilt nur für dein Nextcloud-Konto."},
-      {"title": "Erweiterte Anrufstatistik", "description": "Filtere Anrufdatensätze nach eingehend, ausgehend und nicht angenommen. Eine Stundenverteilung zeigt das Aufkommen."},
-      {"title": "Verpasste Anrufe", "description": "Als verpasst gemeldete Notify-Ereignisse erscheinen separat. Hinweise kennzeichnen eine möglicherweise unvollständige Erfassung."},
-      {"title": "Rückrufliste", "description": "Gefilterte offene Rückrufe lassen sich gemeinsam erledigen. Eine nachweislich spätere Annahme wird als erledigt gekennzeichnet."}
+      {
+        "title": "Neuigkeiten nach Updates",
+        "description": "Beim ersten Öffnen nach einem Update siehst du die Änderungen. Deine Bestätigung gilt nur für dein Nextcloud-Konto."
+      },
+      {
+        "title": "Erweiterte Anrufstatistik",
+        "description": "Filtere Anrufdatensätze nach eingehend, ausgehend und nicht angenommen. Eine Stundenverteilung zeigt das Aufkommen."
+      },
+      {
+        "title": "Verpasste Anrufe",
+        "description": "Als verpasst gemeldete Notify-Ereignisse erscheinen separat. Hinweise kennzeichnen eine möglicherweise unvollständige Erfassung."
+      },
+      {
+        "title": "Rückrufliste",
+        "description": "Gefilterte offene Rückrufe lassen sich gemeinsam erledigen. Eine nachweislich spätere Annahme wird als erledigt gekennzeichnet."
+      }
     ]
   },
   {
     "version": "0.2.4",
     "items": [
-      {"title": "Anrufe im Detail", "description": "Eingehende und ausgehende Anrufdatensätze sowie nicht angenommene Zustellversuche filtern und nach Stunden auswerten."},
-      {"title": "Verpasste Notify-Anrufe", "description": "Von Placetel als verpasst gemeldete Anrufe stehen getrennt von einzelnen Zustellversuchen."}
+      {
+        "title": "Anrufe im Detail",
+        "description": "Eingehende und ausgehende Anrufdatensätze sowie nicht angenommene Zustellversuche filtern und nach Stunden auswerten."
+      },
+      {
+        "title": "Verpasste Notify-Anrufe",
+        "description": "Von Placetel als verpasst gemeldete Anrufe stehen getrennt von einzelnen Zustellversuchen."
+      }
     ]
   }
 ]

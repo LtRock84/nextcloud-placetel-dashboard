@@ -6,6 +6,8 @@
  {"method":"POST","pattern":"^/skills/(preview|apply)$","role":"operator"},
  {"method":"GET","pattern":"^/skill-plans$","role":"viewer"},
  {"method":"POST","pattern":"^/skill-plans$","role":"operator"},
+ {"method":"GET","pattern":"^/agent-colors$","role":"viewer"},
+ {"method":"POST","pattern":"^/agent-colors$","role":"operator"},
  {"method":"DELETE","pattern":"^/skill-plans/[a-f0-9]{32}$","role":"operator"},
  {"method":"POST","pattern":"^/operations/incoming/(sync|state)$","role":"operator"},
  {"method":"GET","pattern":"^/permissions(/options)?$","role":"admin"},

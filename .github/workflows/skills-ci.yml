@@ -29,8 +29,19 @@ jobs:
           cp tests/native/contract.php tests/native/run-http.py tests/native/popups.php tests/native/webhook-contract.php tests/native/webhook-router.php /tmp/
       - name: Start isolated Nextcloud
         run: python3 tests/native/setup.py
-      - name: Test native application on Nextcloud 35
-        if: matrix.image == 'nextcloud:35.0.2-apache'
-        run: python3 tests/native/verify.py
       - name: Test permissions and agent colors
         run: python3 tests/native/rights-http.py
+      - name: Start separate Nextcloud 35 fixture for full contract
+        if: matrix.image == 'nextcloud:35.0.2-apache'
+        env:
+          PLACETEL_NATIVE_NAME: placetel-native351
+          PLACETEL_NATIVE_PORT: '44327'
+          PLACETEL_NATIVE_FIXTURE_DIR: /tmp/placetel-native351-fixture
+        run: python3 tests/native/setup.py
+      - name: Test native application on Nextcloud 35
+        if: matrix.image == 'nextcloud:35.0.2-apache'
+        env:
+          PLACETEL_NATIVE_NAME: placetel-native351
+          PLACETEL_NATIVE_PORT: '44327'
+          PLACETEL_NATIVE_FIXTURE_DIR: /tmp/placetel-native351-fixture
+        run: python3 tests/native/verify.py

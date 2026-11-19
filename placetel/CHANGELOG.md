@@ -2,7 +2,7 @@
 
 ## 0.2.8
 
-- Agenten-Skills und betroffene Warteschleifen aus der Placetel-API lesen; Zuordnungen und Stufen nach Vorschau ändern.
+- Agenten-Skills und betroffene Warteschleifen aus der Placetel-API lesen; Zuordnungen und Stufen einzeln oder gesammelt nach Vorschau ändern.
 - Einmalige und wiederkehrende Skill-Zeitblöcke über den Nextcloud-Hintergrundjob ausführen. Änderungen am Skill-Katalog verhindern veraltete Planwechsel.
 - Lesende Diagnose für Ereignisabonnements ohne Ausgabe des vollständigen Empfangspfads.
 

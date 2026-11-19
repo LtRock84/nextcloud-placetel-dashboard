@@ -1,5 +1,6 @@
 import {RightsSettings} from './RightsSettings';
 import {SkillsManagement} from './SkillsManagement';
+import {SkillsBulk} from './SkillsBulk';
 import {SkillSchedulePage} from './SkillSchedulePage';
 import {WebhookDiagnostics} from './WebhookDiagnostics';
 import {UpdateNotice} from './UpdateNotice';
@@ -203,6 +204,7 @@ export function App() {
       {page === 'agents' && <>
         <div className="section-line"><h2>Agenten & Warteschleifen <span className="count-tag">{data.agents.length} Agenten</span></h2><div className="inline-actions"><label className="search-field"><Search size={16} /><input aria-label="Agent suchen" placeholder="Agent suchen …" value={search} onChange={e => setSearch(e.target.value)} /></label><select aria-label="Statusfilter" value={filterStatus} onChange={e => setFilterStatus(e.target.value)}><option value="">Alle Status</option>{Object.entries(statuses).map(([k, v]) => <option value={k} key={k}>{v}</option>)}</select></div></div>
         {!demo&&cloudConfig()?.native&&<SkillsManagement agents={data.agents} queues={data.queues} request={api} write={canWrite(data,'agents')}/>}
+        {!demo&&cloudConfig()?.native&&canWrite(data,'agents')&&<SkillsBulk agents={data.agents} queues={data.queues} request={api} write/>}
         {!demo&&!cloudConfig()?.native&&<div className="message warning">Die neue Skill-Verwaltung wird zunächst in der Nextcloud-App bereitgestellt.</div>}
         {!demo&&<section className="panel"><div className="panel-heading"><h2>Agenten verwalten</h2></div><div className="table-scroll"><table><thead><tr><th>Agent</th><th>Status</th><th>Priorität</th><th>Aktionen</th></tr></thead><tbody>{agents.map(a=><tr key={a.id}><td>{a.name}</td><td><Badge status={a.status}/></td><td>{a.priority??'—'}</td><td><div className="inline-actions"><button className="text-button" disabled={!canWrite(data,'agents')} aria-label={`Agent ${a.name} bearbeiten`} onClick={()=>{setError('');setResourceEditor({kind:'agents',item:a});}}><Settings2 size={18}/></button><button className="text-button" disabled={!canRead(data,'statistics')} aria-label={`Statistik für ${a.name}`} onClick={()=>goAgentStats(a.id)}><ChartNoAxesCombined size={18}/></button></div></td></tr>)}</tbody></table></div></section>}
         {demo&&<section className="panel matrix-panel"><div className="matrix-help"><SlidersHorizontal size={17} /><span>Warteschleife aktivieren und Fähigkeitenstufe wählen. <strong>Die Stufen in diesem Demomodell sind fiktiv.</strong></span></div>

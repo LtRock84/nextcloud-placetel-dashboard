@@ -13,7 +13,7 @@ final class Dashboard {
  public function mode(): string{return $this->store->get('mode','demo');}
  public function tick(): void {
   if($this->mode()==='demo'){$this->demo->seed();return;}
-  $this->popups->tick();$routing=$this->routing->tick();if(!$routing)$this->importer->tick();$this->directory->tick($this->calls(true));
+  $this->popups->tick();$schedules=(new SkillSchedules($this->store,new Skills($this->store,$this->api)))->tick();$routing=$this->routing->tick();if(!$routing&&!$schedules)$this->importer->tick();$this->directory->tick($this->calls(true));
  }
  private function calls(bool $recent=false): array {
   $from=$recent?Analysis::local(time())->setTime(0,0)->modify('-1 day')->format('Y-m-d'):null;$rows=$this->store->rows($this->mode().':calls',$from);
@@ -28,6 +28,16 @@ final class Dashboard {
   return ['status'=>['mode'=>$mode,'connected'=>$demo||$this->store->get('sync:connected',false),'account'=>$demo?'Placetel Dashboard · Demo':$this->store->get('account:name'),'syncing'=>false,'lastSync'=>$last,'lastAttempt'=>$this->store->get('sync:lastAttempt'),'error'=>$demo?null:$this->store->get('sync:error'),'nextRequestAt'=>($next=$this->store->get('sync:next'))?gmdate('c',(int)$next):null,'historyProgress'=>$this->store->get('sync:progress'),'lastCallsSync'=>$lastCalls,'capabilities'=>['assignments'=>false,'verifiedStatistics'=>$demo,'liveCalls'=>true,'callStatistics'=>true,'agentManagement'=>true,'queueManagement'=>true]],'agents'=>$agents,'queues'=>$queues,'plans'=>[],'assignments'=>(object)[],'overrides'=>(object)[],'audit'=>$this->store->get($mode.':audit',[]),'queueSnapshot'=>$this->views->queues($this->calls(true),$queues,$agents,$this->store->rows($mode.':coverage'),$lastCalls,$demo||$this->store->get('sync:connected',false)),'operations'=>['alerts'=>$this->store->get($mode.':alerts',['warningSeconds'=>60,'criticalSeconds'=>120,'sound'=>false]),'contactNames'=>(object)$this->store->get($mode.':contactNames',[]),'contactsAt'=>$this->store->get($mode.':contactsAt'),'contactsError'=>null,'routing'=>$this->routing->state(),'notify'=>['configured'=>!$demo&&$this->secrets->get('notify')!==null,'lastReceivedAt'=>$this->store->get('notify:lastReceivedAt'),'calls'=>array_slice($notify,0,50),'total'=>count($notify)]],'dispolive'=>$this->directory->state()+['popups'=>$this->popups->state()],'csrf'=>'','network'=>['lan'=>false,'urls'=>[]],'hosting'=>['native'=>true,'managedSecrets'=>false,'configured'=>$configured,'role'=>$identity['role'],'user'=>$identity['user'],'background'=>'nextcloud-cron'],'access'=>$this->store->get('access')];
  }
  public function execute(string $method,string $path,array $input,array $query,array $identity): mixed {
+  if($method==='GET'&&$path==='operations/subscriptions')return $this->locked(function(){
+   if($this->mode()!=='live')throw new \InvalidArgumentException('Ereignis-Abonnements sind nur im Echtbetrieb verfügbar.');
+   return Subscriptions::diagnostic($this->api->placetel('/subscriptions'));
+  });
+  if($method==='GET'&&$path==='skills')return $this->locked(fn()=> (new Skills($this->store,$this->api))->load($query['agentId']??null));
+  if($method==='POST'&&$path==='skills/preview')return $this->locked(fn()=> (new Skills($this->store,$this->api))->preview($input['agentId']??null,$input['skills']??null,$identity['user']));
+  if($method==='POST'&&$path==='skills/apply')return $this->locked(function()use($input,$identity){(new Skills($this->store,$this->api))->apply($input['token']??null,$identity['user']);return ['ok'=>true];});
+  if($method==='GET'&&$path==='skill-plans')return $this->locked(fn()=> (new SkillSchedules($this->store,new Skills($this->store,$this->api)))->all());
+  if($method==='POST'&&$path==='skill-plans')return $this->locked(fn()=> (new SkillSchedules($this->store,new Skills($this->store,$this->api)))->save($input));
+  if($method==='DELETE'&&preg_match('~^skill-plans/([a-f0-9]{32})$~D',$path,$m))return $this->locked(function()use($m){(new SkillSchedules($this->store,new Skills($this->store,$this->api)))->remove($m[1]);return ['ok'=>true];});
   if($method==='GET'&&$path==='operations/incoming')return (new IncomingCalls($this->store,$this->analysis,$this->api))->report($query['from']??Analysis::local(time())->format('Y-m-d'),$this->mode());
   if($method==='GET'&&$path==='bootstrap')return $this->bootstrap($identity);
   if($method==='GET'&&$path==='health')return ['app'=>'placetel-dashboard','version'=>'0.2.0','native'=>true];

@@ -21,6 +21,11 @@ namespace {
  $s->id='bob';$b=$access->identity();verify($b['permissions']['statistics']==='none'&&$b['permissions']['events']==='read','user rule overrides group');
  verify(!$access->permitsArea($b,'POST','/operations/callbacks/complete')&&!$access->permitsArea($b,'GET','/permissions/options'),'read-only user cannot write or enumerate users');
  verify(!$access->permitsArea($b,'GET','/operations/incoming')&&!$access->permitsArea($b,'POST','/operations/incoming/state'),'other areas cannot access call-level sources');
+ $schedule=['role'=>'operator','permissions'=>array_replace($none,['schedule'=>'write'])];
+ verify($access->permitsArea($schedule,'GET','/skills')&&$access->permitsArea($schedule,'GET','/skill-plans')&&$access->permitsArea($schedule,'POST','/skill-plans'),'schedule editor can load skills and manage plans');
+ verify(!$access->permitsArea($schedule,'POST','/skills/preview')&&!$access->permitsArea($schedule,'POST','/skills/apply')&&!$access->permitsArea($schedule,'GET','/operations/subscriptions'),'schedule rights cannot manually change skills or inspect subscriptions');
+ $agentOnly=['role'=>'operator','permissions'=>array_replace($none,['agents'=>'write'])];
+ verify($access->permitsArea($agentOnly,'POST','/skills/apply')&&!$access->permitsArea($agentOnly,'POST','/skill-plans'),'agent and schedule permissions stay separate');
  $s->id='charlie';verify($access->identity()===null,'unassigned user denied app');
  $c->settings=['operator_groups'=>['team']];$s->id='alice';verify($access->identity()['role']==='operator','legacy operator remains valid');$s->id='charlie';verify($access->identity()['role']==='viewer','legacy default read preserved');
  $s->id='admin';$store=new \OCA\Placetel\Native\Store();$managed=new \OCA\Placetel\Service\Access($c,$g,$s,$store,new Users());

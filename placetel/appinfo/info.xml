@@ -21,9 +21,7 @@ Das Placetel Dashboard bringt wichtige Informationen zu Warteschleifen, Agenten 
 
 ## Telefonanlage verwalten
 
-Agentenstatus und dokumentierte Warteschleifeneinstellungen bearbeiten sowie vorhandene Routingpläne prüfen und umschalten. Rechte für Nextcloud-Gruppen lassen sich in den Einstellungen festlegen.
-
-**Einschränkung:** Die Zuordnung von Agenten zu Warteschleifen und Skill-Stufen ist im Echtbetrieb derzeit nicht verfügbar, weil die öffentliche Placetel-API diese Funktion nicht anbietet. Die Einsatzplanung kann im Demomodus ausprobiert werden.
+Agentenstatus und dokumentierte Warteschleifeneinstellungen bearbeiten sowie vorhandene Routingpläne prüfen und umschalten. Agenten lassen sich über Placetel-Skills Warteschleifen zuordnen und Skill-Stufen ändern. Ein Skill kann mehrere Warteschleifen betreffen; die App zeigt die Auswirkungen vor der Änderung. Wiederkehrende und einmalige Zeitblöcke werden im Nextcloud-Cron-Takt ausgeführt und können sich verzögern. Rechte für Nextcloud-Gruppen lassen sich in den Einstellungen festlegen.
 
 ## Optional: DispoLive
 
@@ -32,7 +30,7 @@ Der optionale DispoLive-Abgleich kann Anrufernummern bekannten Kontakten zuordne
 ## Voraussetzungen und Datenschutz
 
 Nextcloud 34 oder 35, PHP ab 8.3 und ein eigener Placetel-PROFI-API-Schlüssel. Der Schlüssel wird serverseitig verschlüsselt gespeichert. DispoLive ist standardmäßig ausgeschaltet und benötigt einen eigenen Zugang.]]></description>
- <version>0.2.7</version><licence>agpl</licence><author>LtRock84</author>
+ <version>0.2.8</version><licence>agpl</licence><author>LtRock84</author>
  <namespace>Placetel</namespace><category>integration</category>
  <bugs>https://github.com/LtRock84/nextcloud-placetel-dashboard/issues</bugs>
  <screenshot>https://raw.githubusercontent.com/LtRock84/nextcloud-placetel-dashboard/v0.2.1/docs/screenshots/0.2.1/dashboard.jpg</screenshot>

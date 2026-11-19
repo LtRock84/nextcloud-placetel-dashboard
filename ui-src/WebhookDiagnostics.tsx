@@ -1,0 +1,8 @@
+import {useState} from 'react';
+type Request=<T>(path:string,data?:unknown,method?:string)=>Promise<T>;
+type Result={checkedAt:string;subscriptions:{origin:string;events:string[];numberCount:number|null}[]};
+const eventNames:Record<string,string>={incoming:'Eingehend',outgoing:'Ausgehend',accepted:'Angenommen',hungup:'Beendet',phone:'Telefonereignisse'};
+export function WebhookDiagnostics({request,live}:{request:Request;live:boolean}){
+ const [result,setResult]=useState<Result|null>(null);const [error,setError]=useState('');const [busy,setBusy]=useState(false);
+ return <section className="panel"><div className="panel-heading"><div><h2>Placetel-Ereignisabonnements</h2><p>Lesende Diagnose der bei Placetel hinterlegten Ziele.</p></div></div><div className="settings-body"><p>Die Prüfung verändert keine Abonnements. Aus Schutzgründen zeigen wir nur den Hostnamen, nicht den vollständigen Empfangspfad.</p><button className="button" disabled={!live||busy} onClick={()=>{setBusy(true);setError('');request<Result>('operations/subscriptions').then(setResult).catch(e=>setError(e instanceof Error?e.message:'Abruf fehlgeschlagen.')).finally(()=>setBusy(false));}}>{busy?'Wird geprüft …':'Abonnements prüfen'}</button>{error&&<div className="message error" role="alert">{error}</div>}{result&&<><p>Geprüft: {new Date(result.checkedAt).toLocaleString('de-DE')}</p>{result.subscriptions.map((s,i)=><div className="setting-row" key={i}><div><strong>{s.origin}</strong><p>{s.events.map(e=>eventNames[e]??e).join(', ')||'Keine Ereignisarten'} · {s.numberCount===null?'Rufnummern unbekannt':`${s.numberCount} Rufnummern`}</p></div></div>)}{!result.subscriptions.length&&<p>Keine Abonnements von Placetel gemeldet.</p>}</>}</div></section>;
+}

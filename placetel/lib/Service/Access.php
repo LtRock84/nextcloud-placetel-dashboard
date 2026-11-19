@@ -67,7 +67,8 @@ final class Access {
   if(in_array($path,['/bootstrap','/health','/updates','/updates/seen'],true))return true;
   if($path==='/dispolive/resolve')return count(array_filter(['overview','callbacks','events','statistics'],static fn($x)=>($permissions[$x]??'none')!=='none'))>0;
   if($path==='/coverage')return ($permissions['statistics']??'none')!=='none'||($permissions['settings']??'none')!=='none';
-  $area=match(true){$path==='/statistics'=>$scope==='overview'?'overview':'statistics',$path==='/operations/report'=>$scope==='statistics'?'statistics':'callbacks',str_starts_with($path,'/operations/callback')||str_starts_with($path,'/operations/incoming')=>'callbacks',str_starts_with($path,'/operations/routing')=>'routing',str_starts_with($path,'/agents/')=>'agents',str_starts_with($path,'/queues/')=>'queues',default=>'settings'};
+  if($path==='/skills'&&$method==='GET')return ($permissions['agents']??'none')!=='none'||($permissions['schedule']??'none')!=='none';
+  $area=match(true){$path==='/statistics'=>$scope==='overview'?'overview':'statistics',$path==='/operations/report'=>$scope==='statistics'?'statistics':'callbacks',str_starts_with($path,'/operations/callback')||str_starts_with($path,'/operations/incoming')=>'callbacks',str_starts_with($path,'/operations/routing')=>'routing',str_starts_with($path,'/skill-plans')=>'schedule',str_starts_with($path,'/skills')||str_starts_with($path,'/agents/')=>'agents',str_starts_with($path,'/queues/')=>'queues',default=>'settings'};
   return ($permissions[$area]??'none')=== 'write'||($method==='GET'&&($permissions[$area]??'none')==='read');
  }
  public function filterBootstrap(array $identity,array $value): array {
@@ -76,8 +77,8 @@ final class Access {
   if($identity['role']==='admin')return $value;
   $value['access']=null;
   if(!$can('overview'))unset($value['queueSnapshot']);
-  if(!$can('overview')&&!$can('agents')&&!$can('statistics'))$value['agents']=[];
-  if(!$can('overview')&&!$can('queues')&&!$can('statistics')&&!$can('callbacks')&&!$can('agents'))$value['queues']=[];
+  if(!$can('overview')&&!$can('agents')&&!$can('statistics')&&!$can('schedule'))$value['agents']=[];
+  if(!$can('overview')&&!$can('queues')&&!$can('statistics')&&!$can('callbacks')&&!$can('agents')&&!$can('schedule'))$value['queues']=[];
   if(!$can('schedule')){$value['plans']=[];$value['assignments']=(object)[];$value['overrides']=(object)[];}
   if(!$can('settings'))$value['audit']=[];
   if(!$can('routing'))$value['operations']['routing']=['routes'=>[],'plans'=>[],'profiles'=>[],'loadedAt'=>null];

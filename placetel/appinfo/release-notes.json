@@ -1,5 +1,13 @@
 [
   {
+    "version": "0.2.8",
+    "items": [
+      {"title": "Agenten und Warteschleifen zuordnen", "description": "Skills und Stufen eines Agenten laden, betroffene Warteschleifen prüfen und Änderungen bestätigen."},
+      {"title": "Einsatzplanung", "description": "Einmalige und wöchentliche Skill-Wechsel planen; Nextcloud-Hintergrundjobs führen sie mit möglicher Verzögerung aus."},
+      {"title": "Ereignisabonnements prüfen", "description": "Administratoren können vorhandene Placetel-Webhooks datensparsam und ohne Änderungen anzeigen."}
+    ]
+  },
+  {
     "version": "0.2.7",
     "items": [
       {"title": "Eingehende Anrufe getrennt auswerten", "description": "Die Anrufliste eines ausgewählten Tages kann abgerufen werden; Notify-Ereignisse werden als eigene Quelle angezeigt."},

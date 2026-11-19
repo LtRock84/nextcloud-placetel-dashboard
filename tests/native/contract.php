@@ -17,10 +17,15 @@ try {
  $f=$fixture['report'];verify(equivalent($views->report($f['calls'],$f['queues'],$f['coverage'],$f['states'],$f['from'],$f['to'],$f['asOf']),$f['expected']),'callback and reachability parity');
  $secrets->save('unit','fixture-only-not-a-real-key');verify($secrets->get('unit')==='fixture-only-not-a-real-key','encrypted credential round trip');verify(!str_contains($store->get('unit','', 'secrets'),'fixture-only-not-a-real-key'),'credential not stored as plaintext');$secrets->remove('unit');verify($secrets->get('unit')===null,'credential removal');
  $real=\OCP\Server::get(IClientService::class);$requests=[];$account='9001';$patched=null;
- $handler=function($request,$options)use(&$requests,&$account,&$patched){$uri=$request->getUri();$path=$uri->getPath();$method=$request->getMethod();parse_str($uri->getQuery(),$query);$page=(int)($query['page']??1);$requests[]=[$method,$path];$body=null;$status=200;
+ $skillLevel=2;$handler=function($request,$options)use(&$requests,&$account,&$patched,&$skillLevel){$uri=$request->getUri();$path=$uri->getPath();$method=$request->getMethod();parse_str($uri->getQuery(),$query);$page=(int)($query['page']??1);$requests[]=[$method,$path];$body=null;$status=200;
   if($path==='/v2/me')$body=['id'=>$account,'platform'=>'PROFI','name'=>'Synthetic Placetel account'];
   elseif($path==='/v2/call_center_agents')$body=$page===1?[['id'=>1,'name'=>'Demo Agent','status'=>'online','extension_sip'=>'100','extension_pstn'=>'']]:[];
   elseif($path==='/v2/call_center_queues')$body=$page===1?[['id'=>10,'name'=>'Demo Queue','priority'=>1]]:[];
+  elseif($path==='/v2/call_center_skills')$body=$page===1?[['id'=>100,'name'=>'Synthetic skill','queue_ids'=>[10]]]:[];
+  elseif($path==='/v2/call_center_agents/1/skills')$body=$skillLevel===null?[]:[['skill_id'=>100,'name'=>'Synthetic skill','skill_level'=>$skillLevel,'queue_ids'=>[10]]];
+  elseif($path==='/v2/call_center_agents/1/skills/100'&&$method==='PUT'){$skillLevel=json_decode((string)$request->getBody(),true)['skill_level'];$body=['skill_id'=>100,'name'=>'Synthetic skill','skill_level'=>$skillLevel,'queue_ids'=>[10]];}
+  elseif($path==='/v2/call_center_agents/1/skills/100'&&$method==='DELETE'){$skillLevel=null;$status=204;}
+  elseif($path==='/v2/subscriptions')$body=[['url'=>'https://example.invalid/private-token?secret=fixture','incoming'=>true,'numbers'=>['synthetic']]];
   elseif($path==='/v2/call_center_calls'){
    $body=[];if($page===1&&($query['date']??'')===Analysis::local(time())->format('Y-m-d')){
     $r=['id'=>11,'from'=>'+493012345678','started_at'=>gmdate('c',time()-600),'left_queue_at'=>gmdate('c',time()-500),'ended_at'=>gmdate('c',time()-300),'last_updated_at'=>gmdate('c'),'call_status'=>'ended','answer_status'=>'Answer','call_type'=>'dail_in','agent_name'=>'Demo Agent','queue_name'=>'Demo Queue','iteration'=>1];$body=[$r,array_replace($r,['id'=>12,'call_status'=>'not_answered','answer_status'=>'NoAnswer'])];
@@ -39,6 +44,11 @@ try {
  $store->remove('api:next');$account='9002';$rejected=false;try{$dashboard->execute('POST','connect',['token'=>'fixture-other-account-key'],[],$who);}catch(\InvalidArgumentException){$rejected=true;}verify($rejected&&$store->get('account:id')==='9001','different account cannot mix historical data');$account='9001';
  for($i=0;$i<14;$i++){$store->remove('api:next');$store->remove('sync:next');$importer->tick();}
  verify(count($store->get('live:agents',[]))===1&&count($store->get('live:queues',[]))===1,'native paginated catalog import');verify(count($store->rows('live:calls'))===2,'native call import publishes full day only');
+ $store->remove('api:next');$skillSnapshot=$dashboard->execute('GET','skills',[],['agentId'=>'1'],$who);verify(count($skillSnapshot['skills'])===1&&$skillSnapshot['skills'][0]['queueIds']===['10'],'native skill catalogue and queue mapping loaded');
+ $store->remove('api:next');$skillPreview=$dashboard->execute('POST','skills/preview',['agentId'=>'1','skills'=>[['skillId'=>'100','level'=>5]]],[],$who);verify($skillPreview['changes'][0]['before']===2&&$skillPreview['changes'][0]['after']===5,'native skill change preview');
+ $store->remove('api:next');$dashboard->execute('POST','skills/apply',['token'=>$skillPreview['token']],[],$who);verify($skillLevel===5,'native explicit skill change confirmed');
+ $store->remove('api:next');$skillPlan=$dashboard->execute('POST','skill-plans',['agentId'=>'1','label'=>'Synthetic','kind'=>'weekly','weekdays'=>[1],'date'=>'','start'=>'09:00','end'=>'12:00','catalogueHash'=>$skillSnapshot['catalogueHash'],'skills'=>[['skillId'=>'100','level'=>2]]],[],$who);verify(count($dashboard->execute('GET','skill-plans',[],[],$who))===1,'native skill schedule persisted');$dashboard->execute('DELETE','skill-plans/'.$skillPlan['id'],[],[],$who);
+ $store->remove('api:next');$subscriptions=$dashboard->execute('GET','operations/subscriptions',[],[],$who);verify($subscriptions['subscriptions'][0]['origin']==='https://example.invalid'&&!str_contains(json_encode($subscriptions),'private-token'),'native subscription check redacts callback path');
  $today=Analysis::local(time())->format('Y-m-d');$store->remove('api:next');$dashboard->execute('POST','operations/incoming/sync',['day'=>$today],[],$who);
  $incoming=$dashboard->execute('GET','operations/incoming',[],['from'=>$today],$who);verify(count($incoming['calls'])===2&&$incoming['calls'][0]['outcome']==='missed'&&$incoming['calls'][1]['outcome']==='accepted','separate call outcomes imported through native dashboard');
  $dashboard->execute('POST','operations/incoming/state',['day'=>$today,'source'=>'placetel-calls','id'=>'701','state'=>'done','note'=>'Synthetic note'],[],$who);
@@ -52,7 +62,7 @@ try {
  $rate=false;try{$api->placetel('/me');}catch(RemoteException $e){$rate=$e->status===429;}verify($rate,'shared API rate state applies to separate requests');
 } finally {
  $store->put('mode','demo');$secrets->remove('placetel');$secrets->remove('dispolive:fixture.dispolive.de');
- foreach(['account:id','account:name','live:agents','live:queues','live:agents:aliases','live:queues:aliases','sync:job','sync:suspended','sync:catalogueAt','sync:lastCallsSync','sync:lastSync','sync:connected','sync:paused','sync:error','sync:progress','sync:next','api:next','dispolive:config','dispolive:queue','dispolive:connected','dispolive:lastSuccess','dispolive:paused','dispolive:error','dispolive:next'] as $key)$store->remove($key);
+ foreach(['account:id','account:name','live:agents','live:queues','live:agents:aliases','live:queues:aliases','live:skill-plans','skills:manual:1','skills:cursor:1','sync:job','sync:suspended','sync:catalogueAt','sync:lastCallsSync','sync:lastSync','sync:connected','sync:paused','sync:error','sync:progress','sync:next','api:next','dispolive:config','dispolive:queue','dispolive:connected','dispolive:lastSuccess','dispolive:paused','dispolive:error','dispolive:next'] as $key)$store->remove($key);
  foreach($store->rows('live:calls') as $c)$store->remove($c['id'],'live:calls');foreach($store->rows('live:coverage') as $c)$store->remove($c['date'],'live:coverage');$store->remove('https://fixture.dispolive.de:+493012345678','dispolive-cache');
  file_put_contents('/tmp/native-contract-results.json',json_encode(['checks'=>$checks,'count'=>count($checks),'passed'=>count(array_filter($checks,static fn($r)=>$r['passed']))],JSON_PRETTY_PRINT|JSON_THROW_ON_ERROR));
 }

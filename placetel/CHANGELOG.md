@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.2.8
+
+- Agenten-Skills und betroffene Warteschleifen aus der Placetel-API lesen; Zuordnungen und Stufen nach Vorschau ändern.
+- Einmalige und wiederkehrende Skill-Zeitblöcke über den Nextcloud-Hintergrundjob ausführen. Änderungen am Skill-Katalog verhindern veraltete Planwechsel.
+- Lesende Diagnose für Ereignisabonnements ohne Ausgabe des vollständigen Empfangspfads.
+
 ## 0.2.7
 
 - Eingehende Anrufe aus der Placetel-Anrufliste tageweise abrufen; Notify-Ereignisse getrennt anzeigen. Die Quellen werden nicht automatisch zusammengeführt.

@@ -1,6 +1,12 @@
 [
  {"method":"GET","pattern":"^/(bootstrap|health|statistics|coverage|operations/report|updates)$","role":"viewer"},
  {"method":"GET","pattern":"^/operations/incoming$","role":"viewer"},
+ {"method":"GET","pattern":"^/skills$","role":"viewer"},
+ {"method":"GET","pattern":"^/operations/subscriptions$","role":"admin"},
+ {"method":"POST","pattern":"^/skills/(preview|apply)$","role":"operator"},
+ {"method":"GET","pattern":"^/skill-plans$","role":"viewer"},
+ {"method":"POST","pattern":"^/skill-plans$","role":"operator"},
+ {"method":"DELETE","pattern":"^/skill-plans/[a-f0-9]{32}$","role":"operator"},
  {"method":"POST","pattern":"^/operations/incoming/(sync|state)$","role":"operator"},
  {"method":"GET","pattern":"^/permissions(/options)?$","role":"admin"},
  {"method":"POST","pattern":"^/updates/seen$","role":"viewer"},

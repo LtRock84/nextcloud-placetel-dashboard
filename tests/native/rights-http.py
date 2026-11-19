@@ -32,6 +32,8 @@ class Client:
    print('APP_PAGE_STATUS',c,'LOCATION',h.get('Location',''),flush=True)
    code='$f="/var/www/html/data/nextcloud.log";if(is_file($f)){foreach(array_slice(file($f),-8) as $line){$j=json_decode($line,true);echo substr(preg_replace("/fixture[-A-Za-z0-9]+/", "[redacted]", (string)($j["message"]??"")),0,350).PHP_EOL;}}'
    p=subprocess.run(['sudo','-n','docker','exec',container,'php','-r',code],capture_output=True,text=True);print(p.stdout,flush=True)
+   p=subprocess.run(['sudo','-n','docker','exec','-u','www-data',container,'php','occ','router:match','/apps/placetel/'],capture_output=True,text=True)
+   print('CLI_ROUTE_MATCH',p.returncode,(p.stdout+p.stderr)[-1200:],flush=True)
   check(user+' app page',c==200 and 'placetel-root' in s)
   self.token=html.unescape(re.search('data-requesttoken="([^"]+)"',s)[1]);self.page=s
   return s
@@ -39,6 +41,10 @@ class Client:
 try:
  admin=Client();admin.login('admin');viewer=Client();viewer.login('viewer');operator=Client();operator.login('operator')
  check('demo bootstrap seeds synthetic data',admin.api('bootstrap')[0]==200)
+ check('demo agent color is saved',admin.api('agent-colors',{'agentId':'a1','color':'#2f6d5d'})[0]==200)
+ check('saved color can be read',json.loads(admin.api('agent-colors')[2]).get('a1')=='#2f6d5d')
+ check('invalid color is rejected',admin.api('agent-colors',{'agentId':'a1','color':'not-a-color'})[0]==400)
+ check('viewer cannot change agent colors',viewer.api('agent-colors',{'agentId':'a1','color':'#ffffff'})[0]==403)
  check('admin configures legacy operator group',admin.api('settings',{'operator_groups':['telefonie-disposition'],'viewer_groups':None})[0]==200)
  from datetime import datetime, timedelta
  from zoneinfo import ZoneInfo

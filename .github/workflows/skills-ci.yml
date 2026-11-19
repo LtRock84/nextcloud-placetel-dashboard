@@ -32,6 +32,5 @@ jobs:
       - name: Test native application on Nextcloud 35
         if: matrix.image == 'nextcloud:35.0.2-apache'
         run: python3 tests/native/verify.py
-      - name: Test permissions on Nextcloud 34
-        if: matrix.image == 'nextcloud:34.0.5-apache'
+      - name: Test permissions and agent colors
         run: python3 tests/native/rights-http.py

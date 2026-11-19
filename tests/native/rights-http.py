@@ -34,6 +34,10 @@ class Client:
    p=subprocess.run(['sudo','-n','docker','exec',container,'php','-r',code],capture_output=True,text=True);print(p.stdout,flush=True)
    p=subprocess.run(['sudo','-n','docker','exec','-u','www-data',container,'php','occ','router:match','/apps/placetel/'],capture_output=True,text=True)
    print('CLI_ROUTE_MATCH',p.returncode,(p.stdout+p.stderr)[-1200:],flush=True)
+   if c==404:
+    subprocess.run(['sudo','-n','docker','exec',container,'apachectl','-k','graceful'],capture_output=True,text=True)
+    time.sleep(2);diagnostic=self.call('/index.php/apps/placetel/')
+    print('DIAGNOSTIC_AFTER_TEST_APACHE_RESTART',diagnostic[0],'root_present',('placetel-root' in diagnostic[2]),flush=True)
   check(user+' app page',c==200 and 'placetel-root' in s)
   self.token=html.unescape(re.search('data-requesttoken="([^"]+)"',s)[1]);self.page=s
   return s

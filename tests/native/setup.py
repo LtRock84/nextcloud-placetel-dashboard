@@ -24,4 +24,8 @@ docker('cp',str(r/'placetel'),prefix+'-nc:/var/www/html/custom_apps/placetel');d
 print(docker('exec','-u','www-data',prefix+'-nc','php','occ','app:enable','placetel'),flush=True)
 for user in ['viewer','operator']:docker('exec','-u','www-data','-e','OC_PASS='+pw,prefix+'-nc','php','occ','user:add','--password-from-env',user)
 docker('exec','-u','www-data',prefix+'-nc','php','occ','group:add','telefonie-disposition');docker('exec','-u','www-data',prefix+'-nc','php','occ','group:adduser','telefonie-disposition','operator')
+# The disposable fixture installs via a separate CLI process after Apache has
+# already handled status.php. Refresh Apache's local caches before testing the
+# newly enabled route; this affects only the disposable container.
+docker('exec',prefix+'-nc','apachectl','-k','graceful');time.sleep(2)
 print('Native App mit Datenbankmigration installiert; kein Node, Gateway oder Secretmount vorhanden.',flush=True)

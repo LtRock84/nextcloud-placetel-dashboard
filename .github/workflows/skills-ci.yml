@@ -1,7 +1,7 @@
 name: Isolated Nextcloud skill integration
 on:
   push:
-    branches: [skill-zuordnung-test-20261119, release-0.2.9-test]
+    branches: [skill-zuordnung-test-20261119, release-0.2.9-test, release-0.2.10-test]
   workflow_dispatch:
 jobs:
   integration:
@@ -22,6 +22,8 @@ jobs:
           php tests/native/skills.php
           php tests/native/skills-api-standalone.php
           php tests/native/rights-standalone.php
+          php tests/native/phonebook-standalone.php
+          php tests/native/permissions-controller-standalone.php
       - name: Prepare synthetic fixtures
         run: |
           tar -czf /tmp/placetel-native-app-test.tar.gz placetel

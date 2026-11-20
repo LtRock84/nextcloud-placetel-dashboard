@@ -30,7 +30,7 @@ final class PageController extends Controller {
  #[NoCSRFRequired]
  public function help(string $name): Response {
   if ($this->access->identity()===null) return new DataDisplayResponse('Kein Zugriff.',403);
-  if (!in_array($name,['ereignisanbindung','support-anfrage','fehler-melden'],true)) return new DataDisplayResponse('Nicht gefunden.',404);
+  if (!in_array($name,['ereignisanbindung','fehler-melden'],true)) return new DataDisplayResponse('Nicht gefunden.',404);
   return new DataDisplayResponse(file_get_contents(__DIR__.'/../../help/'.$name.'.txt'),200,['Content-Type'=>'text/plain; charset=utf-8','Cache-Control'=>'no-store']);
  }
 }

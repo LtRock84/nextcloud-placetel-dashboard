@@ -19,7 +19,7 @@ final class ApiController extends Controller {
   $identity=$this->access->identity();$method=$this->request->getMethod();$scope=$this->request->getParam('scope','');if(!is_string($scope)||!in_array($scope,['','overview','statistics'],true))return new DataResponse(['error'=>'Ungültiger Bereich.'],400);if(!$identity||!$this->access->permitsArea($identity,$method,'/'.$path,$scope))return new DataResponse(['error'=>'Für diese Nextcloud-Rolle nicht freigegeben.'],403);
   try{
    $input=[];$query=[];
-   if($method==='GET'){foreach(['from','to','agentId','queueId'] as $name){$value=$this->request->getParam($name);if($value!==null){if(!is_string($value)||strlen($value)>128)throw new \InvalidArgumentException('Ungültiger Filter.');$query[$name]=$value;}}}
+   if($method==='GET'){foreach(array_merge(['from','to','agentId','queueId'],$path==='phonebook'?['page']:[]) as $name){$value=$this->request->getParam($name);if($value!==null){if(!is_string($value)||strlen($value)>128)throw new \InvalidArgumentException('Ungültiger Filter.');$query[$name]=$value;}}}
    else{
     if(!str_starts_with(strtolower($this->request->getHeader('Content-Type')),'application/json'))return new DataResponse(['error'=>'JSON erforderlich.'],415);
     if((int)$this->request->getHeader('Content-Length')>65536)return new DataResponse(['error'=>'Anfrage zu groß.'],413);

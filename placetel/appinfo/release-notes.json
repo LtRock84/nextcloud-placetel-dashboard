@@ -1,5 +1,22 @@
 [
   {
+    "version": "0.2.10",
+    "items": [
+      {
+        "title": "Placetel Telefonbuch",
+        "description": "Kontakte ansehen und mit separater Berechtigung hinzufügen, bearbeiten oder löschen."
+      },
+      {
+        "title": "Rückrufliste",
+        "description": "Direkt gemeldete Anrufe mit Bearbeitungsstatus und Hinweisen zu möglichen Empfangslücken."
+      },
+      {
+        "title": "Einsatzplanung",
+        "description": "Zeitblöcke direkt im Wochenkalender anlegen; Agentenfarben und Skills besser erkennen."
+      }
+    ]
+  },
+  {
     "version": "0.2.9",
     "items": [
       {

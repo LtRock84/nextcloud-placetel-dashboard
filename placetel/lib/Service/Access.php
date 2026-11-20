@@ -8,7 +8,7 @@ use OCP\IGroupManager;
 use OCP\IUserManager;
 use OCP\IUserSession;
 final class Access {
- public const AREAS=['overview','agents','callbacks','routing','events','queues','schedule','statistics','settings'];
+ public const AREAS=['overview','agents','phonebook','callbacks','routing','events','queues','schedule','statistics','settings'];
  public function __construct(private IConfig $config,private IGroupManager $groups,private IUserSession $session,private ?Store $store=null,private ?IUserManager $users=null) {}
  private static function all(string $value): array{return array_fill_keys(self::AREAS,$value);}
  private function settings(): array {$v=$this->store?->get('access')??$this->config->getSystemValue('placetel',[]);return is_array($v)?$v:[];}
@@ -17,11 +17,11 @@ final class Access {
   $user=$this->session->getUser();if($user===null)return null;$uid=$user->getUID();$settings=$this->settings();
   if($this->groups->isAdmin($uid)||$this->inAny($uid,$settings['management_groups']??[]))return ['user'=>$uid,'role'=>'admin','permissions'=>self::all('write')];
   if(!isset($settings['matrix'])){
-   if($this->inAny($uid,$settings['operator_groups']??[]))return ['user'=>$uid,'role'=>'operator','permissions'=>self::all('write')];
-   if(!array_key_exists('viewer_groups',$settings)||$this->inAny($uid,$settings['viewer_groups']??[]))return ['user'=>$uid,'role'=>'viewer','permissions'=>self::all('read')];
+   if($this->inAny($uid,$settings['operator_groups']??[]))return ['user'=>$uid,'role'=>'operator','permissions'=>array_replace(self::all('write'),['phonebook'=>'none'])];
+   if(!array_key_exists('viewer_groups',$settings)||$this->inAny($uid,$settings['viewer_groups']??[]))return ['user'=>$uid,'role'=>'viewer','permissions'=>array_replace(self::all('read'),['phonebook'=>'none'])];
    return null;
   }
-  $matrix=$settings['matrix'];$levels=['none'=>0,'read'=>1,'write'=>2];$permissions=$matrix['default'];$matched=false;$groupRights=self::all('none');
+  $matrix=$settings['matrix'];$matrix['default']=array_replace(self::all('none'),$matrix['default']??[]);foreach(['groups','users'] as $kind)foreach($matrix[$kind]??[] as $id=>$rule)$matrix[$kind][$id]=array_replace(self::all('none'),$rule);$levels=['none'=>0,'read'=>1,'write'=>2];$permissions=$matrix['default'];$matched=false;$groupRights=self::all('none');
   foreach($matrix['groups'] as $id=>$rule)if($this->groups->isInGroup($uid,$id)){$matched=true;foreach(self::AREAS as $area)if($levels[$rule[$area]]>$levels[$groupRights[$area]])$groupRights[$area]=$rule[$area];}
   if($matched)$permissions=$groupRights;
   if(isset($matrix['users'][$uid]))$permissions=$matrix['users'][$uid];
@@ -29,10 +29,10 @@ final class Access {
   return ['user'=>$uid,'role'=>in_array('write',$permissions,true)?'operator':'viewer','permissions'=>$permissions];
  }
  public function editable(): array {
-  $s=$this->settings();if(isset($s['matrix']))return ['management_groups'=>$s['management_groups']??[],'matrix'=>$s['matrix']];
-  $default=self::all(array_key_exists('viewer_groups',$s)?'none':'read');$groups=[];
-  foreach($s['viewer_groups']??[] as $id)$groups[$id]=self::all('read');
-  foreach($s['operator_groups']??[] as $id)$groups[$id]=self::all('write');
+  $s=$this->settings();if(isset($s['matrix'])){$matrix=$s['matrix'];$matrix['default']=array_replace(self::all('none'),$matrix['default']??[]);foreach(['groups','users'] as $kind)foreach($matrix[$kind]??[] as $id=>$rule)$matrix[$kind][$id]=array_replace(self::all('none'),$rule);return ['management_groups'=>$s['management_groups']??[],'matrix'=>$matrix];}
+  $default=array_replace(self::all(array_key_exists('viewer_groups',$s)?'none':'read'),['phonebook'=>'none']);$groups=[];
+  foreach($s['viewer_groups']??[] as $id)$groups[$id]=array_replace(self::all('read'),['phonebook'=>'none']);
+  foreach($s['operator_groups']??[] as $id)$groups[$id]=array_replace(self::all('write'),['phonebook'=>'none']);
   return ['management_groups'=>[],'matrix'=>['default'=>$default,'groups'=>(object)$groups,'users'=>(object)[]]];
  }
  public function options(string $search=''): array {
@@ -68,7 +68,7 @@ final class Access {
   if($path==='/dispolive/resolve')return count(array_filter(['overview','callbacks','events','statistics'],static fn($x)=>($permissions[$x]??'none')!=='none'))>0;
   if($path==='/coverage')return ($permissions['statistics']??'none')!=='none'||($permissions['settings']??'none')!=='none';
   if($path==='/skills'&&$method==='GET')return ($permissions['overview']??'none')!=='none'||($permissions['agents']??'none')!=='none'||($permissions['schedule']??'none')!=='none';
-  $area=match(true){$path==='/statistics'=>$scope==='overview'?'overview':'statistics',$path==='/operations/report'=>$scope==='statistics'?'statistics':'callbacks',str_starts_with($path,'/operations/callback')||str_starts_with($path,'/operations/incoming')=>'callbacks',str_starts_with($path,'/operations/routing')=>'routing',str_starts_with($path,'/skill-plans')||$path==='/agent-colors'=>'schedule',str_starts_with($path,'/skills')||str_starts_with($path,'/agents/')=>'agents',str_starts_with($path,'/queues/')=>'queues',default=>'settings'};
+  $area=match(true){str_starts_with($path,'/phonebook')=>'phonebook',$path==='/statistics'=>$scope==='overview'?'overview':'statistics',$path==='/operations/report'=>$scope==='statistics'?'statistics':'callbacks',str_starts_with($path,'/operations/callback')||str_starts_with($path,'/operations/incoming')=>'callbacks',str_starts_with($path,'/operations/routing')=>'routing',str_starts_with($path,'/skill-plans')||$path==='/agent-colors'=>'schedule',str_starts_with($path,'/skills')||str_starts_with($path,'/agents/')=>'agents',str_starts_with($path,'/queues/')=>'queues',default=>'settings'};
   return ($permissions[$area]??'none')=== 'write'||($method==='GET'&&($permissions[$area]??'none')==='read');
  }
  public function filterBootstrap(array $identity,array $value): array {

@@ -1,21 +1,107 @@
 [
- {"method":"GET","pattern":"^/(bootstrap|health|statistics|coverage|operations/report|updates)$","role":"viewer"},
- {"method":"GET","pattern":"^/operations/incoming$","role":"viewer"},
- {"method":"GET","pattern":"^/skills$","role":"viewer"},
- {"method":"GET","pattern":"^/operations/subscriptions$","role":"admin"},
- {"method":"POST","pattern":"^/skills/(preview|apply)$","role":"operator"},
- {"method":"GET","pattern":"^/skill-plans$","role":"viewer"},
- {"method":"POST","pattern":"^/skill-plans$","role":"operator"},
- {"method":"GET","pattern":"^/agent-colors$","role":"viewer"},
- {"method":"POST","pattern":"^/agent-colors$","role":"operator"},
- {"method":"DELETE","pattern":"^/skill-plans/[a-f0-9]{32}$","role":"operator"},
- {"method":"POST","pattern":"^/operations/incoming/(sync|state)$","role":"operator"},
- {"method":"GET","pattern":"^/permissions(/options)?$","role":"admin"},
- {"method":"POST","pattern":"^/updates/seen$","role":"viewer"},
- {"method":"POST","pattern":"^/dispolive/resolve$","role":"viewer"},
- {"method":"POST","pattern":"^/(agents|queues)/[A-Za-z0-9_-]+$","role":"operator"},
- {"method":"POST","pattern":"^/operations/(callback|alerts|routing/(load|profile|simulate|preview|apply))$","role":"operator"},
- {"method":"POST","pattern":"^/operations/callbacks/complete$","role":"operator"},
- {"method":"DELETE","pattern":"^/operations/routing/profile/[A-Za-z0-9_-]+$","role":"operator"},
- {"method":"POST","pattern":"^/(connect|disconnect|mode|settings|operations/notify|dispolive/(connect|disconnect|toggle|popups))$","role":"admin"}
+  {
+    "method": "GET",
+    "pattern": "^/(bootstrap|health|statistics|coverage|operations/report|updates)$",
+    "role": "viewer"
+  },
+  {
+    "method": "GET",
+    "pattern": "^/phonebook$",
+    "role": "viewer"
+  },
+  {
+    "method": "POST",
+    "pattern": "^/phonebook$",
+    "role": "operator"
+  },
+  {
+    "method": "GET",
+    "pattern": "^/operations/incoming$",
+    "role": "viewer"
+  },
+  {
+    "method": "GET",
+    "pattern": "^/skills$",
+    "role": "viewer"
+  },
+  {
+    "method": "GET",
+    "pattern": "^/operations/subscriptions$",
+    "role": "admin"
+  },
+  {
+    "method": "POST",
+    "pattern": "^/skills/(preview|apply)$",
+    "role": "operator"
+  },
+  {
+    "method": "GET",
+    "pattern": "^/skill-plans$",
+    "role": "viewer"
+  },
+  {
+    "method": "POST",
+    "pattern": "^/skill-plans$",
+    "role": "operator"
+  },
+  {
+    "method": "GET",
+    "pattern": "^/agent-colors$",
+    "role": "viewer"
+  },
+  {
+    "method": "POST",
+    "pattern": "^/agent-colors$",
+    "role": "operator"
+  },
+  {
+    "method": "DELETE",
+    "pattern": "^/skill-plans/[a-f0-9]{32}$",
+    "role": "operator"
+  },
+  {
+    "method": "POST",
+    "pattern": "^/operations/incoming/(sync|state)$",
+    "role": "operator"
+  },
+  {
+    "method": "GET",
+    "pattern": "^/permissions(/options)?$",
+    "role": "admin"
+  },
+  {
+    "method": "POST",
+    "pattern": "^/updates/seen$",
+    "role": "viewer"
+  },
+  {
+    "method": "POST",
+    "pattern": "^/dispolive/resolve$",
+    "role": "viewer"
+  },
+  {
+    "method": "POST",
+    "pattern": "^/(agents|queues)/[A-Za-z0-9_-]+$",
+    "role": "operator"
+  },
+  {
+    "method": "POST",
+    "pattern": "^/operations/(callback|alerts|routing/(load|profile|simulate|preview|apply))$",
+    "role": "operator"
+  },
+  {
+    "method": "POST",
+    "pattern": "^/operations/callbacks/complete$",
+    "role": "operator"
+  },
+  {
+    "method": "DELETE",
+    "pattern": "^/operations/routing/profile/[A-Za-z0-9_-]+$",
+    "role": "operator"
+  },
+  {
+    "method": "POST",
+    "pattern": "^/(connect|disconnect|mode|settings|operations/notify|dispolive/(connect|disconnect|toggle|popups))$",
+    "role": "admin"
+  }
 ]

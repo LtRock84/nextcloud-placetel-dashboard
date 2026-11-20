@@ -31,3 +31,18 @@
 .queue-live-card{padding-bottom:12px}.queue-waiting-area{margin:12px 12px 0;border:1px solid #cddfce;border-radius:10px;background:#edf6ee;overflow:hidden}.queue-waiting-area .queue-list-heading{background:#dceee0;padding:12px 12px}.queue-waiting-area .queue-list-heading>span{font-size:11px;color:#245e3a}.queue-waiting-area .waiting-caller{border-top:1px solid #d6e9d8;background:#f7fcf7;padding:13px 11px}.queue-waiting-area .waiting-caller.alert-warning{background:#fff6df}.queue-waiting-area .waiting-caller.alert-critical{background:#fff0ec}.queue-waiting-area .queue-list-empty{padding:15px 12px;color:#567563}.queue-recent-area{margin:15px 12px 0;border-top:1px solid #dfe6dc;padding-top:6px}.queue-recent-area .recent-heading{background:transparent;padding:10px 2px}.queue-recent-area .recent-heading>span{color:#718171}.queue-recent-area .queue-caller{background:transparent}.queue-recent-area .queue-list-empty{padding:12px 2px}
 .rights-settings{display:grid;gap:14px}.rights-settings fieldset{border:1px solid #dce6d8;border-radius:10px;padding:15px}.rights-settings legend{font-weight:650;padding:0 6px}.rights-choices{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:10px}.rights-choices label{display:flex;align-items:center;gap:7px}.rights-table{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 16px}.rights-table label{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#f6f8f3;border-radius:8px;padding:8px 10px}.rights-table select{max-width:145px}.rights-rule{border:1px solid #e0e7dd;border-radius:9px;padding:12px}.rights-rule summary{font-weight:600;cursor:pointer}.rights-rule .rights-table{margin-top:12px}.rights-rule>button{margin-top:10px}
 .read-only-scope{border:0;margin:0;padding:0;min-width:0}
+
+/* Keep agent skills readable without repeating queue names in compact lists. */
+.agent-skill-summary{display:block;color:#385443;font-size:12px;line-height:1.5;margin-top:6px;overflow-wrap:anywhere}
+.agent-skill-updated{display:block;color:#68796d;font-size:11px;margin-top:2px}
+
+.agent-color-label{display:inline-flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:12px}
+.agent-color-swatch{display:inline-block;width:24px;height:24px;border:1px solid #7e8e80;border-radius:5px;flex:none}
+.agent-color-input{width:44px!important;height:30px!important;padding:2px!important;cursor:pointer}
+.agent-color-input:disabled{cursor:default}
+
+.calendar-add{display:block;width:100%;min-height:100px;margin-top:8px;border:1px dashed #c3d2bf;border-radius:6px;background:transparent;color:#4c7157;cursor:pointer;font-size:11px}.calendar-add:hover,.calendar-add:focus-visible{background:#edf6eb;border-color:#699671}.calendar-add:disabled{opacity:.45;cursor:not-allowed}.calendar-dialog-backdrop{position:fixed;inset:0;z-index:1000;background:#162d2580;display:flex;justify-content:center;align-items:center;padding:18px}.calendar-dialog{background:#fff;border-radius:12px;width:680px;max-width:100%;max-height:90vh;overflow:auto;padding:16px;box-shadow:0 20px 70px #142b2044}.calendar-dialog .panel{margin:0;box-shadow:none}.calendar-dialog-close{display:flex;justify-content:flex-end}
+
+.calendar-day-heading{display:block;width:100%;border:0;border-bottom:1px solid #edf0e7;cursor:pointer}.calendar-day-heading:hover,.calendar-day-heading:focus-visible{background:#edf6eb}.calendar-day-heading:disabled{cursor:default}
+.day-blocks{display:flex;flex-direction:column}
+.calendar-add{flex:1}

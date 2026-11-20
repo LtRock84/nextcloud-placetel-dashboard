@@ -50,6 +50,9 @@ try:
  check('invalid color is rejected',admin.api('agent-colors',{'agentId':'a1','color':'not-a-color'})[0]==400)
  check('viewer cannot change agent colors',viewer.api('agent-colors',{'agentId':'a1','color':'#ffffff'})[0]==403)
  check('admin configures legacy operator group',admin.api('settings',{'operator_groups':['telefonie-disposition'],'viewer_groups':None})[0]==200)
+ check('legacy viewer cannot access phonebook',viewer.api('phonebook?page=2')[0]==403)
+ check('legacy operator cannot change phonebook',operator.api('phonebook',{'operation':'create','contact':{'first_name':'Synthetic'}})[0]==403)
+ check('admin phonebook remains isolated in demo',admin.api('phonebook?page=2')[0]==400)
  from datetime import datetime, timedelta
  from zoneinfo import ZoneInfo
  day=(datetime.now(ZoneInfo('Europe/Berlin'))-timedelta(days=1)).strftime('%Y-%m-%d')
@@ -60,10 +63,11 @@ try:
  check('completed callback retained',next(x for x in json.loads(operator.api('operations/report?from='+day+'&to='+day)[2])['callbacks'] if x['key']==candidate['key'])['state']=='done')
  c,h,b=admin.api('permissions/options?search=viewer');choices=json.loads(b);check('admin searches Nextcloud users',c==200 and any(x['id']=='viewer' for x in choices['users']))
  check('viewer cannot list users',viewer.api('permissions/options')[0]==403)
- areas=['overview','agents','callbacks','routing','events','queues','schedule','statistics','settings'];none={area:'none' for area in areas};viewer_rights={**none,'statistics':'read'}
+ areas=['overview','agents','phonebook','callbacks','routing','events','queues','schedule','statistics','settings'];none={area:'none' for area in areas};viewer_rights={**none,'statistics':'read'}
  matrix={'management_groups':['telefonie-disposition'],'matrix':{'default':none,'groups':{},'users':{'viewer':viewer_rights}}}
  check('admin configures management and user rights',admin.api('settings',matrix)[0]==200)
  c,h,b=viewer.api('bootstrap');data=json.loads(b);check('restricted bootstrap hides denied sections',c==200 and data['hosting']['permissions']['callbacks']=='none' and 'queueSnapshot' not in data and data['operations']['notify']['calls']==[])
+ check('ungranted phonebook is denied',viewer.api('phonebook?page=2')[0]==403)
  check('individual statistics read works',viewer.api('statistics?from='+day+'&to='+day)[0]==200)
  check('forbidden callback report rejected',viewer.api('operations/report?from='+day+'&to='+day)[0]==403)
  check('forbidden overview scope rejected',viewer.api('statistics?scope=overview')[0]==403)

@@ -1,5 +1,11 @@
 # Übernahme des App-Repositorys
 
+## Releasekandidat 0.2.10
+
+Telefonbuch, Rückrufliste und Kalenderänderungen aus lokalem Projekt übernommen.
+Noch nicht veröffentlicht; vor Freigabe Kandidat testen und neu signieren.
+
+
 ## Kompatibilitätsupdate 0.2.2
 
 Nextcloud 34 und 35 in den Metadaten vorgesehen; Kategorie Einbindung und neue

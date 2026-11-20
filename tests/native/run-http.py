@@ -125,7 +125,7 @@ try:
  admin.api('settings',{'operator_groups':[],'viewer_groups':None})
  # The following access changes are made only in this disposable fixture.
  occ('group:adduser','telefonie-disposition','operator')
- areas=['overview','agents','callbacks','routing','events','queues','schedule','statistics','settings']
+ areas=['overview','agents','phonebook','callbacks','routing','events','queues','schedule','statistics','settings']
  none={area:'none' for area in areas};viewer_rights={**none,'statistics':'read'}
  matrix={'management_groups':['telefonie-disposition'],'matrix':{'default':none,'groups':{},'users':{'viewer':viewer_rights}}}
  c,h,b=admin.api('permissions/options?search=viewer');choices=json.loads(b);check('admin can search Nextcloud users',c==200 and any(x['id']=='viewer' for x in choices['users']))

@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.2.10
+
+- Placetel-Telefonbuch mit separaten Rechten: Kontakte ansehen, hinzufügen, bearbeiten und nach Bestätigung löschen.
+- Rückrufliste zeigt direkt gemeldete Anrufe mit Empfangsstand und Hinweisen auf mögliche Datenlücken.
+- Zeitblöcke direkt im Wochenkalender anlegen; Agentenfarben und Skill-Zuordnungen sind besser lesbar.
+
 ## 0.2.9
 
 - Zeitblöcke können die vorherige Skill-Zuordnung am Ende wiederherstellen; erkannte manuelle Änderungen bleiben erhalten. Der Nextcloud-Hintergrundjob kann den Wechsel verzögern.

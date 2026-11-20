@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { ShieldCheck, Trash2 } from 'lucide-react';
 
 type Level='none'|'read'|'write';
-type Area='overview'|'agents'|'callbacks'|'routing'|'events'|'queues'|'schedule'|'statistics'|'settings';
+type Area='overview'|'agents'|'callbacks'|'routing'|'events'|'queues'|'schedule'|'statistics'|'settings'|'phonebook';
 type Rights=Record<Area,Level>;
 type RuleMap=Record<string,Rights>;
 type Configuration={management_groups:string[];matrix:{default:Rights;groups:RuleMap;users:RuleMap}};
 type Choice={id:string;name:string};
 type Options={groups:Choice[];users:Choice[];limit:number};
 type Request=<T>(path:string,data?:unknown)=>Promise<T>;
-const areas:[Area,string][]=[['overview','Übersicht'],['agents','Agenten'],['callbacks','Rückrufliste'],['routing','Feiertag & Notfall'],['events','Ereignisse'],['queues','Warteschleifen'],['schedule','Einsatzplanung'],['statistics','Statistik'],['settings','Einstellungen']];
+const areas:[Area,string][]=[['phonebook','Placetel Telefonbuch'],['overview','Übersicht'],['agents','Agenten'],['callbacks','Rückrufliste'],['routing','Feiertag & Notfall'],['events','Ereignisse'],['queues','Warteschleifen'],['schedule','Einsatzplanung'],['statistics','Statistik'],['settings','Einstellungen']];
 export function RightsSettings({request,refresh,isAdmin}:{request:Request;refresh:()=>Promise<unknown>;isAdmin:boolean}){
  const [config,setConfig]=useState<Configuration|null>(null),[options,setOptions]=useState<Options|null>(null),[kind,setKind]=useState<'groups'|'users'>('groups'),[selected,setSelected]=useState(''),[error,setError]=useState(''),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false);
  const [search,setSearch]=useState('');
@@ -22,7 +22,7 @@ export function RightsSettings({request,refresh,isAdmin}:{request:Request;refres
  const updateRule=(key:'default'|string,area:Area,value:Level,group?:'groups'|'users')=>setConfig(c=>{if(!c)return c;if(!group)return {...c,matrix:{...c.matrix,default:{...c.matrix.default,[area]:value}}};return {...c,matrix:{...c.matrix,[group]:{...c.matrix[group],[key]:{...c.matrix[group][key],[area]:value}}}};});
  const add=()=>{if(!selected||rules[selected])return;setConfig(c=>c&&({...c,matrix:{...c.matrix,[kind]:{...c.matrix[kind],[selected]:{...c.matrix.default}}}}));setSelected('');};
  const remove=(group:'groups'|'users',id:string)=>setConfig(c=>{if(!c)return c;const next={...c.matrix[group]};delete next[id];return {...c,matrix:{...c.matrix,[group]:next}};});
- const table=(rights:Rights,onChange:(area:Area,value:Level)=>void)=><div className="rights-table">{areas.map(([area,label])=><label key={area}><span>{label}</span><select value={rights[area]} onChange={e=>onChange(area,e.target.value as Level)} aria-label={`${label} Berechtigung`}><option value="none">Kein Zugriff</option><option value="read">Lesen</option>{(['agents','callbacks','routing','queues','settings'].includes(area)||rights[area]==='write')&&<option value="write">Bearbeiten</option>}</select></label>)}</div>;
+ const table=(rights:Rights,onChange:(area:Area,value:Level)=>void)=><div className="rights-table">{areas.map(([area,label])=><label key={area}><span>{label}</span><select value={rights[area]} onChange={e=>onChange(area,e.target.value as Level)} aria-label={`${label} Berechtigung`}><option value="none">Kein Zugriff</option><option value="read">Lesen</option>{(['agents','callbacks','routing','queues','settings','phonebook'].includes(area)||rights[area]==='write')&&<option value="write">Bearbeiten</option>}</select></label>)}</div>;
  const save=async()=>{setBusy(true);setError('');setNotice('');try{await request('settings',config);await refresh();setNotice('Die Zugriffsrechte wurden gespeichert.');}catch(e){setError(e instanceof Error?e.message:'Die Rechte konnten nicht gespeichert werden.');}finally{setBusy(false);}};
  return <section className="panel"><div className="panel-heading"><div><h2>Benutzer & Rechte</h2><p>Zugriff auf die Bereiche des Placetel Dashboards festlegen</p></div><ShieldCheck size={20}/></div><div className="settings-body rights-settings">
  <p>Nextcloud-Administratoren und Mitglieder der ausgewählten Geschäftsführungsgruppen behalten immer alle Rechte. Ein Bereich ohne Zugriff verschwindet aus der Navigation.</p>

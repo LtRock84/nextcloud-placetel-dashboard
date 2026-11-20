@@ -7,7 +7,7 @@ namespace OCP\AppFramework\Http {class DataResponse {public function __construct
 namespace OCA\Placetel\Native {
  class Store {}
  class RemoteException extends \Exception {public int $status=500;}
- class Dashboard {public function execute($method,$path,$input,$query,$identity){if($path==='bootstrap')return ['hosting'=>[],'agents'=>[],'queues'=>[],'plans'=>[],'assignments'=>[],'overrides'=>[],'audit'=>[['secret'=>'audit']],'queueSnapshot'=>['secret'=>'waiting'],'operations'=>['routing'=>['profiles'=>[['secret'=>'route']]],'notify'=>['calls'=>[['secret'=>'call']],'total'=>1],'contactNames'=>[]],'dispolive'=>[]];if($path==='statistics')return ['calls'=>[['secret'=>'call']],'detailCalls'=>[['secret'=>'detail']]];if($path==='operations/report')return ['callbacks'=>[['secret'=>'callback']],'reachability'=>[['count'=>1]]];return ['ok'=>true];}}
+ class Dashboard {public function execute($method,$path,$input,$query,$identity){if($path==='phonebook')return ['page'=>$query['page']??null];if($path==='bootstrap')return ['hosting'=>[],'agents'=>[],'queues'=>[],'plans'=>[],'assignments'=>[],'overrides'=>[],'audit'=>[['secret'=>'audit']],'queueSnapshot'=>['secret'=>'waiting'],'operations'=>['routing'=>['profiles'=>[['secret'=>'route']]],'notify'=>['calls'=>[['secret'=>'call']],'total'=>1],'contactNames'=>[]],'dispolive'=>[]];if($path==='statistics')return ['calls'=>[['secret'=>'call']],'detailCalls'=>[['secret'=>'detail']]];if($path==='operations/report')return ['callbacks'=>[['secret'=>'callback']],'reachability'=>[['count'=>1]]];return ['ok'=>true];}}
 }
 namespace OCA\Placetel\Service {class UpdateNotes{}}
 namespace {
@@ -28,5 +28,6 @@ namespace {
  $request->method='POST';$request->params=[];check($controller->forward('operations/callbacks/complete')->status===403,'denied write blocked before processing');
  $config->data['matrix']['default']=array_replace($none,['statistics'=>'read']);$request->method='GET';$request->params=['scope'=>'statistics'];$res=$controller->forward('operations/report');check($res->status===200&&$res->data['callbacks']===[]&&count($res->data['reachability'])===1,'statistics report strips denied callbacks');
  check($controller->forward('permissions/options')->status===403,'user enumeration admin-only');
+ $config->data['matrix']['default']=array_replace($none,['phonebook'=>'read']);$request->params=['page'=>'2'];$res=$controller->forward('phonebook');check($res->status===200&&$res->data['page']==='2','phonebook page is forwarded through controller');
  echo "PERMISSIONS_CONTROLLER_COMPLETE\n";
 }

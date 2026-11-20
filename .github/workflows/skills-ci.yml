@@ -1,7 +1,7 @@
 name: Isolated Nextcloud skill integration
 on:
   push:
-    branches: [skill-zuordnung-test-20261119, release-0.2.9-test, release-0.2.10-test]
+    branches: [skill-zuordnung-test-20261119, release-0.2.9-test, release-0.2.10-test, release-0.2.11-test]
   workflow_dispatch:
 jobs:
   integration:

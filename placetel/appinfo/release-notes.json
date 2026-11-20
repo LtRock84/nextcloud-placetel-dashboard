@@ -1,5 +1,14 @@
 [
   {
+    "version": "0.2.11",
+    "items": [
+      {
+        "title": "Wochenplanung korrigiert",
+        "description": "Der Dialog zum Anlegen eines Zeitblocks wird beim Anklicken eines Tages wieder korrekt angezeigt."
+      }
+    ]
+  },
+  {
     "version": "0.2.10",
     "items": [
       {

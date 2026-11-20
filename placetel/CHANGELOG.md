@@ -1,5 +1,9 @@
 # Änderungen
 
+## 0.2.11
+
+- Dialog zum Anlegen eines Zeitblocks in der Nextcloud-Wochenplanung wieder korrekt anzeigen.
+
 ## 0.2.10
 
 - Placetel-Telefonbuch mit separaten Rechten: Kontakte ansehen, hinzufügen, bearbeiten und nach Bestätigung löschen.

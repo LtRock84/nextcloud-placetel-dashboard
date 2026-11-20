@@ -1,5 +1,11 @@
 # Übernahme des App-Repositorys
 
+## Korrektur 0.2.11
+
+Kalenderdialog bleibt im Shadow DOM und erhält seine Gestaltung. In isoliertem
+Browsermodell mit künstlichen Agenten und Zeitblöcken geprüft; Releasevorbereitung.
+
+
 ## Releasekandidat 0.2.10
 
 Telefonbuch, Rückrufliste und Kalenderänderungen aus lokalem Projekt übernommen.

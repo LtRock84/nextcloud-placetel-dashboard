@@ -28,7 +28,7 @@ async function api<T>(path: string, data?: unknown, method = 'POST'): Promise<T>
   const headers: Record<string,string> = cloud ? {requesttoken:cloud.token} : {};
   if(data !== undefined) Object.assign(headers, {'Content-Type':'application/json','X-CSRF-Token':csrf});
   const attempt=async()=>{const response=await fetch(`${cloud?.api ?? '/api'}/${path}`, {cache:'no-store',credentials:'same-origin',redirect:'error',method:data===undefined?'GET':method,headers,...(data===undefined?{}:{body:JSON.stringify(data)})});if(!response.headers.get('content-type')?.includes('application/json'))throw new Error('Sitzung abgelaufen oder Dienst nicht erreichbar. Bitte Nextcloud neu laden.');return {ok:response.ok,status:response.status,value:await response.json()};};
-  const isWrite=data!==undefined;let delayed=false;const {ok,value:result}=cloud?.native&&(isWrite||path.startsWith('skills?'))?await requestWithBusyRetry(attempt,{onWait:waiting=>{if(isWrite){if(waiting)delayed=true;window.dispatchEvent(new CustomEvent('placetel-waiting',{detail:waiting}));}}}):await attempt();
+  const isWrite=data!==undefined;let delayed=false;const {ok,value:result}=cloud?.native&&(isWrite||path.startsWith('skills?')||path==='skill-plans')?await requestWithBusyRetry(attempt,{onWait:waiting=>{if(isWrite){if(waiting)delayed=true;window.dispatchEvent(new CustomEvent('placetel-waiting',{detail:waiting}));}}}):await attempt();
   if (!ok) throw new Error(result.error || 'Anfrage fehlgeschlagen.');
   if(delayed)window.dispatchEvent(new CustomEvent('placetel-delayed-success'));
   if(path==='bootstrap'&&cloud) updateCloudIdentity(result.hosting?.role);

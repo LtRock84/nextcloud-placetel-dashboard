@@ -1,5 +1,18 @@
 [
   {
+    "version": "0.2.12",
+    "items": [
+      {
+        "title": "Gemeinsamer Dienstplan",
+        "description": "Zeitblöcke aller berechtigten Benutzer werden regelmäßig aktualisiert; Probleme beim Laden bleiben sichtbar."
+      },
+      {
+        "title": "Agentenfarben",
+        "description": "Pro Agent gibt es ein einzelnes Farbfeld zur Auswahl."
+      }
+    ]
+  },
+  {
     "version": "0.2.11",
     "items": [
       {

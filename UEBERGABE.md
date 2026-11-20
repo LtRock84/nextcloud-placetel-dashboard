@@ -1,5 +1,11 @@
 # Übernahme des App-Repositorys
 
+## Kandidat 0.2.12
+
+Gemeinsamen Dienstplan automatisch aktualisieren und Lesefehler kenntlich machen;
+Agentenfarben über ein Farbfeld. Synthetischer Zwei-Ansichten-Test bestanden.
+
+
 ## Korrektur 0.2.11
 
 Kalenderdialog bleibt im Shadow DOM und erhält seine Gestaltung. In isoliertem

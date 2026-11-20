@@ -1,5 +1,10 @@
 # Änderungen
 
+## 0.2.12
+
+- Gemeinsamen Dienstplan regelmäßig aktualisieren und bei Ladefehlern den letzten Stand kennzeichnen.
+- Agentenfarben über ein einzelnes klickbares Farbfeld auswählen.
+
 ## 0.2.11
 
 - Dialog zum Anlegen eines Zeitblocks in der Nextcloud-Wochenplanung wieder korrekt anzeigen.

@@ -37,7 +37,6 @@
 .agent-skill-updated{display:block;color:#68796d;font-size:11px;margin-top:2px}
 
 .agent-color-label{display:inline-flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:12px}
-.agent-color-swatch{display:inline-block;width:24px;height:24px;border:1px solid #7e8e80;border-radius:5px;flex:none}
 .agent-color-input{width:44px!important;height:30px!important;padding:2px!important;cursor:pointer}
 .agent-color-input:disabled{cursor:default}
 

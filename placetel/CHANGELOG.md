@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.2.13
+
+- Einzelne zukünftige Termine einer wöchentlichen Serie unabhängig bearbeiten.
+- Skills und Stufen festlegen, die nach Ende eines Zeitblocks gelten sollen.
+- Beim Löschen einer Serie werden auch ihre Einzeltermin-Ausnahmen entfernt.
+
 ## 0.2.12
 
 - Gemeinsamen Dienstplan regelmäßig aktualisieren und bei Ladefehlern den letzten Stand kennzeichnen.

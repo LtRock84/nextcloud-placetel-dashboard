@@ -1,5 +1,12 @@
 # Übernahme des App-Repositorys
 
+## Kandidat 0.2.13 (27.11.2026)
+
+Auswahl Einzeltermin/Serie und festgelegter Endzustand lokal vorbereitet.
+Einzeltermine sind vor Beginn änderbar; Löschen der Serie entfernt Ausnahmen.
+Tests, Appsignatur, Release und App-Store-Veröffentlichung stehen noch aus.
+Ausschließlich synthetische Daten verwenden; keine Geheimnisse aufnehmen.
+
 ## Kandidat 0.2.12
 
 Gemeinsamen Dienstplan automatisch aktualisieren und Lesefehler kenntlich machen;

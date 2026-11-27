@@ -1,5 +1,18 @@
 [
   {
+    "version": "0.2.13",
+    "items": [
+      {
+        "title": "Einzelne Serientermine bearbeiten",
+        "description": "Im Dienstplan lässt sich auswählen, ob nur ein Termin oder die gesamte Wiederholung geändert wird."
+      },
+      {
+        "title": "Skills nach Zeitblockende",
+        "description": "Für jeden Zeitblock können Skills und Stufen festgelegt werden, die danach gelten sollen."
+      }
+    ]
+  },
+  {
     "version": "0.2.12",
     "items": [
       {

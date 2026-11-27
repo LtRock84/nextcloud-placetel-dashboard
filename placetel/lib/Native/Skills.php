@@ -77,8 +77,8 @@ final class Skills {
   $agent=$this->agent($agent);if(($saved['status']??null)!=='active')throw new \InvalidArgumentException('Vorheriger Zustand ist nicht sicher wiederherstellbar.');
   $snapshot=$this->snapshot($agent);if(!hash_equals((string)$saved['catalogueHash'],Routing::digest($snapshot['skills'])))throw new \InvalidArgumentException('Skill-Katalog wurde geändert.');
   $current=(array)$snapshot['current'];ksort($current,SORT_NUMERIC);if(!hash_equals((string)$saved['expected'],Routing::digest($current)))throw new \InvalidArgumentException('Skills wurden zwischenzeitlich verändert.');
-  $changes=$this->changes($snapshot,$saved['before']);$saved['status']='executing';$this->store->put('skills:restore:'.$agent,$saved);
+  $changes=$this->changes($snapshot,$saved['target']??$saved['before']);$saved['status']='executing';$this->store->put('skills:restore:'.$agent,$saved);
   $this->store->put('skills:running:'.$agent,['kind'=>'restore','at'=>gmdate('c')]);try{$this->writeChanges($agent,$changes);}finally{$this->store->remove('skills:running:'.$agent);}
-  $this->store->remove('skills:restore:'.$agent);$this->store->log('live','skill-schedule','Vorherige Skill-Zuordnung für Agent '.$agent.' wiederhergestellt.','ok');
+  $this->store->remove('skills:restore:'.$agent);$this->store->log('live','skill-schedule',isset($saved['target'])?'Geplante Skill-Zuordnung am Blockende für Agent '.$agent.' angewendet.':'Vorherige Skill-Zuordnung für Agent '.$agent.' wiederhergestellt.','ok');
  }
 }

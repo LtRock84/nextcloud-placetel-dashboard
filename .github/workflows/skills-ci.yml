@@ -1,7 +1,7 @@
 name: Isolated Nextcloud skill integration
 on:
   push:
-    branches: [skill-zuordnung-test-20261119, release-0.2.9-test, release-0.2.10-test, release-0.2.11-test, release-0.2.12-test, release-0.2.13-test]
+    branches: [skill-zuordnung-test-20261119, release-0.2.9-test, release-0.2.10-test, release-0.2.11-test, release-0.2.12-test, release-0.2.13-test, release-0.2.14-test]
   workflow_dispatch:
 jobs:
   integration:
@@ -19,6 +19,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Test synthetic skill and authorization contracts
         run: |
+          php tests/native/directory-standalone.php
           php tests/native/skills.php
           php tests/native/skills-api-standalone.php
           php tests/native/rights-standalone.php

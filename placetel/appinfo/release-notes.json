@@ -1,5 +1,18 @@
 [
   {
+    "version": "0.2.14",
+    "items": [
+      {
+        "title": "Weniger DispoLive-Anfragen",
+        "description": "Nur neue eingehende Anrufe ohne bekannten Namen werden automatisch abgeglichen. Ältere Anrufe lösen keine neue Suche aus."
+      },
+      {
+        "title": "Anrufermeldungen bleiben aktiv",
+        "description": "Popups werden wie bisher für die konfigurierten Arbeitsplätze versendet."
+      }
+    ]
+  },
+  {
     "version": "0.2.13",
     "items": [
       {

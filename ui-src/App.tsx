@@ -13,7 +13,7 @@ import {SetupGuide} from './SetupGuide';
 import {PlacetelKeyHelp} from './SetupHelp';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { DateTime } from 'luxon';
-import { DispoliveContext, DispoliveSettings, configureDispoliveResolver } from './Dispolive';
+import { DispoliveContext, DispoliveSettings } from './Dispolive';
 import { cloudConfig, helpUrl, updateCloudIdentity } from './hosting';
 import { sortAgents } from './agents';
 import { QueueBoard } from './QueueBoard';
@@ -34,7 +34,6 @@ async function api<T>(path: string, data?: unknown, method = 'POST'): Promise<T>
   if(path==='bootstrap'&&cloud) updateCloudIdentity(result.hosting?.role);
   return result;
 }
-configureDispoliveResolver(numbers => api('dispolive/resolve', { numbers }));
 const today = () => DateTime.now().setZone(ZONE).toISODate()!;
 const time = (iso: string | null, format = 'HH:mm') => iso ? DateTime.fromISO(iso).setZone(ZONE).toFormat(format) : '—';
 const number = (n: number) => new Intl.NumberFormat('de-DE', { maximumFractionDigits: 1 }).format(n);

@@ -1,6 +1,6 @@
 import {SetupGuideLink} from './SetupGuide';
 import { cloudConfig } from './hosting';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { DateTime } from 'luxon';
 import { ZONE, type DispoliveState } from '../shared/types';
 export const DispoliveContext=createContext<DispoliveState|undefined>(undefined);
@@ -8,16 +8,7 @@ type Request=<T>(path:string,data?:unknown,method?:string)=>Promise<T>;
 const stamp=(value:string|null)=>value?DateTime.fromISO(value).setZone(ZONE).toFormat('dd.MM. HH:mm:ss'):'—';
 export function useDispoliveNumber(number:string|null) {
   const directory=useContext(DispoliveContext);
-  // Batch historical numbers from visible caller components into one request per render burst.
-  useEffect(()=>{if(number&&directory?.enabled&&directory.configured)enqueue(number);},[number,directory?.enabled,directory?.configured]);
   return {directory,match:number?directory?.matches[number]:undefined};
-}
-let numbers=new Set<string>(),timer:ReturnType<typeof setTimeout>|null=null;
-let resolveNumbers:((numbers:string[])=>Promise<unknown>)|null=null;
-export function configureDispoliveResolver(resolver:typeof resolveNumbers){resolveNumbers=resolver;}
-function enqueue(number:string){
-  numbers.add(number);if(timer)return;
-  timer=setTimeout(()=>{timer=null;const batch=[...numbers];numbers=new Set();for(let i=0;i<batch.length;i+=100)void resolveNumbers?.(batch.slice(i,i+100)).catch(()=>{/* Connection errors remain visible in integration settings. */});},120);
 }
 export function DispoliveSettings({state,live,request,refresh}:{state?:DispoliveState;live:boolean;request:Request;refresh:()=>Promise<unknown>}) {
   const [origin,setOrigin]=useState(state?.origin??''),[token,setToken]=useState('');
@@ -28,7 +19,7 @@ export function DispoliveSettings({state,live,request,refresh}:{state?:Dispolive
   const queried=state?.matches[found];
   return <section className="panel dispolive-settings"><div className="panel-heading"><div><h2>Zusatzfunktion: DispoLive</h2><p>Gezielte Rufnummernsuche · API {state?.version??'v1.0.6'}</p></div><span className={`count-tag ${state?.connected?'quality-good':''}`}>{!live?'Demo':state?.connected?'Verbunden':state?.enabled?'Verbindung prüfen':'Nicht verbunden'}</span></div><div className="settings-body">
     <label className="setting-row"><span><strong>DispoLive-Abgleich einschalten</strong><small className="muted block">Optional. Das Placetel-Dashboard funktioniert auch ohne DispoLive.</small></span><input type="checkbox" checked={state?.enabled??false} disabled={busy||!!cloudConfig()&&cloudConfig()?.role!=='admin'} onChange={e=>void run(()=>request('dispolive/toggle',{enabled:e.target.checked}),e.target.checked?'DispoLive eingeschaltet.':'DispoLive ausgeschaltet. Es werden keine weiteren Rufnummern abgefragt.')} /></label>
-    <p hidden={!cloudConfig()||cloudConfig()?.native}>Schlüssel werden durch den NAS-Administrator als Geheimnisdatei verwaltet.</p><p>Patienten und Institutionen über die Anrufernummer erkennen. Namen und mehrere Treffer werden direkt bei den Anrufen angezeigt. Der Abgleich löst keine DispoLive-Benachrichtigungen aus.</p>
+    <p hidden={!cloudConfig()||cloudConfig()?.native}>Schlüssel werden durch den NAS-Administrator als Geheimnisdatei verwaltet.</p><p>Patienten und Institutionen über die Anrufernummer erkennen. Namen und mehrere Treffer werden direkt bei den Anrufen angezeigt. Der automatische Abgleich erfolgt nur bei neu gemeldeten eingehenden Anrufen ohne bekannten Namen. Gespeicherte Namen werden verwendet; die Suche in alten Einträgen startet keine neue Abfrage. Der Abgleich löst keine DispoLive-Benachrichtigungen aus.</p>
     {error&&<p className="message error" role="alert">{error}</p>}{notice&&<p className="message" role="status">{notice}</p>}{state?.error&&<p className="message warning">{state.error}</p>}
     <form hidden={!!cloudConfig()&&!cloudConfig()?.native} onSubmit={e=>{e.preventDefault();const value=token;setToken('');void run(()=>request('dispolive/connect',{origin,token:value}),cloudConfig()?.native?'DispoLive-Zugang verschlüsselt in Nextcloud gespeichert. Bei Bedarf einschalten.':'DispoLive geprüft und Schlüssel im Betriebssystem gespeichert.');}}><label className="field">Mandantenadresse<input type="url" required aria-describedby="dispolive-origin-help" value={origin} onChange={e=>setOrigin(e.target.value)} placeholder="https://firma.dispolive.de"/><small id="dispolive-origin-help" className="field-help">Kopiere die Basisadresse aus der Adresszeile deiner DispoLive-Webseite, z. B. https://firma.dispolive.de. Nur bis .de, ohne weiteren Pfad, /openapi/documentation oder Anmeldedaten. Verwende euren eigenen Mandanten.</small></label><label className="field">DispoLive-API-Schlüssel<input type="password" aria-describedby="dispolive-key-help" autoComplete="new-password" value={token} onChange={e=>setToken(e.target.value)} placeholder={state?.configured?'Neuen Schlüssel einfügen, um ihn zu ersetzen':'API-Schlüssel einfügen'} minLength={8} required/><small id="dispolive-key-help" className="field-help">Benötigt wird ein API-Schlüssel deines eigenen DispoLive-Mandanten mit Berechtigung für die Telefonanlage/Rufnummernsuche (contactFindByPhone). Lass ihn von eurem DispoLive-Administrator bereitstellen oder frage den DispoLive-Support nach der Freischaltung. Der genaue Menüpunkt hängt von eurer Version und Berechtigung ab. Kein normales Benutzerpasswort und kein Placetel-Schlüssel.</small></label><button className="button primary" disabled={busy||!live||token.length<8||!!cloudConfig()&&cloudConfig()?.role!=='admin'}>{cloudConfig()?.native?'Zugang verschlüsselt speichern':'Prüfen & sicher speichern'}</button></form>
     {(state?.configured||cloudConfig())&&!cloudConfig()?.native&&<button className="button" disabled={busy||!live||!!cloudConfig()&&cloudConfig()?.role!=='admin'} onClick={()=>void run(()=>request('dispolive/connect',{origin:state?.origin??origin,useStored:true}),'Gespeicherten DispoLive-Zugang erfolgreich geprüft.')}>Gespeicherten Zugang erneut prüfen</button>}

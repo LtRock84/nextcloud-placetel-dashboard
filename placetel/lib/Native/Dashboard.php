@@ -13,7 +13,7 @@ final class Dashboard {
  public function mode(): string{return $this->store->get('mode','demo');}
  public function tick(): void {
   if($this->mode()==='demo'){$this->demo->seed();return;}
-  $this->popups->tick();$schedules=(new SkillSchedules($this->store,new Skills($this->store,$this->api)))->tick();$routing=$this->routing->tick();if(!$routing&&!$schedules)$this->importer->tick();$this->directory->tick($this->calls(true));
+  $this->popups->tick();$schedules=(new SkillSchedules($this->store,new Skills($this->store,$this->api)))->tick();$routing=$this->routing->tick();if(!$routing&&!$schedules)$this->importer->tick();$this->directory->tick();
  }
  private function calls(bool $recent=false): array {
   $from=$recent?Analysis::local(time())->setTime(0,0)->modify('-1 day')->format('Y-m-d'):null;$rows=$this->store->rows($this->mode().':calls',$from);

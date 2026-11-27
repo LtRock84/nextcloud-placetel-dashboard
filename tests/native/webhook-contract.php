@@ -16,12 +16,15 @@ try{
  webhookCheck($requests()[0]['body']===['phone'=>'+493012345678','notification'=>true,'desktopPhone'=>'100','firmenKrz'=>'SYN'],'full webhook flow forwards documented notification payload');
  webhookCheck(requestPopup($data)===200&&count($requests())===1,'identical signed HTTP delivery does not duplicate notification');
  webhookCheck(requestPopup($data+['iteration'=>'2'])===200&&count($requests())===1,'changed event body for same call ID does not duplicate popup');
- $data['call_id']=hash('sha256','integrated-second');webhookCheck(requestPopup($data)===200&&count($requests())===2,'new signed call ID for same phone sends second popup');
- $data['call_id']=hash('sha256','integrated-forged');webhookCheck(requestPopup($data,str_repeat('0',64))===401&&count($requests())===2,'forged signature cannot cause external side effect');
- $data['call_id']=hash('sha256','integrated-outgoing');$data['event']='OutgoingCall';$data['direction']='out';webhookCheck(requestPopup($data)===200&&count($requests())===2,'signed outgoing HTTP event produces no popup');
+ webhookCheck(count($store->rows('dispolive-new'))===1,'one lookup enqueued for repeated delivery');
+ webhookCheck(file_get_contents('http://127.0.0.1:44328/lookup-tick')==='DONE'&&count($requests())===2&&$requests()[1]['body']['notification']===false,'new incoming event triggers one separate name lookup');
+ webhookCheck(file_get_contents('http://127.0.0.1:44328/lookup-tick')==='DONE'&&count($requests())===2,'old event is not looked up again');
+ $data['call_id']=hash('sha256','integrated-second');webhookCheck(requestPopup($data)===200&&count($requests())===3,'new signed call ID for same phone sends second popup');
+ $data['call_id']=hash('sha256','integrated-forged');webhookCheck(requestPopup($data,str_repeat('0',64))===401&&count($requests())===3,'forged signature cannot cause external side effect');
+ $data['call_id']=hash('sha256','integrated-outgoing');$data['event']='OutgoingCall';$data['direction']='out';webhookCheck(requestPopup($data)===200&&count($requests())===3,'signed outgoing HTTP event produces no popup');
 }finally{
  if(is_resource($process)){proc_terminate($process);proc_close($process);}
- $store->put('mode','demo');$secrets->remove('dispolive:fixture.dispolive.de');foreach(['dispolive:config','dispolive:popups','dispolive:next'] as $k)$store->remove($k);foreach(['dispolive-popups','notify-calls'] as $scope)foreach($store->rows($scope) as $r)$store->remove($r['id'],$scope);
+ $store->put('mode','demo');$secrets->remove('dispolive:fixture.dispolive.de');foreach(['dispolive:config','dispolive:popups','dispolive:next'] as $k)$store->remove($k);foreach(['dispolive-popups','notify-calls','dispolive-new'] as $scope)foreach($store->rows($scope) as $r)$store->remove($r['id'],$scope);
  file_put_contents('/tmp/native-webhook-results.json',json_encode(['checks'=>$checks,'count'=>count($checks),'passed'=>count(array_filter($checks,static fn($r)=>$r['passed']))],JSON_PRETTY_PRINT|JSON_THROW_ON_ERROR));
 }
 echo 'NATIVE_WEBHOOK_COMPLETE'.PHP_EOL;

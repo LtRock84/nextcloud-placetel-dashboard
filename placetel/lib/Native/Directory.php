@@ -7,7 +7,7 @@ final class Directory {
  public function state(): array {
   $c=$this->store->get('dispolive:config',['origin'=>'','enabled'=>false]);$matches=[];
   if($c['enabled']&&$this->store->get('mode','demo')==='live')foreach($this->store->rows('dispolive-cache') as $r)if($r['origin']===$c['origin']){$match=$r;unset($match['origin']);$matches[$r['number']]=$match;}
-  return ['origin'=>$c['origin'],'version'=>'v1.0.6','configured'=>$c['origin']!==''&&$this->secrets->get('dispolive:'.parse_url($c['origin'],PHP_URL_HOST))!==null,'enabled'=>$c['enabled'],'connected'=>$c['enabled']&&$this->store->get('dispolive:connected',false),'error'=>$this->store->get('dispolive:error'),'lastSuccess'=>$this->store->get('dispolive:lastSuccess'),'pending'=>count($this->store->get('dispolive:queue',[])),'matches'=>(object)$matches];
+  return ['origin'=>$c['origin'],'version'=>'v1.0.6','configured'=>$c['origin']!==''&&$this->secrets->get('dispolive:'.parse_url($c['origin'],PHP_URL_HOST))!==null,'enabled'=>$c['enabled'],'connected'=>$c['enabled']&&$this->store->get('dispolive:connected',false),'error'=>$this->store->get('dispolive:error'),'lastSuccess'=>$this->store->get('dispolive:lastSuccess'),'pending'=>count($this->store->get('dispolive:queue',[]))+count($this->store->rows('dispolive-new')),'matches'=>(object)$matches];
  }
  public function connect(array $input): void {
   $origin=Api::origin($input['origin']??null);$old=$this->store->get('dispolive:config',['origin'=>'','enabled'=>false]);$key='dispolive:'.parse_url($origin,PHP_URL_HOST);
@@ -23,14 +23,26 @@ final class Directory {
   $c=$this->store->get('dispolive:config',['origin'=>'','enabled'=>false]);$this->toggle(false);if($c['origin'])$this->secrets->remove('dispolive:'.parse_url($c['origin'],PHP_URL_HOST));
  }
  public function request(mixed $numbers,bool $force=false): void {
-  if(!is_array($numbers)||!array_is_list($numbers)||count($numbers)>100)throw new \InvalidArgumentException('Höchstens 100 Rufnummern angeben.');$c=$this->store->get('dispolive:config',['origin'=>'','enabled'=>false]);if(!$c['enabled']||$this->store->get('mode','demo')!=='live')return;$queue=$this->store->get('dispolive:queue',[]);
+  if(!is_array($numbers)||!array_is_list($numbers)||count($numbers)>100)throw new \InvalidArgumentException('Höchstens 100 Rufnummern angeben.');$c=$this->store->get('dispolive:config',['origin'=>'','enabled'=>false]);if(!$c['enabled']||$this->store->get('mode','demo')!=='live'||!$force)return;if(!$this->store->get('dispolive:eventLookupV1',false)){$this->store->put('dispolive:queue',[]);$this->store->put('dispolive:eventLookupV1',true);}$queue=$this->store->get('dispolive:queue',[]);
   foreach($numbers as $value){if(!is_string($value))throw new \InvalidArgumentException('Ungültige Rufnummer.');$phone=$this->analysis->phone($value);if(!$phone)continue;$key=$c['origin'].':'.$phone;$old=$this->store->get($key,null,'dispolive-cache');if($force||!$old||Analysis::stamp($old['expiresAt'])<=time())$queue[$phone]=true;}
   $this->store->put('dispolive:queue',array_slice($queue,0,3000,true));
  }
- public function tick(array $calls): void {
+ /** Only newly received incoming calls may enqueue an automatic lookup. */
+ public function enqueueIncoming(array $call,string $event): void {
+  $c=$this->store->get('dispolive:config',['origin'=>'','enabled'=>false]);
+  if($event!=='IncomingCall'||($call['direction']??'')!=='in'||!$c['enabled']||$this->store->get('mode','demo')!=='live')return;
+  $phone=$this->analysis->phone($call['caller']??null);$id=$call['id']??null;if(!$phone||!is_string($id)||!preg_match('/^[a-f0-9]{64}$/D',$id))return;
+  $old=$this->store->get($c['origin'].':'.$phone,null,'dispolive-cache');$names=$this->store->get('live:contactNames',[]);if(!empty($old['contacts'])||!empty($names[$phone]))return;
+  $this->store->put($id,['id'=>$id,'number'=>$phone,'origin'=>$c['origin'],'revision'=>$this->store->get('dispolive:revision'),'receivedAt'=>gmdate('c')],'dispolive-new',gmdate('Y-m-d'));
+ }
+ public function tick(): void {
   $c=$this->store->get('dispolive:config',['origin'=>'','enabled'=>false]);if(!$c['enabled']||$this->store->get('mode','demo')!=='live'||$this->store->get('dispolive:paused',false)||microtime(true)<$this->store->get('dispolive:next',0))return;
-  usort($calls,static fn($a,$b)=>($b['outcome']==='waiting')<=>($a['outcome']==='waiting')?:strcmp($b['offeredAt'],$a['offeredAt']));$numbers=[];foreach($calls as $call)if(!isset($call['source'])||($call['callType']??'')==='dail_in')$numbers[]=$call['caller']??'';$this->request(array_slice(array_values(array_unique($numbers)),0,100));
-  $queue=$this->store->get('dispolive:queue',[]);if(!$queue)return;$phone=(string)array_key_first($queue);unset($queue[$phone]);$this->store->put('dispolive:queue',$queue);$key=$c['origin'].':'.$phone;$old=$this->store->get($key,null,'dispolive-cache');
+  // Discard the pre-upgrade backlog once; it contains historical callers.
+  if(!$this->store->get('dispolive:eventLookupV1',false)){$this->store->put('dispolive:queue',[]);$this->store->put('dispolive:eventLookupV1',true);}
+  $queue=$this->store->get('dispolive:queue',[]);$phone=null;
+  if($queue){$phone=(string)array_key_first($queue);unset($queue[$phone]);$this->store->put('dispolive:queue',$queue);}
+  else {foreach($this->store->rows('dispolive-new') as $item){$this->store->remove($item['id'],'dispolive-new');if(($item['origin']??'')!==$c['origin']||($item['revision']??null)!==$this->store->get('dispolive:revision')||time()-Analysis::stamp($item['receivedAt']??'')>900)continue;$phone=$item['number'];$prior=$this->store->get($c['origin'].':'.$phone,null,'dispolive-cache');if(!empty($prior['contacts'])){$phone=null;continue;}break;}}
+  if(!$phone)return;$key=$c['origin'].':'.$phone;$old=$this->store->get($key,null,'dispolive-cache');
   try{
    $rows=$this->api->dispolive($c['origin'],$phone);$contacts=[];
    foreach($rows as $r){if(!is_array($r)||!is_string($r['name']??null)||!trim($r['name']))throw new RemoteException('DispoLive-Treffer ohne gültigen Namen.');$returned=[];foreach(['phone','tel','mobile','mobil'] as $field)if(is_string($r[$field]??null)&&($n=$this->analysis->phone($r[$field])))$returned[]=$n;if($returned&&!in_array($phone,$returned,true))throw new RemoteException('Rufnummer im DispoLive-Treffer stimmt nicht überein.');$contact=['id'=>is_string($r['_id']??null)?mb_substr($r['_id'],0,200):null,'name'=>mb_substr(trim($r['name']),0,300),'type'=>is_string($r['type']??null)?mb_substr($r['type'],0,80):'Kontakt'];$id=$contact['id']?json_encode($contact,JSON_THROW_ON_ERROR):'unidentified:'.count($contacts);$contacts[$id]=$contact;}

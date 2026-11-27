@@ -1,5 +1,11 @@
 # Übernahme des App-Repositorys
 
+## Kandidat 0.2.14 (27.11.2026)
+
+DispoLive-Namenssuche nur bei neuen eingehenden Ereignissen ohne bekannten
+Namen; keine automatische Suche in historischen Listen. Popup-Zustellung bleibt
+separat und unverändert. Isolierte Tests und Veröffentlichung in Vorbereitung.
+
 ## Kandidat 0.2.13 (27.11.2026)
 
 Auswahl Einzeltermin/Serie und festgelegter Endzustand lokal vorbereitet.

@@ -6,6 +6,7 @@ use OCA\Placetel\Native\Secrets;
 use OCA\Placetel\Native\Store;
 use OCA\Placetel\Native\Analysis;
 use OCA\Placetel\Native\Popups;
+use OCA\Placetel\Native\Directory;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
@@ -14,7 +15,7 @@ use OCP\IRequest;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 final class NotifyController extends Controller {
- public function __construct(IRequest $request,private Secrets $secrets,private Store $store,private Analysis $analysis,private ILockingProvider $locks,private Popups $popups){parent::__construct('placetel',$request);}
+ public function __construct(IRequest $request,private Secrets $secrets,private Store $store,private Analysis $analysis,private ILockingProvider $locks,private Popups $popups,private Directory $directory){parent::__construct('placetel',$request);}
  #[PublicPage]
  #[NoCSRFRequired]
  public function receive(): DataDisplayResponse {
@@ -29,7 +30,7 @@ final class NotifyController extends Controller {
    if(!preg_match('/^[a-f0-9]{64}$/D',$id)||!in_array($event,['IncomingCall','OutgoingCall','CallAccepted','HungUp'],true)||!in_array($direction,['in','out'],true)||$event==='IncomingCall'&&$direction!=='in'||$event==='OutgoingCall'&&$direction!=='out'||$event==='CallAccepted'&&$direction!=='in')return $reply(400);
    $duration=null;if($event==='HungUp'&&array_key_exists('duration',$data)){if(!ctype_digit($data['duration'])||(float)$data['duration']>366*86400)return $reply(400);$duration=(int)$data['duration'];}
    $until=microtime(true)+0.5;do{try{$this->locks->acquireLock('placetel-dashboard-notify',ILockingProvider::LOCK_EXCLUSIVE);break;}catch(LockedException $e){if(microtime(true)>=$until)throw $e;usleep(25000);}}while(true);
-   try{$hash=hash('sha256',$raw);if($this->store->get($hash,null,'notify-events'))return $reply(200);$old=$this->store->get($id,null,'notify-calls');$now=gmdate('c');$day=gmdate('Y-m-d');$call=['id'=>$id,'caller'=>$this->analysis->phone($data['from']??null),'to'=>mb_substr($data['to']??'',0,200),'peer'=>isset($data['peer'])?mb_substr($data['peer'],0,200):($old['peer']??null),'direction'=>$direction,'firstReceivedAt'=>$old['firstReceivedAt']??$now,'lastReceivedAt'=>$now,'events'=>array_values(array_unique(array_merge($old['events']??[],[$event]))),'durationSeconds'=>$duration??$old['durationSeconds']??null,'hangupType'=>$event==='HungUp'?mb_substr($data['type']??'',0,100):($old['hangupType']??null)];$this->store->transaction(function()use($id,$call,$day,$hash,$now,$event){$this->store->put($id,$call,'notify-calls',$day);$this->store->put($hash,true,'notify-events',$day);$this->store->put('notify:lastReceivedAt',$now);$this->popups->enqueue($call,$event);});
+   try{$hash=hash('sha256',$raw);if($this->store->get($hash,null,'notify-events'))return $reply(200);$old=$this->store->get($id,null,'notify-calls');$now=gmdate('c');$day=gmdate('Y-m-d');$call=['id'=>$id,'caller'=>$this->analysis->phone($data['from']??null),'to'=>mb_substr($data['to']??'',0,200),'peer'=>isset($data['peer'])?mb_substr($data['peer'],0,200):($old['peer']??null),'direction'=>$direction,'firstReceivedAt'=>$old['firstReceivedAt']??$now,'lastReceivedAt'=>$now,'events'=>array_values(array_unique(array_merge($old['events']??[],[$event]))),'durationSeconds'=>$duration??$old['durationSeconds']??null,'hangupType'=>$event==='HungUp'?mb_substr($data['type']??'',0,100):($old['hangupType']??null)];$this->store->transaction(function()use($id,$call,$day,$hash,$now,$event,$old){$this->store->put($id,$call,'notify-calls',$day);$this->store->put($hash,true,'notify-events',$day);$this->store->put('notify:lastReceivedAt',$now);$this->popups->enqueue($call,$event);if(!$old)$this->directory->enqueueIncoming($call,$event);});
 }
    finally{$this->locks->releaseLock('placetel-dashboard-notify',ILockingProvider::LOCK_EXCLUSIVE);}
    // Persist and release reception lock before bounded external delivery.

@@ -1,5 +1,11 @@
 # Änderungen
 
+## 0.2.14
+
+- Namenssuche nur bei neuen eingehenden Anrufen ohne bekannten Namen.
+- Kein automatischer erneuter Abgleich von historischen Anrufen.
+- Popup-Versand für die konfigurierten Arbeitsplätze bleibt erhalten.
+
 ## 0.2.13
 
 - Einzelne zukünftige Termine einer wöchentlichen Serie unabhängig bearbeiten.

@@ -4,7 +4,7 @@
 
 Auswahl Einzeltermin/Serie und festgelegter Endzustand lokal vorbereitet.
 Einzeltermine sind vor Beginn änderbar; Löschen der Serie entfernt Ausnahmen.
-Tests, Appsignatur, Release und App-Store-Veröffentlichung stehen noch aus.
+Nextcloud-34/35-Test des Kandidaten erfolgreich. App signiert; erneuter Test des signierten Stands und Veröffentlichung stehen noch aus.
 Ausschließlich synthetische Daten verwenden; keine Geheimnisse aufnehmen.
 
 ## Kandidat 0.2.12
